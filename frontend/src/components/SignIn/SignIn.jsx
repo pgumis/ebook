@@ -1,0 +1,87 @@
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { viewActions } from "../../store/view";
+import Logo from "../Logo/Logo";
+const SignIn = () => {
+  const dispatch = useDispatch();
+  const [dane, setDane] = useState({
+    imie: "",
+    nazwisko: "",
+    email: "",
+    haslo: "",
+  });
+
+  const [komunikat, setKomunikat] = useState("");
+
+  const handleChange = (e) => {
+    setDane({ ...dane, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const response = await fetch("http://localhost:8000/api/rejestracja", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dane),
+    });
+
+    const wynik = await response.json();
+
+    if (response.ok) {
+      setKomunikat(wynik.komunikat);
+    } else {
+      setKomunikat("Błąd: " + JSON.stringify(wynik.bledy));
+    }
+  };
+
+  return (
+    <div className="screen-center">
+      <div className="form-wrapper">
+        <Logo />
+        <h3>Witamy!</h3>
+        <form onSubmit={handleSubmit} style={{ marginTop: 0 }}>
+          <div className="form-whole-line">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={dane.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-whole-line">
+            <label for="email">Hasło</label>
+            <input
+              type="password"
+              name="haslo"
+              value={dane.haslo}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <span
+            className="form-info"
+            style={{ fontSize: "1rem", marginBottom: "0.8rem" }}
+          >
+            <a href="#">Przypomnij hasło</a>
+          </span>
+          <button type="submit" className="form-submit">
+            Zaloguj się
+          </button>
+          <button
+            className="form-submit form-second-button"
+            onClick={() => {
+              dispatch(viewActions.changeView("signUp"));
+            }}
+          >
+            Nie masz konta?
+          </button>
+        </form>
+        {komunikat && <p>{komunikat}</p>}
+      </div>
+    </div>
+  );
+};
+export default SignIn;

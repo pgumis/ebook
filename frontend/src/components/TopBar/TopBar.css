@@ -1,0 +1,40 @@
+nav{
+    height: 4.5rem;
+    background-color: #fff;
+    padding: 0 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-right-side{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.nav-right-side svg{
+    width: 1.5rem;
+    cursor: pointer;
+}
+.nav-right-side button{
+    cursor: pointer;
+    padding: 0;
+}
+.nav-icon-btn{
+    background-color: white;
+    border: none;
+}
+.nav-buttons{
+    font-weight: bold;
+    width: 8rem;
+    height: 2rem;
+    border: none;
+    color: #fff;
+    border-radius: 0.625rem;
+}
+.sign-in{
+    background-color: #C9C0B5;
+}
+.sign-up{
+    background-color: #4C7766;
+}
