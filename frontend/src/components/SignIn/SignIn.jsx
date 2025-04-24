@@ -5,8 +5,6 @@ import Logo from "../Logo/Logo";
 const SignIn = () => {
   const dispatch = useDispatch();
   const [dane, setDane] = useState({
-    imie: "",
-    nazwisko: "",
     email: "",
     haslo: "",
   });
@@ -19,8 +17,7 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const response = await fetch("http://localhost:8000/api/rejestracja", {
+    const response = await fetch("http://localhost:8000/api/logowanie", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dane),
@@ -31,7 +28,21 @@ const SignIn = () => {
     if (response.ok) {
       setKomunikat(wynik.komunikat);
     } else {
-      setKomunikat("Błąd: " + JSON.stringify(wynik.bledy));
+      console.log(wynik.bledy);
+      if(wynik.bledy)
+      {
+        const problemPassword = wynik.bledy['haslo'];
+        console.log(JSON.stringify(wynik.bledy));
+        if(problemPassword[0]==="The haslo field must be at least 6 characters.")
+        {
+          setKomunikat("Hasło zbyt krótkie");
+        }
+
+      }
+      else{
+        setKomunikat("Nieprawidłowe dane!");
+      }
+     
     }
   };
 
@@ -56,7 +67,7 @@ const SignIn = () => {
             <input
               type="password"
               name="haslo"
-              value={dane.haslo}
+              value={dane.password}
               onChange={handleChange}
               required
             />
@@ -65,7 +76,9 @@ const SignIn = () => {
             className="form-info"
             style={{ fontSize: "1rem", marginBottom: "0.8rem" }}
           >
-            <a href="#">Przypomnij hasło</a>
+            <a href="#" onClick={() => {
+              dispatch(viewActions.changeView("resetPassword"));
+            }}>Przypomnij hasło</a>
           </span>
           <button type="submit" className="form-submit">
             Zaloguj się
