@@ -1,0 +1,12 @@
+.logo img{
+    width: 3.125rem;
+}
+.logo{
+    display: flex;
+    gap: 0.75rem
+}
+.logo-txt{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
