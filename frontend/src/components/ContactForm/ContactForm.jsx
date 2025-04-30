@@ -3,37 +3,73 @@ import "./ContactForm.css";
 import Logo from "../Logo/Logo";
 const ContactForm = () => {
   const [dane, setDane] = useState({
-    imie: "",
-    telefon:"",
     email: "",
-    haslo: "",
+    telefon: "",
+    powodKontaktu: "",
     wiadomosc: "",
+  });
+  const [isInputValid, setIsInputValid] = useState({
+    email: true,
+    telefon: true,
+    powodKontaktu: true,
+    wiadomosc: true,
   });
 
   const [komunikat, setKomunikat] = useState("");
   const [dlugoscTextArea, setDlugoscTextArea] = useState(0);
   const handleChange = (e) => {
-    console.log(e.nativeEvent.data);
+    if (e.target.name === "telefon") {
+      const inputChar = e.nativeEvent.data;
+      if (inputChar && !/[\d\+]/.test(inputChar)) {
+        return;
+      }
+      if (
+        inputChar === "+" &&
+        (dane.telefon.includes("+") || dane.telefon.length > 0)
+      ) {
+        return;
+      }
+    }
     setDane({ ...dane, [e.target.name]: e.target.value });
+    setIsInputValid({ ...isInputValid, [e.target.name]: true });
     e.target.name === "wiadomosc" && setDlugoscTextArea(e.target.value.length);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const response = await fetch("http://localhost:8000/api/rejestracja", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(dane),
-    });
-
-    const wynik = await response.json();
-
-    if (response.ok) {
-      setKomunikat(wynik.komunikat);
-    } else {
-      setKomunikat("Błąd: " + JSON.stringify(wynik.bledy));
+    let isValid = true;
+    for (const element in dane) {
+      if (dane[element] === "") {
+        setIsInputValid((prevState) => ({
+          ...prevState,
+          [element]: false,
+        }));
+        isValid = false;
+      }
     }
+
+    if (dane.powodKontaktu === "Wybierz" || dane.powodKontaktu === "") {
+      setIsInputValid((prevState) => ({
+        ...prevState,
+        ["powodKontaktu"]: false,
+      }));
+      isValid = false;
+    }
+    console.log(isValid);
+    console.log(isInputValid);
+    // const response = await fetch("http://localhost:8000/api/rejestracja", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(dane),
+    // });
+
+    // const wynik = await response.json();
+
+    // if (response.ok) {
+    //   setKomunikat(wynik.komunikat);
+    // } else {
+    //   setKomunikat("Błąd: " + JSON.stringify(wynik.bledy));
+    // }
   };
 
   return (
@@ -49,10 +85,11 @@ const ContactForm = () => {
               <label for="nazwisko">Adres email</label>
               <input
                 type="text"
-                name="imie"
-                value={dane.imie}
+                name="email"
+                value={dane.email}
                 onChange={handleChange}
-                required
+                placeholder={!isInputValid["email"] ? "Podaj adres email" : ""}
+                className={!isInputValid["email"] ? "invalid" : ""}
               />
             </div>
             <div className="form-whole-line">
@@ -62,16 +99,34 @@ const ContactForm = () => {
                 name="telefon"
                 value={dane.telefon}
                 onChange={handleChange}
-                required
+                placeholder={
+                  !isInputValid["telefon"] ? "Podaj numer telefonu" : ""
+                }
+                className={!isInputValid["telefon"] ? "invalid" : ""}
               />
             </div>
             <div className="form-whole-line">
               <label for="email">Powód kontaktu</label>
-              <select name="cars" id="cars">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="opel">Opel</option>
-                <option value="audi">Audi</option>
+              <select
+                name="powodKontaktu"
+                value={dane.powodKontaktu}
+                onChange={handleChange}
+                className={!isInputValid["powodKontaktu"] ? "invalid" : ""}
+                onClick={
+                  () =>
+                    setIsInputValid((prevState) => ({
+                      ...prevState,
+                      ["powodKontaktu"]: true,
+                    })) //wylaczenie czerwonego podswietlenia
+                }
+              >
+                <option value="Wybierz">Wybierz...</option>
+                <option value="Problem z logowaniem">
+                  Problem z logowanie
+                </option>
+                <option value="Założenie konta autora">
+                  Założenie konta autora
+                </option>
               </select>
             </div>
           </div>
@@ -80,11 +135,13 @@ const ContactForm = () => {
             <label>Treść wiadomości</label>
             <div className="text-area-wrapper">
               <textarea
-                className="contact-form-textarea"
                 maxLength={1000}
                 name="wiadomosc"
-                value={dane.wiadomosc}
                 onChange={handleChange}
+                placeholder={
+                  !isInputValid["wiadomosc"] ? "Podaj treść wiadomości" : ""
+                }
+                className={!isInputValid["wiadomosc"] ? "invalid contact-form-textarea" : "contact-form-textarea"}
               ></textarea>
               <div className="text-area-word-counter">
                 {dlugoscTextArea}/1000
@@ -92,9 +149,7 @@ const ContactForm = () => {
             </div>
           </div>
           <div className="contact-form-buttons-container">
-            <button className="contact-form-cancel-button">
-              Anuluj
-            </button>
+            <button className="contact-form-cancel-button">Anuluj</button>
             <button type="submit" className="form-submit contact-form-send">
               <svg
                 fill="none"

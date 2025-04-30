@@ -65,6 +65,10 @@
     justify-content: space-around;
     width: 11.5rem;
 }
-.contact-form-send svg{
-    transform: rotateX(40deg);
+.invalid{
+    border: 1px solid red !important;
+    color: red !important;
+}
+.invalid::placeholder{
+    color: red;
 }
