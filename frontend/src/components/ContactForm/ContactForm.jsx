@@ -1,7 +1,11 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
+
 import "./ContactForm.css";
 import Logo from "../Logo/Logo";
 const ContactForm = () => {
+  const currView = useSelector((state) => state.userData);
+  console.log(currView);
   const [dane, setDane] = useState({
     email: "",
     telefon: "",
