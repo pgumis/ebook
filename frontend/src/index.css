@@ -95,3 +95,7 @@ code {
 .form-second-button{
   background-color: #4C7766;
 }
+
+input:disabled{
+  background-color: #ececec;
+}

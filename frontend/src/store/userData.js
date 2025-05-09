@@ -3,10 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 const userDataSlice = createSlice({
     name: "userData",
     initialState:{
+        loggedIn: false,
+        userName: 'unknow',
+        email: 'unknown',
+        phoneNumber: '000000000'
     },
     reducers: {
         setData(state, action){
-            state.userData = action.payload;
+            Object.assign(state, action.payload);
         }
     }
 })

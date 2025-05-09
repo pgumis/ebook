@@ -1,6 +1,9 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+
+import { useDispatch, useSelector } from "react-redux";
 import { viewActions } from "../../store/view";
+import { userDataActions } from "../../store/userData";
+
 import Logo from "../Logo/Logo";
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -27,6 +30,8 @@ const SignIn = () => {
 
     if (response.ok) {
       setKomunikat(wynik.komunikat);
+      dispatch(userDataActions.setData({loggedIn: true, userName: 'test', email: 'test@gmail.com', phoneNumber: '123456789'}));
+
     } else {
       console.log(wynik.bledy);
       if(wynik.bledy)

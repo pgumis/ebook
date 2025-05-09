@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 import "./ContactForm.css";
 import Logo from "../Logo/Logo";
+
 const ContactForm = () => {
-  const currView = useSelector((state) => state.userData);
-  console.log(currView);
+  const userData = useSelector((state) => state.userData);
+  console.log(userData);
   const [dane, setDane] = useState({
     email: "",
     telefon: "",
@@ -18,7 +19,11 @@ const ContactForm = () => {
     powodKontaktu: true,
     wiadomosc: true,
   });
-
+  useEffect(()=>{
+    if(userData.loggedIn){
+      setDane({...dane, email: userData.email, telefon: userData.phoneNumber})
+    }
+  },[userData]);
   const [komunikat, setKomunikat] = useState("");
   const [dlugoscTextArea, setDlugoscTextArea] = useState(0);
   const handleChange = (e) => {
@@ -59,8 +64,8 @@ const ContactForm = () => {
       }));
       isValid = false;
     }
-    console.log(isValid);
-    console.log(isInputValid);
+    //TRZEBA DODAĆ CAŁĄ LOGIKE PRZESYŁANIA WIADOMOŚCI I WALIDACJI, CZY WIADOMOŚĆ WYSŁANA PRAWIDŁOWO
+
     // const response = await fetch("http://localhost:8000/api/rejestracja", {
     //   method: "POST",
     //   headers: { "Content-Type": "application/json" },
@@ -94,6 +99,7 @@ const ContactForm = () => {
                 onChange={handleChange}
                 placeholder={!isInputValid["email"] ? "Podaj adres email" : ""}
                 className={!isInputValid["email"] ? "invalid" : ""}
+                disabled={userData.loggedIn}
               />
             </div>
             <div className="form-whole-line">
@@ -107,6 +113,7 @@ const ContactForm = () => {
                   !isInputValid["telefon"] ? "Podaj numer telefonu" : ""
                 }
                 className={!isInputValid["telefon"] ? "invalid" : ""}
+                disabled={userData.loggedIn}
               />
             </div>
             <div className="form-whole-line">
@@ -181,3 +188,4 @@ const ContactForm = () => {
 };
 
 export default ContactForm;
+
