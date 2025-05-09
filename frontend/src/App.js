@@ -7,7 +7,7 @@ import ContactForm from "./components/ContactForm/ContactForm";
 import ResetPasswordForm from "./components/ResetPasswordForm/ResetPasswordForm";
 import ResetPasswordEmailForm from "./components/ResetPasswordEmailForm/ResetPasswordEmailForm";
 import BooksList from "./components/BooksList/BooksList";
-
+import Footer from "./components/Footer/Footer";
 function App() {
   const currView = useSelector((state) => state.view);
   console.log(currView.selectedView);
@@ -22,6 +22,7 @@ function App() {
         {currView.selectedView === "resetPassword" && <ResetPasswordForm />}
 
       </div>
+      <Footer/>
     </div>
   );
 }
