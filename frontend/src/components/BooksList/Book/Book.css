@@ -1,0 +1,14 @@
+.book-wrapper{
+}
+.book-img-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 12.75rem;
+}
+.book-img-wrapper img {
+    height: 12.75rem;
+}
+.book-txt-content{
+    text-align: center;
+}

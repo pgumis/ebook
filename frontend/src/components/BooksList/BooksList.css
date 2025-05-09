@@ -17,3 +17,9 @@
 li{
     margin-bottom: 0.5rem;
 }
+.books-grid{
+    /*overflow-y: scroll;
+    height: 400px;*/ 
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
