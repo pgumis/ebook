@@ -6,6 +6,7 @@ import SignIn from "./components/SignIn/SignIn";
 import ContactForm from "./components/ContactForm/ContactForm";
 import ResetPasswordForm from "./components/ResetPasswordForm/ResetPasswordForm";
 import ResetPasswordEmailForm from "./components/ResetPasswordEmailForm/ResetPasswordEmailForm";
+import BooksList from "./components/BooksList/BooksList";
 
 function App() {
   const currView = useSelector((state) => state.view);
@@ -14,6 +15,7 @@ function App() {
     <div className="App">
       <TopBar />
       <div className="content-wrapper">
+      {currView.selectedView === "home" && <BooksList />}
         {currView.selectedView === "signUp" && <SignUp />}
         {currView.selectedView === "signIn" && <SignIn />}
         {currView.selectedView === "contact" && <ContactForm />}
