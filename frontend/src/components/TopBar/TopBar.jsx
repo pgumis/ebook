@@ -13,6 +13,7 @@ const TopBar = () => {
           dispatch(viewActions.changeView("home"));
         }}
       />
+      <input type="text" className="nav-search-bar"/>
       <div className="nav-right-side">
         <button
           className="nav-icon-btn"
