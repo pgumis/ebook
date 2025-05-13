@@ -6,7 +6,7 @@ const BooksListMainPanel = () => {
         Książki
       </h3>
       <div className="books-grid">
-        <Book bookObj={{title:'Harry Potter i Kamień Filozoficzny',author: 'J.K Rowling'}}/>
+        <Book bookObj={{id:1,title:'Harry Potter i Kamień Filozoficzny',author: 'J.K Rowling'}}/>
         <Book bookObj={{title:'Harry Potter i Kamień Filozoficzny',author: 'J.K Rowling'}}/>
         <Book bookObj={{title:'Harry Potter i Kamień Filozoficzny',author: 'J.K Rowling'}}/>
         <Book bookObj={{title:'Harry Potter i Kamień Filozoficzny',author: 'J.K Rowling'}}/>

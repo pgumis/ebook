@@ -1,3 +1,6 @@
+import { useDispatch } from "react-redux";
+import { viewActions } from "../../../store/view";
+
 import "./Book.css";
 const generateStars = (rating) => {
   let orangeStars = "";
@@ -19,22 +22,29 @@ const generateStars = (rating) => {
     </span>
   );
 };
-const titleSliced = (title) =>{
-    return title.slice(0,25)+'...';
+const titleSliced = (title) => {
+  return title.slice(0, 25) + "...";
+};
+const handleOpenBookDetails = (dispatch,id) => {
+  //Ustawiam na view z detailsami i przekazuje id
+  dispatch(viewActions.changeView("bookDetails"));
+  dispatch(viewActions.setBookDetailsId(id));
+
 }
 const Book = ({ bookObj }) => {
+  const dispatch = useDispatch();
   const rating = generateStars(3.2);
-  const title = titleSliced(bookObj.title)
+  const title = titleSliced(bookObj.title);
   return (
     <div className="book-wrapper">
-      <div className="book-img-wrapper">
+      <div className="book-img-wrapper" onClick={()=>{handleOpenBookDetails(dispatch,bookObj.id)}}>
         <img src="okladka1.jpg" />
       </div>
       <div className="book-txt-content">
         <p className="book-price">32.99 zł</p>
-        {rating}
-        <p className="book-title">{title}</p>
+        <a className="book-title" href="#" onClick={()=>{handleOpenBookDetails(dispatch,bookObj.id)}}>{title}</a>
         <p className="book-author">{bookObj.author}</p>
+        {rating}
       </div>
     </div>
   );

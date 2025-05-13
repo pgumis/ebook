@@ -1,0 +1,15 @@
+.book-details-wrapper{
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   min-height: calc(100vh - 15.5rem);
+   background-color: #fff; 
+}
+.book-details-img-container{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+.book-details-img{
+    height: 50vh;
+}
