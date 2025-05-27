@@ -1,0 +1,18 @@
+Frontend: npm 10.2.3
+	  node 20.10.0
+
+Backend: php 8.2.12
+	 Composer 2.8.8 
+	 Laravel 10.48.29
+	 XAMPP 3.3.0
+
+Zadania które udało się zrealizować:
+1. Utworzenie repozytorium na GitHubie
+2. Konfiguracja środowisk (Laravel, XAMPP, itd.)
+3. Utworzenie bazy danych
+4. Utworzenie tabel
+5. Implementacja kontrolerów
+6. Implementacja routingu
+7. Implementacja formularza rejestracji użytkownika z walidacją
+8. Implementacja formularza logowania
+9. Implementacja funkcji zrestartowania hasła
