@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('format');
             $table->string('plik')->nullable();
             $table->string('okladka')->nullable();
+            $table->string('status')->default('aktywny');
             $table->timestamps();
         });
     }

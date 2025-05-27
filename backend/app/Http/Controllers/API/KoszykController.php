@@ -3,35 +3,55 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Ebook;
 use Illuminate\Http\Request;
 use App\Models\Koszyk;
 use Illuminate\Support\Facades\Validator;
 class KoszykController extends Controller
 {
-    public function lista()
+    public function widok(Request $request)
     {
-        $pozycje = Koszyk::all();
+        $pozycje = Koszyk::with('ebook')
+            ->where('uzytkownik_id', $request->user()->id)
+            ->get();
 
-        return response()->json($pozycje, 200);
+        $suma = $pozycje->sum(function ($pozycja) {
+            return $pozycja->cena_jednostkowa;
+        });
+
+        return response()->json([
+            'pozycje' => $pozycje,
+            'suma' => $suma,
+        ]);
     }
+
 
     public function dodaj(Request $request)
     {
-        $dane = $request->all();
-
-        $validator = Validator::make($dane, [
-            'uzytkownik_id' => 'required|exists:uzytkownicy,id',
+        $request->validate([
             'ebook_id' => 'required|exists:ebooki,id',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['bledy' => $validator->errors()], 422);
+        $ebook = Ebook::find($request->ebook_id);
+
+        if ($ebook->status !== 'aktywny') {
+            return response()->json(['komunikat' => 'Ten e-book jest niedostępny.'], 400);
+        }
+
+        $cena = $ebook->cena_promocyjna ?? $ebook->cena;
+
+        $istnieje = Koszyk::where('uzytkownik_id', $request->user()->id)
+            ->where('ebook_id', $ebook->id)
+            ->exists();
+
+        if ($istnieje) {
+            return response()->json(['komunikat' => 'Ten e-book już znajduje się w koszyku.'], 409);
         }
 
         $pozycja = Koszyk::create([
-            'uzytkownik_id' => $dane['uzytkownik_id'],
-            'ebook_id' => $dane['ebook_id'],
-            'ilosc' => 1
+            'uzytkownik_id' => $request->user()->id,
+            'ebook_id' => $ebook->id,
+            'cena_jednostkowa' => $cena,
         ]);
 
         return response()->json([
@@ -40,17 +60,23 @@ class KoszykController extends Controller
         ], 201);
     }
 
-    public function usun($id)
+
+    public function usun($id, Request $request)
     {
         $pozycja = Koszyk::find($id);
 
         if (!$pozycja) {
-            return response()->json(['komunikat' => 'Pozycja w koszyku nie istnieje'], 404);
+            return response()->json(['komunikat' => 'Pozycja nie istnieje.'], 404);
+        }
+
+        if ($pozycja->uzytkownik_id !== $request->user()->id) {
+            return response()->json(['komunikat' => 'Brak uprawnień.'], 403);
         }
 
         $pozycja->delete();
 
-        return response()->json(['komunikat' => 'Pozycja została usunięta z koszyka'], 200);
+        return response()->json(['komunikat' => 'Pozycja została usunięta z koszyka.']);
     }
+
 
 }

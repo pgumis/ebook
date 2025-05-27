@@ -15,7 +15,8 @@ class EbookController extends Controller
 
     public function lista()
     {
-        $ebooki = Ebook::all();
+        $ebooki = Ebook::where('status', 'aktywny')->get();
+
 
         return response()->json($ebooki, 200);
     }
@@ -59,13 +60,15 @@ class EbookController extends Controller
 
     public function szczegoly($id)
     {
-        $ebook = Ebook::find($id);
+        $ebook = Ebook::where('id', $id)
+            ->where('status', 'aktywny')
+            ->first();
 
         if (!$ebook) {
-            return response()->json(['komunikat' => 'E-book nie istnieje'], 404);
+            return response()->json(['komunikat' => 'E-book nie istnieje lub został wycofany.'], 404);
         }
 
-        return response()->json($ebook, 200);
+        return response()->json($ebook);
     }
 
     public function edytuj(Request $request, $id)
@@ -76,9 +79,11 @@ class EbookController extends Controller
             return response()->json(['komunikat' => 'E-book nie istnieje'], 404);
         }
 
-        $dane = $request->all();
+        if ($request->user()->rola === 'dostawca' && $ebook->uzytkownik_id !== $request->user()->id) {
+            return response()->json(['komunikat' => 'Brak uprawnień do edycji tego e-booka.'], 403);
+        }
 
-        $validator = Validator::make($dane, [
+        $validator = Validator::make($request->all(), [
             'tytul' => 'sometimes|required|string|max:255',
             'autor' => 'sometimes|required|string|max:255',
             'opis' => 'nullable|string',
@@ -89,7 +94,8 @@ class EbookController extends Controller
             'jezyk' => 'nullable|string|max:20',
             'data_wydania' => 'nullable|date',
             'cena' => 'sometimes|required|numeric|min:0',
-            'format' => 'sometimes|required|string|max:10',
+            'cena_promocyjna' => 'nullable|numeric|min:0|lt:cena',
+            'format' => 'sometimes|required|string|in:PDF,EPUB,MOBI',
             'plik' => 'nullable|string',
             'okladka' => 'nullable|string',
         ]);
@@ -98,7 +104,7 @@ class EbookController extends Controller
             return response()->json(['bledy' => $validator->errors()], 422);
         }
 
-        $ebook->update($dane);
+        $ebook->update($validator->validated());
 
         return response()->json([
             'komunikat' => 'E-book został zaktualizowany',
@@ -106,8 +112,7 @@ class EbookController extends Controller
         ], 200);
     }
 
-
-    public function usun($id)
+    public function usun($id, Request $request)
     {
         $ebook = Ebook::find($id);
 
@@ -115,10 +120,33 @@ class EbookController extends Controller
             return response()->json(['komunikat' => 'E-book nie istnieje'], 404);
         }
 
+        if ($request->user()->rola === 'dostawca' && $ebook->uzytkownik_id !== $request->user()->id) {
+            return response()->json(['komunikat' => 'Brak uprawnień do usunięcia tego e-booka.'], 403);
+        }
+
         $ebook->delete();
 
         return response()->json(['komunikat' => 'E-book został usunięty'], 200);
     }
+
+    public function wycofaj($id, Request $request)
+    {
+        $ebook = Ebook::find($id);
+
+        if (!$ebook) {
+            return response()->json(['komunikat' => 'E-book nie istnieje.'], 404);
+        }
+
+        if ($request->user()->rola === 'dostawca' && $ebook->uzytkownik_id !== $request->user()->id) {
+            return response()->json(['komunikat' => 'Brak uprawnień do wycofania tego e-booka.'], 403);
+        }
+
+        $ebook->status = 'wycofany';
+        $ebook->save();
+
+        return response()->json(['komunikat' => 'E-book został wycofany.']);
+    }
+
 
     public function stronaGlowna(Request $request)
     {
@@ -137,7 +165,7 @@ class EbookController extends Controller
                 break;
         }
 
-        $nowosci = Ebook::orderBy('created_at', 'desc')
+        $nowosci = Ebook::where('status', 'aktywny')->orderBy('created_at', 'desc')
             ->take(6)
             ->get();
 
@@ -179,7 +207,8 @@ class EbookController extends Controller
 
     public function promocje()
     {
-        $promocje = Ebook::whereNotNull('cena_promocyjna')
+        $promocje = Ebook::where('status', 'aktywny')
+            ->whereNotNull('cena_promocyjna')
             ->whereColumn('cena_promocyjna', '<', 'cena')
             ->orderBy('created_at', 'desc')
             ->paginate(12); // 12 książek na stronę
@@ -189,7 +218,8 @@ class EbookController extends Controller
 
     public function nowosci()
     {
-        $nowosci = Ebook::orderBy('created_at', 'desc')
+        $nowosci = Ebook::where('status', 'aktywny')
+            ->orderBy('created_at', 'desc')
             ->paginate(12);
 
         return response()->json($nowosci);
@@ -224,6 +254,7 @@ class EbookController extends Controller
         )
             ->join('ebook_zamowienie', 'ebooki.id', '=', 'ebook_zamowienie.ebook_id')
             ->where('ebook_zamowienie.created_at', '>=', $dataPoczatkowa)
+            ->where('status', 'aktywny')
             ->groupBy(
                 'ebooki.id',
                 'ebooki.tytul',
@@ -233,10 +264,24 @@ class EbookController extends Controller
                 'ebooki.format'
             )
             ->orderByDesc('liczba_sprzedazy')
-            ->paginate(12); // paginacja
+            ->paginate(12);
 
         return response()->json($bestsellery);
     }
+
+    public function moje(Request $request)
+    {
+        $query = Ebook::where('uzytkownik_id', $request->user()->id)
+            ->orderBy('created_at', 'desc');
+
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        return response()->json($query->get());
+    }
+
+
 
 
 }

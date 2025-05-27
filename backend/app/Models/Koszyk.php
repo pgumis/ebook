@@ -16,4 +16,9 @@ class Koszyk extends Model
         'ebook_id',
         'ilosc',
     ];
+
+    public function ebook()
+    {
+        return $this->belongsTo(Ebook::class);
+    }
 }
