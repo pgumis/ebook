@@ -120,6 +120,10 @@
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/vlucas/phpdotenv" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/voku/portable-ascii" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/webmozart/assert" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/aws/aws-crt-php" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/aws/aws-sdk-php" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/league/flysystem-aws-s3-v3" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/mtdowling/jmespath.php" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

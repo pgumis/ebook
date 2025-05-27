@@ -1,5 +1,7 @@
 <?php
 
+use App\Mail\TestMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,4 +18,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('home');
+});
+
+
+Route::get('/test-mail', function () {
+    Mail::to('odbiorca@przyklad.com')->send(new TestMail());
+    return 'Mail wysłany!';
 });
