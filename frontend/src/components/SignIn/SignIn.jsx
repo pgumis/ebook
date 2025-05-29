@@ -30,7 +30,8 @@ const SignIn = () => {
 
     if (response.ok) {
       setKomunikat(wynik.komunikat);
-      dispatch(userDataActions.setData({loggedIn: true, userName: 'test', email: 'test@gmail.com', phoneNumber: '123456789'}));
+      dispatch(userDataActions.setData({loggedIn: true, userName: 'test', email: 'test@gmail.com', phoneNumber: '123456789', role: 'user', profilePic: "profile.jpg"}));
+      dispatch(viewActions.changeView('home'))
 
     } else {
       console.log(wynik.bledy);

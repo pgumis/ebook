@@ -1,0 +1,23 @@
+.purchase-details-img{
+    width: 8rem;
+}
+.purchase-details-wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+.purchase-details-book-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.purchase-details-book-info{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.purchase-details-book-info span:nth-child(1){
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+

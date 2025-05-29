@@ -4,9 +4,11 @@ const userDataSlice = createSlice({
     name: "userData",
     initialState:{
         loggedIn: false,
-        userName: 'unknow',
+        userName: 'unknown',
         email: 'unknown',
-        phoneNumber: '000000000'
+        phoneNumber: '000000000',
+        role: 'unknown',
+        profilePic: 'unknown' // kilka obrazkow
     },
     reducers: {
         setData(state, action){

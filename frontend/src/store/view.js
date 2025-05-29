@@ -4,14 +4,14 @@ const viewSlice = createSlice({
     name: "view",
     initialState:{
         selectedView: 'home',
-        bookDetailsId: undefined,
+        bookDetailsObj: undefined,
     },
     reducers: {
         changeView(state, action){
             state.selectedView = action.payload;
         },
-        setBookDetailsId(state,action){
-            state.bookDetailsId = action.payload
+        setBookDetailsObj(state,action){
+            state.bookDetailsObj = action.payload
         }
     }
 })

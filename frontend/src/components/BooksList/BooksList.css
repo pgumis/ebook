@@ -1,9 +1,9 @@
 .panel{
     background-color: #fff;
     min-width: 100px;
-    min-height: calc(100vh - 10.5rem); /* 100vh - szerokosc navbar - marg top - marg bot*/
+    min-height: calc(100vh - 12.5rem); /* 100vh - szerokosc navbar - marg top - marg bot*/
     margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 3rem;
     border-radius: 10px;
     padding: 2rem;
 }

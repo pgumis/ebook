@@ -9,9 +9,12 @@ import ResetPasswordEmailForm from "./components/ResetPasswordEmailForm/ResetPas
 import BooksList from "./components/BooksList/BooksList";
 import BookDetails from "./components/BookDetails/BookDetails";
 import Footer from "./components/Footer/Footer";
+import Cart from "./components/Cart/Cart";
+import PurchaseHistory from "./components/PurchaseHistory/PurchaseHistory";
+import PurchaseDetails from "./components/PurchaseDetails/PurchaseDetails";
+import Profile from "./components/Profile/Profile";
 function App() {
   const currView = useSelector((state) => state.view);
-  console.log(currView.selectedView);
   return (
     <div className="App">
       <div className="wrapper">
@@ -23,6 +26,10 @@ function App() {
           {currView.selectedView === "contact" && <ContactForm />}
           {currView.selectedView === "bookDetails" && <BookDetails />}
           {currView.selectedView === "resetPassword" && <ResetPasswordForm />}
+          {currView.selectedView === "cart" && <Cart />}
+          {currView.selectedView === "purchaseHistory" && <PurchaseHistory />}
+          {currView.selectedView === "purchaseDetails" && <PurchaseDetails />}
+          {currView.selectedView === "profileDetails" && <Profile />}
         </div>
         <Footer />
       </div>

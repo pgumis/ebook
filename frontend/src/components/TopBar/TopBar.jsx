@@ -1,10 +1,34 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { viewActions } from "../../store/view";
 import "./TopBar.css";
 import Logo from "../Logo/Logo";
+import { useState, useRef, useEffect } from "react";
+import TopBarListOption from "./TopBarListOption";
 
 const TopBar = () => {
   const dispatch = useDispatch();
+  const userData = useSelector((state) => state.userData);
+  const [showProfileDetails, setShowProfileDetails] = useState(false);
+  const profileDetailsRef = useRef(null);
+  const profilePictureRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        profileDetailsRef.current &&
+        !profileDetailsRef.current.contains(event.target) &&
+        profilePictureRef.current &&
+        !profilePictureRef.current.contains(event.target)
+      ) {
+        setShowProfileDetails(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav>
@@ -13,7 +37,7 @@ const TopBar = () => {
           dispatch(viewActions.changeView("home"));
         }}
       />
-      <input type="text" className="nav-search-bar"/>
+      <input type="text" className="nav-search-bar" />
       <div className="nav-right-side">
         <button
           className="nav-icon-btn"
@@ -59,12 +83,107 @@ const TopBar = () => {
             />
           </svg>
         </button>
+        <button
+          className="nav-icon-btn"
+          onClick={() => {
+            dispatch(viewActions.changeView("cart"));
+          }}
+          hidden={!userData.loggedIn}
+        >
+          <svg
+            fill="none"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M3 3H5L5.5 6M5.5 6L7 15H18L21 6H5.5Z"
+              stroke="black"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            />
+            <circle
+              cx="8"
+              cy="20"
+              r="1"
+              stroke="black"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            />
+            <circle
+              cx="17"
+              cy="20"
+              r="1"
+              stroke="black"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            />
+          </svg>
+        </button>
+        <div
+          style={{ cursor: "pointer", position: "relative" }}
+          hidden={!userData.loggedIn}
+        >
+          <img
+            ref={profilePictureRef}
+            src={userData.profilePic}
+            className="top-bar-profile-picture"
+            onClick={() => {
+              setShowProfileDetails(!showProfileDetails);
+            }}
+          />
+          <div
+            ref={profileDetailsRef}
+            hidden={!showProfileDetails}
+            style={{
+              position: "absolute",
+              top: 32,
+              right: 0,
+              minWidth: "max-content",
+              backgroundColor: "#fff",
+              boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
+              borderRadius: "10px",
+            }}
+          >
+            <TopBarListOption
+              first
+              onClick={() => {
+                dispatch(viewActions.changeView("profileDetails"));
+                setShowProfileDetails(false);
+              }}
+            >
+              Zarządzaj profilem
+            </TopBarListOption>
+            <TopBarListOption
+              onClick={() => {
+                dispatch(viewActions.changeView("purchaseHistory"));
+                setShowProfileDetails(false);
+              }}
+            >
+              Historia zamówień
+            </TopBarListOption>
+            <TopBarListOption
+              last
+              onClick={() => {
+                dispatch(viewActions.changeView("settings"));
+                setShowProfileDetails(false);
+              }}
+            >
+              Ustawienia
+            </TopBarListOption>
+          </div>
+        </div>
 
         <button
           className="sign-in nav-buttons"
           onClick={() => {
             dispatch(viewActions.changeView("signIn"));
           }}
+          hidden={userData.loggedIn}
         >
           Zaloguj się
         </button>
@@ -73,6 +192,7 @@ const TopBar = () => {
           onClick={() => {
             dispatch(viewActions.changeView("signUp"));
           }}
+          hidden={userData.loggedIn}
         >
           Zarejestruj się
         </button>

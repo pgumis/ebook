@@ -48,3 +48,7 @@ nav{
 .sign-up{
     background-color: #4C7766;
 }
+.top-bar-profile-picture{
+    width: 32px;
+    border-radius: 50%;
+}

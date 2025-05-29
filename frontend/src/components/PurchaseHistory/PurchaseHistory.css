@@ -1,0 +1,14 @@
+.purchase-history-container{
+
+}
+.single-purchase{
+    min-height: 8rem;
+    width: calc(100%);
+    transform: translateX(-2rem);
+    border-bottom: 1px solid red;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    cursor: pointer;
+}
