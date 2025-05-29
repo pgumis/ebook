@@ -15,11 +15,11 @@ const handleOpenBookDetails = (dispatch, bookObj) => {
 const Book = ({ bookObj }) => {
   const dispatch = useDispatch();
 
-  const title = titleSliced(bookObj.title);
+  const title = bookObj.title.length >= 25 ? titleSliced(bookObj.title) : bookObj.title;
   return (
     <div className="book-wrapper">
       <div className="book-img-wrapper" onClick={()=>{handleOpenBookDetails(dispatch,bookObj)}}>
-        <img src="okladka1.jpg" />
+        <img src={bookObj.okladka} />
       </div>
       <div className="book-txt-content">
         <p className="book-price">{bookObj.price} PLN</p>

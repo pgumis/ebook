@@ -1,25 +1,78 @@
 import "./Cart.css";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { cartActions } from "../../store/cart";
 
 const Cart = () => {
   const dispatch = useDispatch();
+  const userData = useSelector((state) => state.userData);
   const cart = useSelector((state) => state.cart);
   const items = cart.items || [];
-  console.log(cart);
+  const [isLoading, setIsLoading] = useState(false);
+  console.log(items);
+  useEffect(() => {
+    const fetchCart = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch("http://localhost:8000/api/koszyk", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userData.token}`,
+          },
+        });
+
+        if (!response.ok) {
+          const err = await response.json();
+          throw new Error(err.komunikat || "Błąd pobierania koszyka");
+        }
+
+        const data = await response.json();
+        console.log(data.pozycje); // POBIERAM SAMO ID KSIAZKI ALE NIE INFO NA JEJ TEMAT
+        dispatch(
+          cartActions.setCart({
+            items: data.pozycje.map((pozycja) => (
+              {
+              id: pozycja.ebook_id,
+              title: pozycja.ebook.tytul,
+              author: pozycja.ebook.autor,
+              price: pozycja.cena_jednostkowa,
+              okladka: pozycja.ebook.okladka,
+            })),
+            suma: data.suma,
+          })
+        );
+      } catch (error) {
+        console.error("Błąd pobierania koszyka:", error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (userData.token) {
+      fetchCart();
+    }
+  }, [userData.token, dispatch]);
   const handleDelete = (id) => {
-    dispatch(cartActions.removeItem(id))
-  }
+    dispatch(cartActions.removeItem(id));
+  };
   return (
-    <>
-      {items.length > 0 ? (
-        <div className="panel">
+    <div className="panel">
+      {isLoading ? (
+        <p
+          style={{
+            fontSize: "1.1rem",
+            textAlign: "center",
+          }}
+        >
+          Pobieranie koszyka
+        </p>
+      ) : items.length > 0 ? (
+        <>
           <h2>Twój koszyk</h2>
           <button
             className="cart-btn"
-            onClick={() => {
-              alert("Płatność zrealizowana");
-            }}
+            onClick={() => alert("Płatność zrealizowana")}
           >
             Przejdź do płatności
             <svg
@@ -47,6 +100,7 @@ const Cart = () => {
           </button>
           {items.map((item) => (
             <div
+              key={item.id}
               style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -54,22 +108,30 @@ const Cart = () => {
               }}
             >
               <div style={{ display: "flex", alignItems: "center" }}>
-                <div>
-                  <img
-                    src="okladka2.jpg"
-                    alt="okladka ksiazki"
-                    className="cart-img"
-                  />
-                </div>
+                <img
+                  src={item.okladka}
+                  alt="okładka książki"
+                  className="cart-img"
+                />
                 <div className="cart-book-info">
                   <span>{item.title}</span>
                   <span>{item.author}</span>
-                   <span>{item.id}</span>
-                  <span>Kategoria książki</span>
+                  <span>ID: {item.id}</span>
+                  <span>Kategoria: {item.kategoria || "Brak kategorii"}</span>
                 </div>
               </div>
-              <div style={{display: 'flex', flexDirection:'column', justifyContent:'space-between', alignItems:'flex-end'}}>
-                <button className="cart-delete-element-btn" onClick={()=>{handleDelete(item.id)}}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  alignItems: "flex-end",
+                }}
+              >
+                <button
+                  className="cart-delete-element-btn"
+                  onClick={() => handleDelete(item.id)}
+                >
                   <svg
                     fill="none"
                     height="16"
@@ -86,27 +148,26 @@ const Cart = () => {
                     />
                   </svg>
                 </button>
-                <span style={{fontSize: '1.3rem'}}>{item.price} PLN</span>
+                <span style={{ fontSize: "1.3rem" }}>{item.price} PLN</span>
               </div>
             </div>
           ))}
-        </div>
+          <div>
+            <strong>Suma: {cart.suma || 0} PLN</strong>
+          </div>
+        </>
       ) : (
-        <div
-          className="panel"
+        <p
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexWrap: "wrap",
+            fontSize: "1.5rem",
+            fontWeight: "bold",
+            textAlign: "center",
           }}
         >
-          <p style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
-            Twój koszyk jest pusty.
-          </p>
-        </div>
+          Twój koszyk jest pusty.
+        </p>
       )}
-    </>
+    </div>
   );
 };
 export default Cart;
