@@ -42,15 +42,30 @@ class ZamowienieController extends Controller
         ], 201);
     }
 
-    public function szczegoly($id)
+    public function szczegoly($id, Request $request)
     {
-        $zamowienie = Zamowienie::find($id);
+        $zamowienie = Zamowienie::with('ebooki')->find($id);
 
         if (!$zamowienie) {
-            return response()->json(['komunikat' => 'Zamówienie nie istnieje'], 404);
+            return response()->json(['message' => 'Zamówienie nie istnieje.'], 404);
         }
 
-        return response()->json($zamowienie, 200);
+        // Użytkownik może zobaczyć tylko swoje zamówienie
+        if ($request->user()->rola !== 'admin' && $zamowienie->uzytkownik_id !== $request->user()->id) {
+            return response()->json(['message' => 'Brak dostępu do zamówienia.'], 403);
+        }
+
+        return response()->json([
+            'zamowienie' => $zamowienie,
+            'ebooki' => $zamowienie->ebooki->map(function ($ebook) {
+                return [
+                    'id' => $ebook->id,
+                    'tytul' => $ebook->tytul,
+                    'autor' => $ebook->autor,
+                    'cena_jednostkowa' => $ebook->pivot->cena_jednostkowa,
+                ];
+            })
+        ]);
     }
 
     public function edytuj(Request $request, $id)
@@ -92,6 +107,18 @@ class ZamowienieController extends Controller
         $zamowienie->delete();
 
         return response()->json(['komunikat' => 'Zamówienie zostało usunięte'], 200);
+    }
+
+    public function historia(Request $request)
+    {
+        $query = Zamowienie::withCount('ebooki')
+            ->orderBy('created_at', 'desc');
+
+        if ($request->user()->rola !== 'admin') {
+            $query->where('uzytkownik_id', $request->user()->id);
+        }
+
+        return response()->json($query->get());
     }
 
 }

@@ -17,4 +17,12 @@ class Zamowienie extends Model
         'suma',
         'status',
     ];
+
+    public function ebooki()
+    {
+        return $this->belongsToMany(Ebook::class, 'ebook_zamowienie')
+            ->withPivot('cena_jednostkowa')
+            ->withTimestamps();
+    }
+
 }

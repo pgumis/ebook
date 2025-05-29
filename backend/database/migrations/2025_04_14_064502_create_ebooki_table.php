@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('ebooki', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('uzytkownik_id')->nullable();
+            $table->foreign('uzytkownik_id')->references('id')->on('uzytkownicy')->onDelete('set null');
             $table->string('tytul');
             $table->string('autor');
             $table->text('opis')->nullable();
@@ -23,9 +25,11 @@ return new class extends Migration
             $table->string('jezyk')->nullable();
             $table->date('data_wydania')->nullable();
             $table->decimal('cena', 8, 2);
+            $table->decimal('cena_promocyjna', 8, 2)->nullable();
             $table->string('format');
             $table->string('plik')->nullable();
             $table->string('okladka')->nullable();
+            $table->string('status')->default('aktywny');
             $table->timestamps();
         });
     }

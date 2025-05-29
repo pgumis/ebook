@@ -26,4 +26,10 @@ class Ebook extends Model
         'plik',
         'okladka',
     ];
+
+    public function zamowienia()
+    {
+        return $this->belongsToMany(Zamowienie::class, 'ebook_zamowienie');
+    }
+
 }
