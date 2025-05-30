@@ -1,0 +1,35 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+  }
+  thead {
+    background-color: #C9C0B5;
+  }
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  th {
+    background-color: #C9C0B5;
+  }
+  tr:nth-child(even) {
+    background-color: #EBE6E0;
+  }
+  tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+  }
+
+.vendors-book-list-add-new-book{
+  height: 3rem;
+  width: 10rem;
+  background-color: #C9C0B5;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}

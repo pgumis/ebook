@@ -31,6 +31,7 @@
 .book-details-add-book {
   width: 100%;
   height: 3rem;
+  cursor: pointer;
 }
 .book-details-img-container {
   display: flex;

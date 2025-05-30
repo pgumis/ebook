@@ -1,0 +1,10 @@
+.vendor-edit-book-details-wrapper{
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+}
+.vendor-edit-book-details-wrapper form{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}

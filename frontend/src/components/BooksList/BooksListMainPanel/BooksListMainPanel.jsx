@@ -8,7 +8,7 @@ const BooksListMainPanel = () => {
   useEffect(() => {
     const pobierzKsiazki = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/ebooki"); // <- dostosuj jeśli inny endpoint
+        const response = await fetch("http://localhost:8000/api/ebooki"); 
         const dane = await response.json();
         setBooks(
           dane.map((item) => ({
@@ -28,7 +28,6 @@ const BooksListMainPanel = () => {
 
     pobierzKsiazki();
   }, []);
-  console.log(books);
 
   return (
     <div className="panel">

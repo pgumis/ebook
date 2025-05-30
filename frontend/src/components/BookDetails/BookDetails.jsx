@@ -54,7 +54,7 @@ const BookDetails = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${userData.token}`,
+          Authorization: `Bearer ${userData.token}`,
         },
         body: JSON.stringify({ ebook_id: selectedBook.id }),
       });
@@ -63,10 +63,8 @@ const BookDetails = () => {
         const err = await response.json();
         throw new Error(err.komunikat || "Błąd dodawania do koszyka");
       }
-
       const data = await response.json();
       dispatch(cartActions.addItem({ ...selectedBook }));
-      console.log(selectedBook);
     } catch (error) {
       console.error("Błąd dodawania do koszyka:", error.message);
     }
@@ -85,7 +83,7 @@ const BookDetails = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(userData, selectedBook.id)
+    console.log(userData, selectedBook.id);
 
     if (!userData.id || !selectedBook.id) {
       alert("Błąd: Brak ID użytkownika lub książki.");
@@ -108,7 +106,7 @@ const BookDetails = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${userData.token}`,
+          Authorization: `Bearer ${userData.token}`,
         },
         body: JSON.stringify(payload),
       });
@@ -148,36 +146,47 @@ const BookDetails = () => {
               {generateStars(selectedBook.rating)}
             </div>
           </div>
-
-          <div style={{ width: "100%" }}>
-            <p hidden={userData.loggedIn}>
-              Aby dodać produkt do koszyka musisz być{" "}
-              <a
-                href="#"
+          {userData.role !== "dostawca" && (
+            <div style={{ width: "100%" }}>
+              <p hidden={userData.loggedIn}>
+                Aby dodać produkt do koszyka musisz być{" "}
+                <a
+                  href="#"
+                  onClick={() => {
+                    dispatch(viewActions.changeView("signIn"));
+                  }}
+                >
+                  zalogowany
+                </a>
+              </p>
+              {message && <p>{message}</p>}
+              <button
+                className="book-details-add-book"
+                disabled={!userData.loggedIn || isInCart}
                 onClick={() => {
-                  dispatch(viewActions.changeView("signIn"));
+                  handleAdd();
                 }}
               >
-                zalogowany
-              </a>
-            </p>
-            {message && <p>{message}</p>}
-            <button
-              className="book-details-add-book"
-              disabled={!userData.loggedIn || isInCart}
-              onClick={() => {
-                handleAdd();
-              }}
-            >
-              Dodaj do koszyka
-            </button>
-          </div>
+                Dodaj do koszyka
+              </button>
+            </div>
+          )}
+          <button
+            className="book-details-add-book"
+            disabled={!userData.loggedIn || isInCart}
+            onClick={() => {
+              dispatch(viewActions.changeView('editBookDetails'));
+            }}
+          >
+            Edytuj informacje
+          </button>
         </div>
       </div>
+
       <div className="book-details-ratings-container">
         <div className="book-details-rating-top-section">
           <h3>Opinie użytkowników</h3>
-          {userData.loggedIn && (
+          {(userData.loggedIn && userData.role !== 'dostawca') && (
             <button onClick={handleOpenRating}>+ Napisz recenzję</button>
           )}
         </div>
