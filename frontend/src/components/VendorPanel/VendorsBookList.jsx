@@ -38,7 +38,7 @@ const VendorsBookList = () => {
     <>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <h4>Twoje książki</h4>
-        <button className="vendors-book-list-add-new-book">
+        <button className="vendors-book-list-add-new-book" onClick={()=>{ dispatch(viewActions.changeView("addBook"));}}>
           + Dodaj nową książkę
         </button>
       </div>
