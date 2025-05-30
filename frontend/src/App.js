@@ -1,4 +1,6 @@
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { userDataActions } from "./store/userData";
 
 import TopBar from "./components/TopBar/TopBar";
 import SignUp from "./components/SignUp/SignUp";
@@ -14,7 +16,19 @@ import PurchaseHistory from "./components/PurchaseHistory/PurchaseHistory";
 import PurchaseDetails from "./components/PurchaseDetails/PurchaseDetails";
 import Profile from "./components/Profile/Profile";
 function App() {
+  const dispatch = useDispatch();
   const currView = useSelector((state) => state.view);
+<<<<<<< HEAD
+=======
+
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      dispatch(userDataActions.setData(JSON.parse(storedData)));
+    }
+  }, [dispatch]);
+
+>>>>>>> mb
   return (
     <div className="App">
       <div className="wrapper">

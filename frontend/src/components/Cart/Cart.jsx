@@ -1,9 +1,14 @@
 import "./Cart.css";
+<<<<<<< HEAD
+=======
+import { useEffect, useState } from "react";
+>>>>>>> mb
 import { useDispatch, useSelector } from "react-redux";
 import { cartActions } from "../../store/cart";
 
 const Cart = () => {
   const dispatch = useDispatch();
+<<<<<<< HEAD
   const cart = useSelector((state) => state.cart);
   const items = cart.items || [];
   console.log(cart);
@@ -20,6 +25,78 @@ const Cart = () => {
             onClick={() => {
               alert("Płatność zrealizowana");
             }}
+=======
+  const userData = useSelector((state) => state.userData);
+  const cart = useSelector((state) => state.cart);
+  const items = cart.items || [];
+  const [isLoading, setIsLoading] = useState(false);
+  const [total, setTotal] = useState(0);
+  useEffect(() => {
+    const fetchCart = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch("http://localhost:8000/api/koszyk", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userData.token}`,
+          },
+        });
+
+        if (!response.ok) {
+          const err = await response.json();
+          throw new Error(err.komunikat || "Błąd pobierania koszyka");
+        }
+
+        const data = await response.json();
+        console.log(data); // POBIERAM SAMO ID KSIAZKI ALE NIE INFO NA JEJ TEMAT
+        const newItems = data.pozycje.map((pozycja) => ({
+          id: pozycja.ebook_id,
+          title: pozycja.ebook.tytul,
+          author: pozycja.ebook.autor,
+          price: parseFloat(pozycja.ebook.cena),
+          okladka: pozycja.ebook.okladka,
+        }));
+        dispatch(
+          cartActions.setCart({
+            items: newItems,
+            suma: 0, // Ignorujemy data.suma z backendu
+          })
+        );
+        const calculatedTotal = newItems.reduce((sum, item) => sum + item.price, 0);
+        setTotal(calculatedTotal);
+      } catch (error) {
+        console.error("Błąd pobierania koszyka:", error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (userData.token) {
+      fetchCart();
+    }
+  }, [userData.token, dispatch]);
+  const handleDelete = (id) => {
+    dispatch(cartActions.removeItem(id));
+  };
+  return (
+    <div className="panel">
+      {isLoading ? (
+        <p
+          style={{
+            fontSize: "1.1rem",
+            textAlign: "center",
+          }}
+        >
+          Pobieranie koszyka
+        </p>
+      ) : items.length > 0 ? (
+        <>
+          <h2>Twój koszyk</h2>
+          <button
+            className="cart-btn"
+            onClick={() => alert("Płatność zrealizowana")}
+>>>>>>> mb
           >
             Przejdź do płatności
             <svg
@@ -47,6 +124,10 @@ const Cart = () => {
           </button>
           {items.map((item) => (
             <div
+<<<<<<< HEAD
+=======
+              key={item.id}
+>>>>>>> mb
               style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -54,6 +135,7 @@ const Cart = () => {
               }}
             >
               <div style={{ display: "flex", alignItems: "center" }}>
+<<<<<<< HEAD
                 <div>
                   <img
                     src="okladka2.jpg"
@@ -70,6 +152,32 @@ const Cart = () => {
               </div>
               <div style={{display: 'flex', flexDirection:'column', justifyContent:'space-between', alignItems:'flex-end'}}>
                 <button className="cart-delete-element-btn" onClick={()=>{handleDelete(item.id)}}>
+=======
+                <img
+                  src={item.okladka}
+                  alt="okładka książki"
+                  className="cart-img"
+                />
+                <div className="cart-book-info">
+                  <span>{item.title}</span>
+                  <span>{item.author}</span>
+                  <span>ID: {item.id}</span>
+                  <span>Kategoria: {item.kategoria || "Brak kategorii"}</span>
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  alignItems: "flex-end",
+                }}
+              >
+                <button
+                  className="cart-delete-element-btn"
+                  onClick={() => handleDelete(item.id)}
+                >
+>>>>>>> mb
                   <svg
                     fill="none"
                     height="16"
@@ -86,6 +194,7 @@ const Cart = () => {
                     />
                   </svg>
                 </button>
+<<<<<<< HEAD
                 <span style={{fontSize: '1.3rem'}}>{item.price} PLN</span>
               </div>
             </div>
@@ -107,6 +216,28 @@ const Cart = () => {
         </div>
       )}
     </>
+=======
+                <span style={{ fontSize: "1.3rem" }}>{item.price.toFixed(2)} PLN</span>
+              </div>
+            </div>
+          ))}
+          <div>
+            <strong>Suma: {total.toFixed(2) || 0} PLN</strong>
+          </div>
+        </>
+      ) : (
+        <p
+          style={{
+            fontSize: "1.5rem",
+            fontWeight: "bold",
+            textAlign: "center",
+          }}
+        >
+          Twój koszyk jest pusty.
+        </p>
+      )}
+    </div>
+>>>>>>> mb
   );
 };
 export default Cart;

@@ -29,9 +29,21 @@ const SignIn = () => {
     const wynik = await response.json();
 
     if (response.ok) {
+      //powinno zwracac info z backendu
+      const userData = {
+        loggedIn: true,
+        id: wynik.user?.id || 1, 
+        userName: wynik.user?.imie || "test",
+        email: wynik.user?.email || dane.email,
+        phoneNumber: wynik.user?.numer_telefonu || "123456789",
+        role: wynik.user?.rola || "user",
+        profilePic: wynik.user?.zdjecie_profilowe || "profile.jpg",
+        token: wynik.token,
+      };
       setKomunikat(wynik.komunikat);
-      dispatch(userDataActions.setData({loggedIn: true, userName: 'test', email: 'test@gmail.com', phoneNumber: '123456789', role: 'user', profilePic: "profile.jpg"}));
+      dispatch(userDataActions.setData({loggedIn: true, id: 1, userName: 'test', email: 'test@gmail.com', phoneNumber: '123456789', role: 'user', profilePic: "profile.jpg", token: wynik.token}));
       dispatch(viewActions.changeView('home'))
+      localStorage.setItem("userData", JSON.stringify(userData));
 
     } else {
       console.log(wynik.bledy);
