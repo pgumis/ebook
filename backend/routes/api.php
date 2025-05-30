@@ -65,6 +65,9 @@ Route::middleware(['auth:sanctum', 'sprawdz.role:admin'])
 Route::middleware(['auth:sanctum', 'sprawdz.role:admin,dostawca'])
     ->put('/ebooki/{id}/wycofaj', [EbookController::class, 'wycofaj']);
 
+Route::get('/ebooki/{id}/recenzje', [RecenzjaController::class, 'lista']);
+
+
 
 Route::get('/zamowienia', [ZamowienieController::class, 'lista']);
 
