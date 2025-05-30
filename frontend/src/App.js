@@ -15,10 +15,14 @@ import Cart from "./components/Cart/Cart";
 import PurchaseHistory from "./components/PurchaseHistory/PurchaseHistory";
 import PurchaseDetails from "./components/PurchaseDetails/PurchaseDetails";
 import Profile from "./components/Profile/Profile";
+import VendorPanel from "./components/VendorPanel/VendorPanel";
+import VendorEditBookDetails from "./components/VendorEditBookDetails/VendorEditBookDetails";
+
 function App() {
   const dispatch = useDispatch();
   const currView = useSelector((state) => state.view);
-
+  const userData = useSelector((state) => state.userData);
+  console.log(userData);
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
@@ -31,7 +35,8 @@ function App() {
       <div className="wrapper">
         <TopBar />
         <div className="content-wrapper">
-          {currView.selectedView === "home" && <BooksList />}
+          {(currView.selectedView === "home" && userData.role !== 'dostawca')&& <BooksList />}
+          {(currView.selectedView === "home" && userData.role === 'dostawca')&& <VendorPanel />}
           {currView.selectedView === "signUp" && <SignUp />}
           {currView.selectedView === "signIn" && <SignIn />}
           {currView.selectedView === "contact" && <ContactForm />}
@@ -41,6 +46,7 @@ function App() {
           {currView.selectedView === "purchaseHistory" && <PurchaseHistory />}
           {currView.selectedView === "purchaseDetails" && <PurchaseDetails />}
           {currView.selectedView === "profileDetails" && <Profile />}
+          {currView.selectedView === "editBookDetails" && <VendorEditBookDetails />}
         </div>
         <Footer />
       </div>
