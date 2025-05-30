@@ -88,4 +88,14 @@ class RecenzjaController extends Controller
         return response()->json(['komunikat' => 'Recenzja została usunięta.']);
     }
 
+    public function lista($id)
+    {
+        $recenzje = Recenzja::where('ebook_id', $id)
+            ->with('uzytkownik:id,imie,nazwisko')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json($recenzje);
+    }
+
 }
