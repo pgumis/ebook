@@ -155,7 +155,7 @@ const Cart = () => {
             </div>
           ))}
           <div>
-            <strong>Suma: {total.toFixed(2) || 0} PLN</strong>
+            <strong>Suma: {(typeof(total) === "Number" && total.toFixed(2)) || 0} PLN</strong>
           </div>
         </>
       ) : (
