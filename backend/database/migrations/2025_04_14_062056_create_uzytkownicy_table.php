@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('rola');
             $table->string('status')->default('aktywny');
             $table->string('numer_telefonu')->nullable()->unique();
+            $table->string('avatar')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

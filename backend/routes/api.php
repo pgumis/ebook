@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\EbookController;
 use App\Http\Controllers\API\KoszykController;
+use App\Http\Controllers\API\RecenzjaController;
 use App\Http\Controllers\API\UploadController;
 use App\Http\Controllers\API\WiadomoscController;
 use App\Http\Controllers\API\ZamowienieController;
@@ -108,3 +109,12 @@ Route::get('/bestsellery', [EbookController::class, 'bestsellery']);
 
 Route::middleware(['auth:sanctum', 'sprawdz.role:dostawca'])
     ->get('/moje-ebooki', [EbookController::class, 'moje']);
+
+Route::middleware('auth:sanctum')
+    ->post('/recenzje', [RecenzjaController::class, 'dodaj']);
+
+Route::middleware('auth:sanctum')
+    ->put('/recenzje/{id}', [RecenzjaController::class, 'edytuj']);
+
+Route::middleware('auth:sanctum')
+    ->delete('/recenzje/{id}', [RecenzjaController::class, 'usun']);

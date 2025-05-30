@@ -3,11 +3,15 @@ import { createSlice } from "@reduxjs/toolkit";
 const viewSlice = createSlice({
     name: "view",
     initialState:{
-        selectedView: 'Testing'
+        selectedView: 'home',
+        bookDetailsObj: undefined,
     },
     reducers: {
         changeView(state, action){
             state.selectedView = action.payload;
+        },
+        setBookDetailsObj(state,action){
+            state.bookDetailsObj = action.payload
         }
     }
 })

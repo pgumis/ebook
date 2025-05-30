@@ -73,32 +73,28 @@ class AuthController extends Controller
 
     public function zapomnianeHaslo(Request $request)
     {
-        $dane = $request->all();
-
-        $validator = Validator::make($dane, [
+        $request->validate([
             'email' => 'required|email|exists:uzytkownicy,email',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['bledy' => $validator->errors()], 422);
-        }
+        $email = $request->email;
+        $kod = rand(100000, 999999);
+        $waznosc = now()->addMinutes(10);
 
-        $token = Str::random(64);
+        KodResetowaniaHasla::where('email', $email)->delete();
 
-        DB::table('password_reset_tokens')->updateOrInsert(
-            ['email' => $dane['email']],
-            [
-                'token' => Hash::make($token),
-                'created_at' => Carbon::now()
-            ]
-        );
+        KodResetowaniaHasla::create([
+            'email' => $email,
+            'kod' => $kod,
+            'waznosc' => $waznosc,
+        ]);
+
+        Mail::to($email)->send(new ResetHaslaMail($kod));
 
         return response()->json([
-            'komunikat' => 'Link do resetu hasła został wysłany',
-            'token' => $token // tylko na potrzeby testów – w rzeczywistości byłby wysyłany mailem
-        ], 200);
+            'komunikat' => 'Kod został wysłany na e-mail.',
+        ]);
     }
-
 
 
     public function wyslijKodResetujacy(Request $request)
@@ -165,7 +161,6 @@ class AuthController extends Controller
         $uzytkownik->haslo = Hash::make($request->haslo);
         $uzytkownik->save();
 
-        // Usuwamy kod resetowania
         $kodResetowania->delete();
 
         return response()->json(['message' => 'Hasło zostało zmienione.']);

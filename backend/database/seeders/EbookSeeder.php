@@ -20,6 +20,7 @@ class EbookSeeder extends Seeder
                 'cena' => rand(20, 60),
                 'cena_promocyjna' => rand(0, 1) ? rand(10, 19) : null,
                 'format' => $formats[array_rand($formats)],
+                'status' => 'aktywny',
                 'created_at' => Carbon::now()->subDays(rand(0, 365)),
                 'updated_at' => now(),
             ]);

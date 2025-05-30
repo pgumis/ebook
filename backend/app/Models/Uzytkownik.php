@@ -38,4 +38,9 @@ class Uzytkownik extends Authenticatable
     {
         return $this->haslo;
     }
+
+    public function recenzje()
+    {
+        return $this->hasMany(Recenzja::class, 'uzytkownik_id');
+    }
 }

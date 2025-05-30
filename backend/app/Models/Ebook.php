@@ -32,4 +32,9 @@ class Ebook extends Model
         return $this->belongsToMany(Zamowienie::class, 'ebook_zamowienie');
     }
 
+    public function recenzje()
+    {
+        return $this->hasMany(Recenzja::class, 'ebook_id');
+    }
+
 }

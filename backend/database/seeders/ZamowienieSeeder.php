@@ -28,6 +28,7 @@ class ZamowienieSeeder extends Seeder
             foreach ($ebooki as $ebook) {
                 $zamowienie->ebooki()->attach($ebook->id, [
                     'cena_jednostkowa' => $ebook->cena_promocyjna ?? $ebook->cena,
+                    'ilosc' => 1,
                 ]);
                 $suma += $ebook->cena_promocyjna ?? $ebook->cena;
             }

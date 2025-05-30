@@ -1,0 +1,10 @@
+.list-option{
+    padding: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    min-width: max-content;
+}
+.list-option:hover{
+    background-color: #f2f2f2;
+}

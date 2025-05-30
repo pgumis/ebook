@@ -1,0 +1,35 @@
+.rating{
+    min-height: 3rem;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 2rem;
+    gap: 1.5rem;
+}
+.rating img{
+    width: 24px;
+    border-radius: 50%;
+}
+.rating-even{
+    background-color: #c9c0b56c;
+}
+.rating-odd{
+    
+}
+.rating-author-container{
+    display: flex;
+    gap: 1rem;
+}
+.rating-rating-container{
+    display: flex;
+    gap: 0.3rem;
+    font-weight: bold;
+}
+
+.rating-details{
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+.rating-date{
+    color: #6e6861;;
+}

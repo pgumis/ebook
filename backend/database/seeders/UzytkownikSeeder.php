@@ -16,6 +16,7 @@ class UzytkownikSeeder extends Seeder
             'email' => 'test@example.com',
             'haslo' => Hash::make('tajnehaslo'),
             'rola' => 'klient',
+            'avatar' => 'avatar1.png',
             'status' => 'aktywny',
         ]);
 

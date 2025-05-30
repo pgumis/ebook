@@ -1,0 +1,27 @@
+.book-wrapper{
+}
+.book-img-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 12.75rem;
+}
+.book-img-wrapper img {
+    height: 12.75rem;
+}
+.book-txt-content{
+    text-align: center;
+}
+.book-price{
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin: 0.5rem 0;
+}
+.book-title{
+    margin: 0;
+    font-size: 0.85rem;
+}
+.book-author{
+    margin: 0.5rem 0;
+    font-size: 0.75rem;
+}

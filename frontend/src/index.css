@@ -1,4 +1,8 @@
 /*https://www.iconfinder.com/search?q=&iconset=liny*/
+html, body {
+    height: 100%;
+    width: 100%;
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -10,6 +14,10 @@ body {
   max-width: 100vw;
 }
 
+.wrapper {
+  position: relative;
+  min-height: 100vh; /* ważne, żeby kontener miał pełną wysokość */
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
@@ -94,4 +102,8 @@ code {
 }
 .form-second-button{
   background-color: #4C7766;
+}
+
+input:disabled{
+  background-color: #ececec;
 }
