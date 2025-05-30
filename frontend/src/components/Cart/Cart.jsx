@@ -1,31 +1,10 @@
 import "./Cart.css";
-<<<<<<< HEAD
-=======
 import { useEffect, useState } from "react";
->>>>>>> mb
 import { useDispatch, useSelector } from "react-redux";
 import { cartActions } from "../../store/cart";
 
 const Cart = () => {
   const dispatch = useDispatch();
-<<<<<<< HEAD
-  const cart = useSelector((state) => state.cart);
-  const items = cart.items || [];
-  console.log(cart);
-  const handleDelete = (id) => {
-    dispatch(cartActions.removeItem(id))
-  }
-  return (
-    <>
-      {items.length > 0 ? (
-        <div className="panel">
-          <h2>Twój koszyk</h2>
-          <button
-            className="cart-btn"
-            onClick={() => {
-              alert("Płatność zrealizowana");
-            }}
-=======
   const userData = useSelector((state) => state.userData);
   const cart = useSelector((state) => state.cart);
   const items = cart.items || [];
@@ -96,7 +75,6 @@ const Cart = () => {
           <button
             className="cart-btn"
             onClick={() => alert("Płatność zrealizowana")}
->>>>>>> mb
           >
             Przejdź do płatności
             <svg
@@ -124,10 +102,7 @@ const Cart = () => {
           </button>
           {items.map((item) => (
             <div
-<<<<<<< HEAD
-=======
               key={item.id}
->>>>>>> mb
               style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -135,24 +110,6 @@ const Cart = () => {
               }}
             >
               <div style={{ display: "flex", alignItems: "center" }}>
-<<<<<<< HEAD
-                <div>
-                  <img
-                    src="okladka2.jpg"
-                    alt="okladka ksiazki"
-                    className="cart-img"
-                  />
-                </div>
-                <div className="cart-book-info">
-                  <span>{item.title}</span>
-                  <span>{item.author}</span>
-                   <span>{item.id}</span>
-                  <span>Kategoria książki</span>
-                </div>
-              </div>
-              <div style={{display: 'flex', flexDirection:'column', justifyContent:'space-between', alignItems:'flex-end'}}>
-                <button className="cart-delete-element-btn" onClick={()=>{handleDelete(item.id)}}>
-=======
                 <img
                   src={item.okladka}
                   alt="okładka książki"
@@ -177,7 +134,6 @@ const Cart = () => {
                   className="cart-delete-element-btn"
                   onClick={() => handleDelete(item.id)}
                 >
->>>>>>> mb
                   <svg
                     fill="none"
                     height="16"
@@ -194,29 +150,6 @@ const Cart = () => {
                     />
                   </svg>
                 </button>
-<<<<<<< HEAD
-                <span style={{fontSize: '1.3rem'}}>{item.price} PLN</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div
-          className="panel"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexWrap: "wrap",
-          }}
-        >
-          <p style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
-            Twój koszyk jest pusty.
-          </p>
-        </div>
-      )}
-    </>
-=======
                 <span style={{ fontSize: "1.3rem" }}>{item.price.toFixed(2)} PLN</span>
               </div>
             </div>
@@ -237,7 +170,6 @@ const Cart = () => {
         </p>
       )}
     </div>
->>>>>>> mb
   );
 };
 export default Cart;

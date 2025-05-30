@@ -18,8 +18,6 @@ import Profile from "./components/Profile/Profile";
 function App() {
   const dispatch = useDispatch();
   const currView = useSelector((state) => state.view);
-<<<<<<< HEAD
-=======
 
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
@@ -28,7 +26,6 @@ function App() {
     }
   }, [dispatch]);
 
->>>>>>> mb
   return (
     <div className="App">
       <div className="wrapper">

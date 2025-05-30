@@ -6,16 +6,6 @@ import { viewActions } from "../../store/view";
 import { cartActions } from "../../store/cart";
 import generateStars from "../../utils/generateStars";
 //fetch
-<<<<<<< HEAD
-const data = {
-  id: 1,
-  title: "Harry Potter i Kamień Filozoficzny",
-  author: "J.K Rowling",
-  price: "32.99zł",
-  rating: 4.3,
-};
-=======
->>>>>>> mb
 
 const BookDetails = () => {
   const dispatch = useDispatch();
@@ -35,24 +25,15 @@ const BookDetails = () => {
   const [confirmedRating, setConfirmedRating] = useState(0);
 
   const [dane, setDane] = useState({
-<<<<<<< HEAD
-    recenzja: '',
-    opinia: 0
-=======
     recenzja: "",
     opinia: 0,
->>>>>>> mb
   });
 
   useEffect(() => {
     if (openRating && contentRef.current) {
       requestAnimationFrame(() => {
         const scrollHeight = contentRef.current.scrollHeight;
-<<<<<<< HEAD
-        setHeight(`${scrollHeight+32}px`);
-=======
         setHeight(`${scrollHeight + 32}px`);
->>>>>>> mb
       });
     } else {
       setHeight("0px");
@@ -65,12 +46,6 @@ const BookDetails = () => {
     }
   }, [isInCart, addedNow]);
 
-<<<<<<< HEAD
-  const handleAdd = (data) => {
-    dispatch(cartActions.addItem({...selectedBook}));
-    setMessage("Dodano produkt do koszyka!");
-    setAddedNow(true);
-=======
   const handleAdd = async () => {
     setMessage("Dodano produkt do koszyka!");
     setAddedNow(true);
@@ -95,7 +70,6 @@ const BookDetails = () => {
     } catch (error) {
       console.error("Błąd dodawania do koszyka:", error.message);
     }
->>>>>>> mb
     //dispatch(cartActions.addItem({ id: data.id}));
   };
   const handleOpenRating = () => {
@@ -105,16 +79,6 @@ const BookDetails = () => {
     setRating(rating);
     setConfirmedRating(rating);
     console.log(rating);
-<<<<<<< HEAD
-  }
-  const handleChange = (e) => {
-    setDane({...dane, [e.target.name]: e.target.value});
-  }
-  const handleSubmit = (e) =>{
-    e.preventDefault();
-    console.log(dane);
-  }
-=======
   };
   const handleChange = (e) => {
     setDane({ ...dane, [e.target.name]: e.target.value });
@@ -165,22 +129,10 @@ const BookDetails = () => {
     }
   };
 
->>>>>>> mb
   return (
     <div className="book-details-wrapper panel">
       <div className="book-details-main-info">
         <div className="book-details-img-container">
-<<<<<<< HEAD
-          <img src="okladka1.jpg" alt="okładka" className="book-details-img" />
-        </div>
-        <div className="book-details-rigt-panel">
-          <div className="book-details-info-container">
-            <p className="book-details-title">{data.title}</p>
-            <p className="book-details-author">{data.author}</p>
-            <p className="book-details-price">{data.price}</p>
-            <div className="book-details-rating">
-              {generateStars(data.rating)}
-=======
           <img
             src={selectedBook.okladka}
             alt="okładka"
@@ -194,7 +146,6 @@ const BookDetails = () => {
             <p className="book-details-price">{selectedBook.price}</p>
             <div className="book-details-rating">
               {generateStars(selectedBook.rating)}
->>>>>>> mb
             </div>
           </div>
 
@@ -215,11 +166,7 @@ const BookDetails = () => {
               className="book-details-add-book"
               disabled={!userData.loggedIn || isInCart}
               onClick={() => {
-<<<<<<< HEAD
-                handleAdd(data);
-=======
                 handleAdd();
->>>>>>> mb
               }}
             >
               Dodaj do koszyka
