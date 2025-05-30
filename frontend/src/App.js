@@ -17,6 +17,7 @@ import PurchaseDetails from "./components/PurchaseDetails/PurchaseDetails";
 import Profile from "./components/Profile/Profile";
 import VendorPanel from "./components/VendorPanel/VendorPanel";
 import VendorEditBookDetails from "./components/VendorEditBookDetails/VendorEditBookDetails";
+import VendorAddBook from "./components/VendorAddBook/VendorAddBook";
 
 function App() {
   const dispatch = useDispatch();
@@ -47,6 +48,7 @@ function App() {
           {currView.selectedView === "purchaseDetails" && <PurchaseDetails />}
           {currView.selectedView === "profileDetails" && <Profile />}
           {currView.selectedView === "editBookDetails" && <VendorEditBookDetails />}
+          {currView.selectedView === "addBook" && <VendorAddBook />}
         </div>
         <Footer />
       </div>

@@ -171,7 +171,7 @@ const BookDetails = () => {
               </button>
             </div>
           )}
-          <button
+          {userData.role === "dostawca"&& <button
             className="book-details-add-book"
             disabled={!userData.loggedIn || isInCart}
             onClick={() => {
@@ -179,7 +179,7 @@ const BookDetails = () => {
             }}
           >
             Edytuj informacje
-          </button>
+          </button>}
         </div>
       </div>
 
