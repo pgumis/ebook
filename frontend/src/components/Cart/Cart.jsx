@@ -9,7 +9,7 @@ const Cart = () => {
   const cart = useSelector((state) => state.cart);
   const items = cart.items || [];
   const [isLoading, setIsLoading] = useState(false);
-  console.log(items);
+  const [total, setTotal] = useState(0);
   useEffect(() => {
     const fetchCart = async () => {
       setIsLoading(true);
@@ -28,20 +28,22 @@ const Cart = () => {
         }
 
         const data = await response.json();
-        console.log(data.pozycje); // POBIERAM SAMO ID KSIAZKI ALE NIE INFO NA JEJ TEMAT
+        console.log(data); // POBIERAM SAMO ID KSIAZKI ALE NIE INFO NA JEJ TEMAT
+        const newItems = data.pozycje.map((pozycja) => ({
+          id: pozycja.ebook_id,
+          title: pozycja.ebook.tytul,
+          author: pozycja.ebook.autor,
+          price: parseFloat(pozycja.ebook.cena),
+          okladka: pozycja.ebook.okladka,
+        }));
         dispatch(
           cartActions.setCart({
-            items: data.pozycje.map((pozycja) => (
-              {
-              id: pozycja.ebook_id,
-              title: pozycja.ebook.tytul,
-              author: pozycja.ebook.autor,
-              price: pozycja.cena_jednostkowa,
-              okladka: pozycja.ebook.okladka,
-            })),
-            suma: data.suma,
+            items: newItems,
+            suma: 0, // Ignorujemy data.suma z backendu
           })
         );
+        const calculatedTotal = newItems.reduce((sum, item) => sum + item.price, 0);
+        setTotal(calculatedTotal);
       } catch (error) {
         console.error("Błąd pobierania koszyka:", error.message);
       } finally {
@@ -148,12 +150,12 @@ const Cart = () => {
                     />
                   </svg>
                 </button>
-                <span style={{ fontSize: "1.3rem" }}>{item.price} PLN</span>
+                <span style={{ fontSize: "1.3rem" }}>{item.price.toFixed(2)} PLN</span>
               </div>
             </div>
           ))}
           <div>
-            <strong>Suma: {cart.suma || 0} PLN</strong>
+            <strong>Suma: {total.toFixed(2) || 0} PLN</strong>
           </div>
         </>
       ) : (

@@ -48,7 +48,6 @@ const BookDetails = () => {
 
   const handleAdd = async () => {
     setMessage("Dodano produkt do koszyka!");
-    console.log(userData.token);
     setAddedNow(true);
     try {
       const response = await fetch("http://localhost:8000/api/koszyk", {
@@ -66,7 +65,6 @@ const BookDetails = () => {
       }
 
       const data = await response.json();
-      // Zaktualizuj stan Redux po dodaniu (może być w BookDetails)
       dispatch(cartActions.addItem({ ...selectedBook }));
       console.log(selectedBook);
     } catch (error) {
@@ -110,8 +108,7 @@ const BookDetails = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // Jeśli wymagana jest autoryzacja, dodaj np.:
-          // "Authorization": `Bearer ${userData.token}`,
+          "Authorization": `Bearer ${userData.token}`,
         },
         body: JSON.stringify(payload),
       });
@@ -321,7 +318,6 @@ const BookDetails = () => {
                   ★
                 </span>
               </div>
-              {/*trzeba tu będzie dodać form, zapisywać te dane i wysyłać do DB*/}
               <textarea
                 name="recenzja"
                 onChange={handleChange}
@@ -374,7 +370,7 @@ const BookDetails = () => {
             ratingObj={{
               author: "bob",
               authorImg: "profile.jpg",
-              rating: 4.6,
+              rating: 5,
               date: "20-05-2025",
               text: "Na prawdę dobra książka. To prawda - jest wiele drastycznych scen, ale to jest właśnie Langer, Sadysta z Mokotowa. Od początku Chyłki Langer stał się moją ulubioną postacią, a ta książka nie zawiodła mnie, pokazuje początki Piotra, tłumaczy skąd wzięło się to zło w nim. Jednakże trzeba przyznać - książka nie jest dla wrażliwych ludzi i to nie jest książka przy której można chrupać chipsy",
             }}
@@ -384,7 +380,7 @@ const BookDetails = () => {
             ratingObj={{
               author: "czytelnik12",
               authorImg: "profile-red.png",
-              rating: 4.6,
+              rating: 4,
               date: "20-05-2025",
               text: "super księga",
             }}
@@ -394,7 +390,7 @@ const BookDetails = () => {
             ratingObj={{
               author: "czytelnik123",
               authorImg: "profile-blue.png",
-              rating: 4.6,
+              rating: 5,
               date: "20-05-2025",
               text: "super księga",
             }}
@@ -404,7 +400,7 @@ const BookDetails = () => {
             ratingObj={{
               author: "czytelnik123",
               authorImg: "profile-red.png",
-              rating: 4.6,
+              rating: 5,
               date: "20-05-2025",
               text: "super księga",
             }}
@@ -414,7 +410,7 @@ const BookDetails = () => {
             ratingObj={{
               author: "czytelnik123",
               authorImg: "profile-blue.png",
-              rating: 4.6,
+              rating: 3,
               date: "20-05-2025",
               text: "super księga",
             }}

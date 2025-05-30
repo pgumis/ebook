@@ -50,5 +50,6 @@ nav{
 }
 .top-bar-profile-picture{
     width: 32px;
+    aspect-ratio: 1;
     border-radius: 50%;
 }
