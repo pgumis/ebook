@@ -4,6 +4,7 @@ import "./TopBar.css";
 import Logo from "../Logo/Logo";
 import { useState, useRef, useEffect } from "react";
 import TopBarListOption from "./TopBarListOption";
+import { userDataActions } from "../../store/userData";
 
 const TopBar = () => {
   const dispatch = useDispatch();
@@ -30,6 +31,15 @@ const TopBar = () => {
     };
   }, []);
 
+
+  const handleSignOut = async () => {
+   
+      dispatch(userDataActions.clearData());
+
+      localStorage.removeItem("userData");
+
+      dispatch(viewActions.changeView("home"));
+  };
   return (
     <nav>
       <Logo
@@ -174,6 +184,14 @@ const TopBar = () => {
               }}
             >
               Ustawienia
+            </TopBarListOption>
+            <TopBarListOption
+              last
+              onClick={() => {
+                handleSignOut();
+              }}
+            >
+              Wyloguj
             </TopBarListOption>
           </div>
         </div>

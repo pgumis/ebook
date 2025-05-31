@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { viewActions } from "../../store/view";
 import { cartActions } from "../../store/cart";
 import generateStars from "../../utils/generateStars";
-//fetch
 
 const BookDetails = () => {
   const dispatch = useDispatch();
@@ -83,7 +82,6 @@ const BookDetails = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(userData, selectedBook.id);
 
     if (!userData.id || !selectedBook.id) {
       alert("Błąd: Brak ID użytkownika lub książki.");
@@ -100,6 +98,8 @@ const BookDetails = () => {
       ocena: dane.opinia,
       tresc: dane.recenzja || null,
     };
+    console.log("Token:", userData.token);
+    console.log("Payload:", payload);
 
     try {
       const response = await fetch("http://localhost:8000/api/recenzje", {
@@ -126,6 +126,26 @@ const BookDetails = () => {
       alert(`Nie udało się zapisać recenzji: ${error.message}`);
     }
   };
+
+  const [recenzje, setRecenzje] = useState([]);
+
+  useEffect(() => {
+    const fetchRecenzje = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8000/api/ebooki/${selectedBook.id}/recenzje`
+        );
+        if (!response.ok) throw new Error("Błąd podczas pobierania recenzji");
+
+        const data = await response.json();
+        setRecenzje(data); // zakładamy, że API zwraca tablicę recenzji
+      } catch (error) {
+        console.error("Błąd:", error.message);
+      }
+    };
+
+    if (selectedBook?.id) fetchRecenzje();
+  }, [selectedBook?.id]);
 
   return (
     <div className="book-details-wrapper panel">
@@ -171,22 +191,24 @@ const BookDetails = () => {
               </button>
             </div>
           )}
-          {userData.role === "dostawca"&& <button
-            className="book-details-add-book"
-            disabled={!userData.loggedIn || isInCart}
-            onClick={() => {
-              dispatch(viewActions.changeView('editBookDetails'));
-            }}
-          >
-            Edytuj informacje
-          </button>}
+          {userData.role === "dostawca" && (
+            <button
+              className="book-details-add-book"
+              disabled={!userData.loggedIn || isInCart}
+              onClick={() => {
+                dispatch(viewActions.changeView("editBookDetails"));
+              }}
+            >
+              Edytuj informacje
+            </button>
+          )}
         </div>
       </div>
 
       <div className="book-details-ratings-container">
         <div className="book-details-rating-top-section">
           <h3>Opinie użytkowników</h3>
-          {(userData.loggedIn && userData.role !== 'dostawca') && (
+          {userData.loggedIn && userData.role !== "dostawca" && (
             <button onClick={handleOpenRating}>+ Napisz recenzję</button>
           )}
         </div>
@@ -365,66 +387,26 @@ const BookDetails = () => {
           <div>{generateStars(selectedBook.rating)}</div>
         </div>
         <div className="book-details-users-rating-wrapper">
-          <Rating
-            ratingObj={{
-              author: "czytelnik123",
-              authorImg: "profile-red.png",
-              rating: 4,
-              date: "20-05-2025",
-              text: "mega kool",
-            }}
-            index={1}
-          />
-          <Rating
-            ratingObj={{
-              author: "bob",
-              authorImg: "profile.jpg",
-              rating: 5,
-              date: "20-05-2025",
-              text: "Na prawdę dobra książka. To prawda - jest wiele drastycznych scen, ale to jest właśnie Langer, Sadysta z Mokotowa. Od początku Chyłki Langer stał się moją ulubioną postacią, a ta książka nie zawiodła mnie, pokazuje początki Piotra, tłumaczy skąd wzięło się to zło w nim. Jednakże trzeba przyznać - książka nie jest dla wrażliwych ludzi i to nie jest książka przy której można chrupać chipsy",
-            }}
-            index={2}
-          />
-          <Rating
-            ratingObj={{
-              author: "czytelnik12",
-              authorImg: "profile-red.png",
-              rating: 4,
-              date: "20-05-2025",
-              text: "super księga",
-            }}
-            index={3}
-          />
-          <Rating
-            ratingObj={{
-              author: "czytelnik123",
-              authorImg: "profile-blue.png",
-              rating: 5,
-              date: "20-05-2025",
-              text: "super księga",
-            }}
-            index={4}
-          />
-          <Rating
-            ratingObj={{
-              author: "czytelnik123",
-              authorImg: "profile-red.png",
-              rating: 5,
-              date: "20-05-2025",
-              text: "super księga",
-            }}
-            index={5}
-          />
-          <Rating
-            ratingObj={{
-              author: "czytelnik123",
-              authorImg: "profile-blue.png",
-              rating: 3,
-              date: "20-05-2025",
-              text: "super księga",
-            }}
-            index={6}
-          />
+          {recenzje.length > 0 ? (
+            recenzje.map((recenzja, index) => (
+              <Rating
+                key={index}
+                ratingObj={{
+                  author: recenzja.uzytkownik?.nazwa || "Anonim",
+                  authorImg:
+                    recenzja.uzytkownik?.avatar || "default-avatar.png",
+                  rating: recenzja.ocena,
+                  date: new Date(recenzja.created_at).toLocaleDateString(
+                    "pl-PL"
+                  ),
+                  text: recenzja.tresc,
+                }}
+                index={index}
+              />
+            ))
+          ) : (
+            <p>Brak recenzji dla tej książki.</p>
+          )}
         </div>
       </div>
     </div>
