@@ -42,7 +42,7 @@ const SignIn = () => {
       };
       setKomunikat(wynik.komunikat);
       //API POWINNO ZWRACAĆ INFO NA TEMAT ROLI. NA RAZIE RĘCZNIE ZMIENIAMY ROLE NA  'klient', 'dostawca', 'admin'
-      dispatch(userDataActions.setData({loggedIn: true, id: 1, userName: 'test', email: 'test@gmail.com', imie:'Jan', nazwisko: 'Kowalski', phoneNumber: '123456789', role: 'klient', profilePic: "profile.jpg", token: wynik.token}));
+      dispatch(userDataActions.setData({loggedIn: true, id: 1, userName: 'test', email: 'test@gmail.com', imie:'Jan', nazwisko: 'Kowalski', phoneNumber: '123456789', role: 'admin', profilePic: "profile.jpg", token: wynik.token}));
       dispatch(viewActions.changeView('home'))
       localStorage.setItem("userData", JSON.stringify(userData));
 

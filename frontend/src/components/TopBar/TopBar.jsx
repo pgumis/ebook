@@ -214,6 +214,7 @@ const TopBar = () => {
         >
           Zarejestruj się
         </button>
+        
       </div>
     </nav>
   );

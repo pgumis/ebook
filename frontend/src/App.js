@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { userDataActions } from "./store/userData";
+import { viewActions } from "./store/view";
 
 import TopBar from "./components/TopBar/TopBar";
 import SignUp from "./components/SignUp/SignUp";
@@ -18,6 +19,7 @@ import Profile from "./components/Profile/Profile";
 import VendorPanel from "./components/VendorPanel/VendorPanel";
 import VendorEditBookDetails from "./components/VendorEditBookDetails/VendorEditBookDetails";
 import VendorAddBook from "./components/VendorAddBook/VendorAddBook";
+import AdminPanel from "./components/AdminPanel/AdminPanel";
 
 function App() {
   const dispatch = useDispatch();
@@ -36,8 +38,12 @@ function App() {
       <div className="wrapper">
         <TopBar />
         <div className="content-wrapper">
-          {(currView.selectedView === "home" && userData.role !== 'dostawca')&& <BooksList />}
+          <button onClick={()=>{dispatch(userDataActions.setData({...userData, role: 'klient'}))}}>klient</button>
+          <button onClick={()=>{dispatch(userDataActions.setData({...userData, role: 'dostawca'}))}}>dostawca</button>
+          <button onClick={()=>{dispatch(userDataActions.setData({...userData, role: 'admin'}))}}>admin</button>
+          {(currView.selectedView === "home" && (userData.role === 'klient' || userData.role === 'user'))&& <BooksList />}
           {(currView.selectedView === "home" && userData.role === 'dostawca')&& <VendorPanel />}
+          {(currView.selectedView === "home" && userData.role === 'admin')&& <AdminPanel />}
           {currView.selectedView === "signUp" && <SignUp />}
           {currView.selectedView === "signIn" && <SignIn />}
           {currView.selectedView === "contact" && <ContactForm />}

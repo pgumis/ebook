@@ -1,0 +1,39 @@
+.admin-panel-button{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    width: 18rem;
+    height: 12rem;
+    color: white;
+    font-weight: bold;
+    background-color: #C9C0B5;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    cursor: pointer;
+}
+.admin-panel-buttons-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+}
+.admin-panel-buttons-row{
+    display: flex;
+    justify-content: space-between;
+}
+.admin-panel{
+    display: flex;
+}
+.admin-panel-container{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+.admin-panel-messages-container{
+    width: 100%;
+    padding: 0 4rem;
+}

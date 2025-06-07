@@ -1,0 +1,32 @@
+const AdminPanelMessagesList = () => {
+  return (
+    <>
+    <h3 style={{marginTop:0}}>Skrzynka wiadomości</h3>
+      <table className="admin-panel-messages-list">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Temat</th>
+            <th>Od</th>
+            <th>Data</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>wiadomosc</td>
+            <td>asddas</td>
+            <td>adas</td>
+            <td>adas</td>
+          </tr>
+          <tr>
+            <td>wiadomosc</td>
+            <td>asddas</td>
+            <td>adas</td>
+            <td>adas</td>
+          </tr>
+        </tbody>
+      </table>
+    </>
+  );
+};
+export default AdminPanelMessagesList;
