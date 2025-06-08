@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Wiadomosc;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class WiadomoscController extends Controller
@@ -20,7 +21,8 @@ class WiadomoscController extends Controller
 
     public function wyslij(Request $request)
     {
-        if ($request->user()) {
+
+        if (Auth::guard('sanctum')->check()) {
 
             $request->validate([
                 'temat' => 'required|string|min:5|max:100',
@@ -28,11 +30,14 @@ class WiadomoscController extends Controller
             ]);
 
             Wiadomosc::create([
-                'uzytkownik_id' => $request->user()->id,
+                'uzytkownik_id' => Auth::guard('sanctum')->user()->id,
+                'imie' => Auth::guard('sanctum')->user()->imie,
+                'email' => Auth::guard('sanctum')->user()->email,
                 'temat' => $request->temat,
                 'tresc' => $request->tresc,
                 'przeczytana' => false,
             ]);
+
         } else {
 
             $request->validate([

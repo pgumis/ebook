@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\EbookController;
 use App\Http\Controllers\API\KoszykController;
 use App\Http\Controllers\API\RecenzjaController;
@@ -93,7 +94,7 @@ Route::middleware(['auth:sanctum', 'sprawdz.role:klient'])
 Route::middleware(['auth:sanctum', 'sprawdz.role:klient'])
     ->delete('/koszyk/{id}', [KoszykController::class, 'usun']);
 
-Route::post('/wiadomosci', [WiadomoscController::class, 'wyslij']);
+Route::post('/wiadomosci/wyslij', [WiadomoscController::class, 'wyslij']);
 
 Route::get('/wiadomosci', [WiadomoscController::class, 'lista']);
 
@@ -121,3 +122,8 @@ Route::middleware('auth:sanctum')
 
 Route::middleware('auth:sanctum')
     ->delete('/recenzje/{id}', [RecenzjaController::class, 'usun']);
+
+Route::middleware(['auth:sanctum', 'sprawdz.role:admin'])->prefix('admin')->group(function () {
+    Route::get('/uzytkownicy', [AdminController::class, 'wszyscyUzytkownicy']);
+    Route::get('/recenzje', [AdminController::class, 'wszystkieRecenzje']);
+});
