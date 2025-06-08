@@ -1,4 +1,4 @@
-const AdminPanelButton = ({ children, index }) => {
+const AdminPanelButton = ({ children, index, onClick }) => {
   const icons = [
     <svg
       fill="none"
@@ -105,8 +105,8 @@ const AdminPanelButton = ({ children, index }) => {
   ];
 
   return (
-    <div className="admin-panel-container">
-      <button className="admin-panel-button" onClick={() => {}}>
+    <div className="admin-panel-container" onClick={onClick}>
+      <button className="admin-panel-button">
         {icons[index]}
         {children}
       </button>

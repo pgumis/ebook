@@ -1,7 +1,7 @@
 const AdminPanelMessagesList = () => {
   return (
     <>
-    <h3 style={{marginTop:0}}>Skrzynka wiadomości</h3>
+      <h3 style={{ marginTop: 0 }}>Skrzynka wiadomości</h3>
       <table className="admin-panel-messages-list">
         <thead>
           <tr>
@@ -24,8 +24,57 @@ const AdminPanelMessagesList = () => {
             <td>adas</td>
             <td>adas</td>
           </tr>
+          <tr>
+            <td>wiadomosc</td>
+            <td>asddas</td>
+            <td>adas</td>
+            <td>adas</td>
+          </tr>
+          <tr>
+            <td>wiadomosc</td>
+            <td>asddas</td>
+            <td>adas</td>
+            <td>adas</td>
+          </tr>
+          <tr>
+            <td>wiadomosc</td>
+            <td>asddas</td>
+            <td>adas</td>
+            <td>adas</td>
+          </tr>
+          <tr>
+            <td>wiadomosc</td>
+            <td>asddas</td>
+            <td>adas</td>
+            <td>adas</td>
+          </tr>
+          <tr>
+            <td>wiadomosc</td>
+            <td>asddas</td>
+            <td>adas</td>
+            <td>adas</td>
+          </tr>
+          <tr>
+            <td>wiadomosc</td>
+            <td>asddas</td>
+            <td>adas</td>
+            <td>adas</td>
+          </tr>
+          <tr>
+            <td>wiadomosc</td>
+            <td>asddas</td>
+            <td>adas</td>
+            <td>adas</td>
+          </tr>
+          <tr>
+            <td>wiadomosc</td>
+            <td>asddas</td>
+            <td>adas</td>
+            <td>adas</td>
+          </tr>
         </tbody>
       </table>
+      <span style={{float:'right', textDecoration:'underline'}}>Pokaż więcej</span>
     </>
   );
 };

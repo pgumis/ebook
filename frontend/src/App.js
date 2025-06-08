@@ -20,6 +20,7 @@ import VendorPanel from "./components/VendorPanel/VendorPanel";
 import VendorEditBookDetails from "./components/VendorEditBookDetails/VendorEditBookDetails";
 import VendorAddBook from "./components/VendorAddBook/VendorAddBook";
 import AdminPanel from "./components/AdminPanel/AdminPanel";
+import AdminPanelManage from "./components/AdminPanel/AdminPanelManage/AdminPanelManage";
 
 function App() {
   const dispatch = useDispatch();
@@ -55,6 +56,11 @@ function App() {
           {currView.selectedView === "profileDetails" && <Profile />}
           {currView.selectedView === "editBookDetails" && <VendorEditBookDetails />}
           {currView.selectedView === "addBook" && <VendorAddBook />}
+          {currView.selectedView === "adminPanelManageUsers" && <AdminPanelManage />}
+          {currView.selectedView === "adminPanelManageEbooks" && <AdminPanelManage />}
+          {currView.selectedView === "adminPanelManageRatings" && <AdminPanelManage />}
+          {currView.selectedView === "adminPanelManageOrders" && <AdminPanelManage />}
+          {currView.selectedView === "adminPanelManageMessages" && <AdminPanelManage />}
         </div>
         <Footer />
       </div>
