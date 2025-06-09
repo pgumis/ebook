@@ -45,6 +45,11 @@ const TopBar = () => {
         console.log("Przycisk Szukaj kliknięty! (funkcjonalność do zaimplementowania)");
     };
 
+    const handleAdvancedSearchClick = (e) => {
+        e.preventDefault();
+        console.log("Przycisk Szukanie zaawansowane kliknięty! (funkcjonalność do zaimplementowania)");
+    };
+
   return (
     <nav>
       <Logo
@@ -56,6 +61,9 @@ const TopBar = () => {
             <input type="search" placeholder="Szukaj ebooka..." className="nav-search-bar" />
             <button className="search-button" onClick={handleSearch}>
                 Szukaj
+            </button>
+            <button className="advanced-search-button" onClick={handleAdvancedSearchClick}>
+                Szukanie zaawansowane
             </button>
         </div>
       <div className="nav-right-side">

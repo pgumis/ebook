@@ -43,7 +43,7 @@ nav{
     line-height: 1.5;
     margin: 0;
     max-width: none;
-    min-height: 34px;
+    min-height: 30px;
     min-width: 10px;
     outline: none;
     overflow: hidden;
@@ -59,6 +59,40 @@ nav{
 }
 .search-button:hover,
 .search-button:focus {
+    opacity: .75;
+}
+
+.advanced-search-button{
+
+    background-color: #4C7766;
+    border-radius: 4px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.5;
+    margin: 0;
+    max-width: none;
+    min-height: 30px;
+    min-width: 10px;
+    outline: none;
+    overflow: hidden;
+    padding: 9px 20px 8px;
+    position: relative;
+    text-align: center;
+    text-transform: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
+
+}
+.advanced-search-button:hover,
+.advanced-search-button:focus {
     opacity: .75;
 }
 
