@@ -21,3 +21,38 @@
   margin-top: 1rem;
   text-align: left;
 }
+/* frontend/src/components/Profile/Profile.css */
+
+/* Stary .profile-card, niepotrzebny, gdy używasz Bootstrap Card */
+/* .profile-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+} */
+
+.profile-avatar {
+  width: 150px; /* Określona szerokość */
+  height: 150px; /* Określona wysokość */
+  object-fit: cover; /* Upewnij się, że obrazek wypełnia koło bez zniekształceń */
+  /* Klasa Bootstrap 'rounded-circle' już zaokrągli */
+  /* Klasa Bootstrap 'img-fluid' już sprawi, że będzie responsywny */
+}
+
+/* Stary .profile-info, niepotrzebny, gdy używasz Bootstrap mb-3 */
+/* .profile-info {
+  margin-top: 1rem;
+  text-align: left;
+} */
+
+/* Możesz dodać ogólne style dla panelu, jeśli potrzebujesz, np. padding i tło */
+.panel { /* Jeśli używasz klasy panel na divie nadrzędnym dla całego profilu */
+  background-color: #f8f9fa; /* Jasne tło, pasujące do Bootstrapa */
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+}

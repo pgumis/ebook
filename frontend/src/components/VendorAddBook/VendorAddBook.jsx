@@ -152,18 +152,40 @@ const VendorAddBook = () => {
                       </select>
                     </div>
 
+                  <div className="mb-3">
+                    <label className="form-label">Język</label>
+                    <select className="form-select" name="jezyk" value={dane.jezyk} onChange={handleChange}>
+                      <option value="">Wybierz język</option>
+                      <option value="Polski">Polski</option>
+                      <option value="Angielski">Angielski</option>
+                      <option value="Niemiecki">Niemiecki</option>
+                      <option value="Hiszpański">Hiszpański</option>
+                      <option value="Francuski">Francuski</option>
+                      <option value="Inne">Inne</option>
+                    </select>
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Data wydania</label>
+                    <input type="date" className="form-control" name="data_wydania" value={dane.data_wydania} onChange={handleChange} />
+                  </div>
 
                 </div>
 
                 {/* PRAWA KOLUMNA – okładka i podgląd */}
                 <div className="col-md-5">
+
+                  <div className="mb-3">
+                    <label className="form-label">Cena</label>
+                    <input type="number" className="form-control" name="cena" value={dane.cena} onChange={handleChange} />
+                  </div>
+
                   <div className="mb-2">
                     <label className="form-label">Plik książki (.epub, .mobi, .pdf)</label>
-                    <input type="file" className="form-control" accept=".epub" onChange={handleBookChange} />
+                    <input type="file" className="form-control" accept=".epub, .pdf, .mobi" onChange={handleBookChange} />
                   </div>
                   <div className="mb-2">
                     <label className="form-label">Okładka (.jpg, .jpeg, .png)</label>
-                    <input type="file" className="form-control" accept=".jpg" onChange={handleCoverChange} />
+                    <input type="file" className="form-control" accept=".jpg, .jpeg, .png" onChange={handleCoverChange} />
                   </div>
 
                   {okladka && (
