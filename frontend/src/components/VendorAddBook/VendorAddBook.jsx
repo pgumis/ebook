@@ -90,8 +90,45 @@ const VendorAddBook = () => {
         <input type="text" name="isbn" placeholder="ISBN" value={dane.isbn} onChange={handleChange} />
         <input type="number" name="liczba_stron" placeholder="Liczba stron" value={dane.liczba_stron} onChange={handleChange} />
         <input type="text" name="wydawnictwo" placeholder="Wydawnictwo" value={dane.wydawnictwo} onChange={handleChange} />
-        <input type="text" name="kategoria" placeholder="Kategoria" value={dane.kategoria} onChange={handleChange} />
-        <input type="text" name="jezyk" placeholder="Język" value={dane.jezyk} onChange={handleChange} />
+        <select name="kategoria" value={dane.kategoria} onChange={handleChange}>
+          <option value="">Wybierz kategorię</option>
+          <option value="Atlasy i albumy">Atlasy i albumy</option>
+          <option value="Biografie">Biografie</option>
+          <option value="Biznes">Biznes</option>
+          <option value="Dla dzieci">Dla dzieci</option>
+          <option value="Fantastyka">Fantastyka</option>
+          <option value="Historia">Historia</option>
+          <option value="Horror">Horror</option>
+          <option value="Informatyka">Informatyka</option>
+          <option value="Komiksy">Komiksy</option>
+          <option value="Kryminał, sensacja, thriller">Kryminał, sensacja, thriller</option>
+          <option value="Kuchnia">Kuchnia</option>
+          <option value="Kultura i sztuka">Kultura i sztuka</option>
+          <option value="Lektury">Lektury</option>
+          <option value="Literatura faktu">Literatura faktu</option>
+          <option value="Literatura piękna">Literatura piękna</option>
+          <option value="Literatura popularnonaukowa">Literatura popularnonaukowa</option>
+          <option value="Nauka języków">Nauka języków</option>
+          <option value="Nauki ścisłe, medycyna">Nauki ścisłe, medycyna</option>
+          <option value="Podróże i turystyka">Podróże i turystyka</option>
+          <option value="Poezja i dramat">Poezja i dramat</option>
+          <option value="Poradniki">Poradniki</option>
+          <option value="Prasa">Prasa</option>
+          <option value="Prawo">Prawo</option>
+          <option value="Religia">Religia</option>
+          <option value="Romanse">Romanse</option>
+          <option value="Sport">Sport</option>
+        </select>
+        <select name="jezyk" value={dane.jezyk} onChange={handleChange}>
+          <option value="">Wybierz język</option>
+          <option value="polski">Polski</option>
+          <option value="angielski">Angielski</option>
+          <option value="niemiecki">Niemiecki</option>
+          <option value="francuski">Francuski</option>
+          <option value="hiszpański">Hiszpański</option>
+          <option value="włoski">Włoski</option>
+          <option value="inny">Inny</option>
+        </select>
         <input type="date" name="data_wydania" placeholder="Data wydania" value={dane.data_wydania} onChange={handleChange} />
         <input type="number" name="cena" placeholder="Cena *" step="0.01" value={dane.cena} onChange={handleChange} />
         <input type="number" name="cena_promocyjna" placeholder="Cena promocyjna" step="0.01" value={dane.cena_promocyjna} onChange={handleChange} />

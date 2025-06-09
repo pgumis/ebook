@@ -204,6 +204,17 @@ class EbookController extends Controller
         ]);
     }
 
+    public function kategorie()
+    {
+        $kategorie = Ebook::select('kategoria')
+            ->distinct()
+            ->orderBy('kategoria') // Sortowanie alfabetyczne jest pomocne dla wyświetlania
+            ->get()
+            ->pluck('kategoria'); // Pobierz tylko wartości z kolumny 'kategoria' jako prostą tablicę
+
+        return response()->json($kategorie);
+    }
+
 
     public function promocje()
     {

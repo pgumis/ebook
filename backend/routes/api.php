@@ -110,6 +110,7 @@ Route::get('/strona-glowna', [EbookController::class, 'stronaGlowna']);
 Route::get('/promocje', [EbookController::class, 'promocje']);
 Route::get('/nowosci', [EbookController::class, 'nowosci']);
 Route::get('/bestsellery', [EbookController::class, 'bestsellery']);
+Route::get('/kategorie', [EbookController::class, 'kategorie']);
 
 Route::middleware(['auth:sanctum', 'sprawdz.role:dostawca'])
     ->get('/moje-ebooki', [EbookController::class, 'moje']);
