@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Ebook;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -151,6 +152,7 @@ class EbookController extends Controller
     public function stronaGlowna(Request $request)
     {
         $okres = $request->query('okres', 'rok');
+        $kategoria = $request->query('kategoria'); // <--- Dodana linia do pobierania kategorii
 
         switch ($okres) {
             case 'tydzien':
@@ -165,7 +167,17 @@ class EbookController extends Controller
                 break;
         }
 
-        $nowosci = Ebook::where('status', 'aktywny')->orderBy('created_at', 'desc')
+        // Funkcja pomocnicza do dodawania filtru kategorii do zapytań
+        $applyCategoryFilter = function ($query) use ($kategoria) {
+            if ($kategoria) {
+                $query->where('kategoria', $kategoria);
+            }
+            return $query;
+        };
+
+        $nowosci = Ebook::where('status', 'aktywny');
+        $nowosci = $applyCategoryFilter($nowosci)
+            ->orderBy('created_at', 'desc')
             ->take(6)
             ->get();
 
@@ -176,24 +188,33 @@ class EbookController extends Controller
             'ebooki.cena',
             'ebooki.cena_promocyjna',
             'ebooki.format',
+            'ebooki.okladka', // DODAŁEM OKLADKE, bo jest potrzebna w Book.jsx
             DB::raw('COUNT(ebook_zamowienie.ebook_id) as liczba_sprzedazy')
         )
             ->join('ebook_zamowienie', 'ebooki.id', '=', 'ebook_zamowienie.ebook_id')
             ->where('ebook_zamowienie.created_at', '>=', $dataPoczatkowa)
+            ->where('ebooki.status', 'aktywny');
+
+        $bestsellery = $applyCategoryFilter($bestsellery)
             ->groupBy(
                 'ebooki.id',
                 'ebooki.tytul',
                 'ebooki.autor',
                 'ebooki.cena',
                 'ebooki.cena_promocyjna',
-                'ebooki.format'
+                'ebooki.format',
+                'ebooki.okladka' // GRUPUJ TEŻ PO OKŁADCE
             )
             ->orderByDesc('liczba_sprzedazy')
             ->take(6)
             ->get();
 
+
         $promocje = Ebook::whereNotNull('cena_promocyjna')
             ->whereColumn('cena_promocyjna', '<', 'cena')
+            ->where('status', 'aktywny');
+
+        $promocje = $applyCategoryFilter($promocje)
             ->take(6)
             ->get();
 
@@ -204,15 +225,30 @@ class EbookController extends Controller
         ]);
     }
 
+    public function ebookiKategorii(Request $request)
+    {
+        $kategoria = $request->query('kategoria'); // Pobierz kategorię z parametru zapytania URL
+        $query = Ebook::where('status', 'aktywny');
+
+        if ($kategoria) {
+            $query->where('kategoria', $kategoria);
+        }
+
+        $query->orderBy('tytul', 'asc'); // Domyślne sortowanie
+
+        $ebooki = $query->paginate(12); // Paginacja, np. 12 książek na stronę
+
+        return response()->json($ebooki);
+    }
+
     public function kategorie()
     {
-        $kategorie = Ebook::select('kategoria')
-            ->distinct()
-            ->orderBy('kategoria') // Sortowanie alfabetyczne jest pomocne dla wyświetlania
-            ->get()
-            ->pluck('kategoria'); // Pobierz tylko wartości z kolumny 'kategoria' jako prostą tablicę
+        // Pobierz listę wszystkich kategorii z pliku konfiguracyjnego
+        $wszystkieKategorie = Config::get('kategorie.lista');
 
-        return response()->json($kategorie);
+
+        // Zwróć wszystkie kategorie z pliku konfiguracyjnego
+        return response()->json($wszystkieKategorie);
     }
 
 

@@ -20,6 +20,10 @@ import VendorPanel from "./components/VendorPanel/VendorPanel";
 import VendorEditBookDetails from "./components/VendorEditBookDetails/VendorEditBookDetails";
 import VendorAddBook from "./components/VendorAddBook/VendorAddBook";
 import AdminPanel from "./components/AdminPanel/AdminPanel";
+import HomePageContent from "./components/HomePage/HomePageContent";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 
 function App() {
   const dispatch = useDispatch();
@@ -41,7 +45,7 @@ function App() {
           <button onClick={()=>{dispatch(userDataActions.setData({...userData, role: 'klient'}))}}>klient</button>
           <button onClick={()=>{dispatch(userDataActions.setData({...userData, role: 'dostawca'}))}}>dostawca</button>
           <button onClick={()=>{dispatch(userDataActions.setData({...userData, role: 'admin'}))}}>admin</button>
-          {(currView.selectedView === "home" && (userData.role === 'klient' || userData.role === 'user'))&& <BooksList />}
+          {(currView.selectedView === "home" && (userData.role === 'klient' || userData.role === 'user'))&& <HomePageContent />}
           {(currView.selectedView === "home" && userData.role === 'dostawca')&& <VendorPanel />}
           {(currView.selectedView === "home" && userData.role === 'admin')&& <AdminPanel />}
           {currView.selectedView === "signUp" && <SignUp />}

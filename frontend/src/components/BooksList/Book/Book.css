@@ -8,6 +8,7 @@
 }
 .book-img-wrapper img {
     height: 12.75rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 .book-txt-content{
     text-align: center;
