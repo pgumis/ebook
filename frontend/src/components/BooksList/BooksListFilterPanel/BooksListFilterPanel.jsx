@@ -1,6 +1,6 @@
 // frontend/src/components/BooksListFilterPanel/BooksListFilterPanel.jsx
 import React, { useState, useEffect } from 'react';
-
+import './BooksListFilterPanel.css';
 // Ten komponent przyjmuje dwie właściwości (props):
 // - onSelectCategory: Funkcja, która zostanie wywołana, gdy użytkownik wybierze kategorię.
 // - selectedKategoria: Aktualnie wybrana kategoria, służy do podświetlania aktywnego elementu.
@@ -69,7 +69,7 @@ const BooksListFilterPanel = ({ onSelectCategory, selectedKategoria }) => {
                         // Dodaj klasę 'active', jeśli ta kategoria jest aktualnie wybrana
                         className={selectedKategoria === kategoria ? 'active-category' : ''}
                         onClick={() => onSelectCategory(kategoria)} // Wywołaj funkcję z nazwą kategorii
-                        style={{ cursor: 'pointer', fontWeight: selectedKategoria === kategoria ? 'bold' : 'normal' }}
+                        style={{ textShadow: '1px 2px 4px rgba(0, 0, 0, 0.3);',cursor: 'pointer', fontWeight: selectedKategoria === kategoria ? 'bold' : 'normal' }}
                     >
                         {kategoria}
                     </li>
