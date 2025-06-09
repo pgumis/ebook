@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 import { viewActions } from "../../store/view";
 import { userDataActions } from "../../store/userData";
@@ -35,17 +34,20 @@ const SignIn = () => {
         id: wynik.user?.id || 1, 
         userName: wynik.user?.imie || "test",
         email: wynik.user?.email || dane.email,
+        imie: wynik.user?.imie || "", //
+        nazwisko: wynik.user?.nazwisko || "",
         phoneNumber: wynik.user?.numer_telefonu || "123456789",
         role: wynik.user?.rola || "user",
         profilePic: wynik.user?.zdjecie_profilowe || "profile.jpg",
         token: wynik.token,
       };
-      setKomunikat(wynik.komunikat);
-      //API POWINNO ZWRACAĆ INFO NA TEMAT ROLI. NA RAZIE RĘCZNIE ZMIENIAMY ROLE NA  'klient', 'dostawca', 'admin'
-      dispatch(userDataActions.setData({loggedIn: true, id: 1, userName: 'test', email: 'test@gmail.com', imie:'Jan', nazwisko: 'Kowalski', phoneNumber: '123456789', role: 'admin', profilePic: "profile.jpg", token: wynik.token}));
-      dispatch(viewActions.changeView('home'))
+      dispatch(userDataActions.setData(userData));
       localStorage.setItem("token", wynik.token);
       localStorage.setItem("userData", JSON.stringify(userData));
+      setKomunikat(wynik.komunikat);
+      //API POWINNO ZWRACAĆ INFO NA TEMAT ROLI. NA RAZIE RĘCZNIE ZMIENIAMY ROLE NA  'klient', 'dostawca', 'admin'
+      dispatch(viewActions.changeView('home'))
+
 
     } else {
       console.log(wynik.bledy);
@@ -73,7 +75,7 @@ const SignIn = () => {
         <h3>Witamy!</h3>
         <form onSubmit={handleSubmit} style={{ marginTop: 0 }}>
           <div className="form-whole-line">
-            <label for="email">Email</label>
+            <label htmlFor="email">Email</label>
             <input
               type="email"
               name="email"
@@ -83,7 +85,7 @@ const SignIn = () => {
             />
           </div>
           <div className="form-whole-line">
-            <label for="email">Hasło</label>
+            <label htmlFor="email">Hasło</label>
             <input
               type="password"
               name="haslo"

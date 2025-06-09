@@ -59,6 +59,11 @@ Route::get('/ebooki/{id}', [EbookController::class, 'szczegoly']);
 Route::middleware(['auth:sanctum', 'sprawdz.role:admin,dostawca'])
     ->put('/ebooki/{id}', [EbookController::class, 'edytuj']);
 
+Route::middleware(['auth:sanctum', 'sprawdz.role:admin,dostawca'])
+    ->get('/ebooki/dostawca/{id}', [EbookController::class, 'listaDostawcy']);
+
+Route::middleware(['auth:sanctum', 'sprawdz.role:admin,dostawca'])
+    ->get('/dostawca/dashboard-stats', [DashboardController::class, 'statystykaDostawcy']);
 
 Route::middleware(['auth:sanctum', 'sprawdz.role:admin'])
     ->delete('/ebooki/{id}', [EbookController::class, 'usun']);

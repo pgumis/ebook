@@ -20,6 +20,7 @@ class Uzytkownik extends Authenticatable
         'email',
         'haslo',
         'rola',
+        'zdjecie_profilowe',
         'status',
         'numer_telefonu', // jeśli jest w bazie
     ];

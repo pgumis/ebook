@@ -12,6 +12,7 @@ class Ebook extends Model
     protected $table = 'ebooki';
 
     protected $fillable = [
+        'uzytkownik_id',
         'tytul',
         'autor',
         'opis',
@@ -35,6 +36,11 @@ class Ebook extends Model
     public function recenzje()
     {
         return $this->hasMany(Recenzja::class, 'ebook_id');
+    }
+
+    public function dostawca()
+    {
+        return $this->belongsTo(Uzytkownik::class, 'uzytkownik_id');
     }
 
 }

@@ -16,7 +16,7 @@ const VendorAddBook = () => {
     data_wydania: "",
     cena: "",
     cena_promocyjna: "",
-    format: "EPUB",
+    format: "",
   });
 
   const [okladka, setOkladka] = useState(null);
@@ -28,15 +28,32 @@ const VendorAddBook = () => {
 
   const handleCoverChange = (e) => {
     const file = e.target.files[0];
-    if (file && file.type === "image/jpeg") setOkladka(file);
-    else alert("Proszę przesłać plik w formacie .jpg");
+    // Akceptowane typy MIME dla obrazów
+    const acceptedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/webp'];
+
+    if (file && acceptedImageTypes.includes(file.type)) {
+      setOkladka(file);
+    } else {
+      alert("Proszę przesłać plik obrazu w formacie .jpg, .png, .gif, .bmp lub .webp");
+    }
   };
 
   const handleBookChange = (e) => {
     const file = e.target.files[0];
-    if (file && (file.type === "application/epub+zip" || file.name.endsWith(".epub")))
+    // Akceptowane typy MIME dla ebooków
+    const acceptedEbookTypes = [
+      'application/epub+zip', // .epub
+      'application/pdf',      // .pdf
+      'application/x-mobipocket-ebook', // .mobi (często używany typ MIME)
+      // Możesz również sprawdzić po rozszerzeniu, jeśli typ MIME jest niepewny:
+      // file.name.endsWith(".epub") || file.name.endsWith(".pdf") || file.name.endsWith(".mobi")
+    ];
+
+    if (file && acceptedEbookTypes.includes(file.type)) {
       setPlik(file);
-    else alert("Proszę przesłać plik w formacie .epub");
+    } else {
+      alert("Proszę przesłać plik ebooka w formacie .epub, .pdf lub .mobi");
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -57,6 +74,7 @@ const VendorAddBook = () => {
     if (okladka) formData.append("okladka", okladka);
     if (plik) formData.append("plik", plik);
 
+    console.log("Token:", userData.token);
     try {
       const response = await fetch("http://localhost:8000/api/ebooki", {
         method: "POST",
@@ -76,7 +94,7 @@ const VendorAddBook = () => {
 
       alert("E-book został dodany!");
     } catch (err) {
-      console.error("Błąd sieci:", err);
+      console.error("Błąd sieci:", err.message || err);
       alert("Wystąpił błąd połączenia.");
     }
   };
@@ -117,6 +135,11 @@ const VendorAddBook = () => {
                       <label className="form-label">Liczba stron</label>
                       <input type="number" className="form-control" name="liczba_stron" value={dane.liczba_stron} onChange={handleChange} />
                     </div>
+
+                  <div className="mb-3">
+                    <label className="form-label">Wydawnictwo</label>
+                    <input type="text" className="form-control" name="wydawnictwo" value={dane.wydawnictwo} onChange={handleChange} />
+                  </div>
 
                     <div className="mb-3">
                       <label className="form-label">Kategoria</label>
@@ -164,15 +187,16 @@ const VendorAddBook = () => {
                       <option value="Inne">Inne</option>
                     </select>
                   </div>
-                  <div className="mb-3">
-                    <label className="form-label">Data wydania</label>
-                    <input type="date" className="form-control" name="data_wydania" value={dane.data_wydania} onChange={handleChange} />
-                  </div>
 
                 </div>
 
                 {/* PRAWA KOLUMNA – okładka i podgląd */}
                 <div className="col-md-5">
+
+                  <div className="mb-3">
+                    <label className="form-label">Data wydania</label>
+                    <input type="date" className="form-control" name="data_wydania" value={dane.data_wydania} onChange={handleChange} />
+                  </div>
 
                   <div className="mb-3">
                     <label className="form-label">Cena</label>

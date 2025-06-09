@@ -57,12 +57,15 @@ class EbookController extends Controller
         $ebook->cena_promocyjna = $request->cena_promocyjna;
         $ebook->jezyk = $request->jezyk;
         $ebook->kategoria = $request->kategoria;
-        $ebook->formaty = json_encode($request->formaty);
 
         // Upload pliku e-booka na S3
         if ($request->hasFile('plik')) {
-            $plikPath = $request->file('plik')->store('ebooki', 's3');
+            $plik = $request->file('plik');
+            $plikPath = $plik->store('ebooki', 's3');
             $ebook->plik = Storage::disk('s3')->url($plikPath);
+
+            // Ustaw format na podstawie rozszerzenia (np. "pdf" → "PDF")
+            $ebook->format = strtoupper($plik->getClientOriginalExtension());
         }
 
         // Upload okładki na S3 (opcjonalnie)
@@ -349,7 +352,21 @@ class EbookController extends Controller
         return response()->json($query->get());
     }
 
+    public function listaDostawcy(Request $request, $providerId)
+    {
+        // Sprawdź, czy zalogowany użytkownik jest tym samym dostawcą, którego książki chce pobrać
 
+        if ($request->user()->id != $providerId && $request->user()->role !== 'admin') {
+            return response()->json(['message' => 'Brak autoryzacji do przeglądania tych książek.'], 403);
+        }
+
+
+        $ebooks = Ebook::where('uzytkownik_id', $providerId)
+        ->get();
+
+
+        return response()->json($ebooks);
+    }
 
 
 }

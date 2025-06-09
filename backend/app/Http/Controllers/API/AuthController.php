@@ -62,12 +62,21 @@ class AuthController extends Controller
 
         $token = $uzytkownik->createToken('token')->plainTextToken;
 
+        // *** KLUCZOWA ZMIANA: Dodajemy obiekt 'user' do odpowiedzi ***
         return response()->json([
             'komunikat' => 'Zalogowano pomyślnie',
-            'token' => $token
+            'token' => $token,
+            'user' => [ // Dodaj dane użytkownika, które chcesz wysłać do frontendu
+                'id' => $uzytkownik->id,
+                'imie' => $uzytkownik->imie, // Zakładam, że w modelu Uzytkownik masz kolumnę 'imie'
+                'nazwisko' => $uzytkownik->nazwisko, // Zakładam, że w modelu Uzytkownik masz kolumnę 'nazwisko'
+                'email' => $uzytkownik->email,
+                'numer_telefonu' => $uzytkownik->numer_telefonu, // Zakładam, że masz kolumnę 'numer_telefonu'
+                'rola' => $uzytkownik->rola, // Zakładam, że masz kolumnę 'rola'
+                'zdjecie_profilowe' => $uzytkownik->zdjecie_profilowe, // Zakładam, że masz kolumnę 'zdjecie_profilowe'
+                // Dodaj inne pola, które chcesz mieć dostępne w Reduxie i profilu (np. nazwa firmy dla dostawcy)
+            ]
         ], 200);
-
-
     }
 
 
