@@ -8,6 +8,7 @@ use App\Models\Ebook;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class EbookController extends Controller
@@ -39,8 +40,8 @@ class EbookController extends Controller
             'cena' => 'required|numeric|min:0',
             'cena_promocyjna' => 'nullable|numeric|min:0|lt:cena',
             'format' => 'required|string|in:PDF,EPUB,MOBI',
-            'plik' => 'nullable|string',
-            'okladka' => 'nullable|string',
+            'plik' => 'required|file|mimes:pdf,epub,mobi|max:51200',
+            'okladka' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
         ]);
 
         if ($validator->fails()) {
@@ -50,6 +51,26 @@ class EbookController extends Controller
         $ebook = new Ebook($validator->validated());
 
         $ebook->uzytkownik_id = $request->user()->id;
+        $ebook->tytul = $request->tytul;
+        $ebook->opis = $request->opis;
+        $ebook->cena = $request->cena;
+        $ebook->cena_promocyjna = $request->cena_promocyjna;
+        $ebook->jezyk = $request->jezyk;
+        $ebook->kategoria = $request->kategoria;
+        $ebook->formaty = json_encode($request->formaty);
+
+        // Upload pliku e-booka na S3
+        if ($request->hasFile('plik')) {
+            $plikPath = $request->file('plik')->store('ebooki', 's3');
+            $ebook->plik = Storage::disk('s3')->url($plikPath);
+        }
+
+        // Upload okładki na S3 (opcjonalnie)
+        if ($request->hasFile('okladka')) {
+            $okladkaPath = $request->file('okladka')->store('okladki', 's3');
+            $ebook->okladka = Storage::disk('s3')->url($okladkaPath);
+        }
+
 
         $ebook->save();
 

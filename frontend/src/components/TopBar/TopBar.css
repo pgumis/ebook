@@ -16,6 +16,23 @@ nav{
     width: 1.5rem;
     cursor: pointer;
 }
+
+.nav-icon-btn svg {
+    /* Ustawienie rozmiaru SVG, jeśli nie jest już ustawione, i kursor */
+    width: 1.5rem; /* Przykład rozmiaru, dostosuj jeśli potrzebujesz */
+    height: 1.5rem; /* Ustawienie wysokości dla proporcjonalności skalowania */
+    cursor: pointer;
+    /* Domyślny kolor obrysu, zgodny z SVG */
+    stroke: black;
+    /* Dodaj transition dla płynnej animacji powiększenia i zmiany koloru */
+    transition: transform 0.2s ease-in-out, stroke 0.1s ease-in-out;
+}
+
+.nav-icon-btn svg:hover {
+    transform: scale(1.25); /* Powiększenie o 25% */
+    fill: #ebe6e0;
+}
+
 .nav-right-side button{
     cursor: pointer;
     padding: 0;
@@ -39,7 +56,6 @@ nav{
     display: inline-block;
     font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
     font-size: 14px;
-    font-weight: 700;
     line-height: 1.5;
     margin: 0;
     max-width: none;
@@ -73,7 +89,6 @@ nav{
     display: inline-block;
     font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
     font-size: 14px;
-    font-weight: 700;
     line-height: 1.5;
     margin: 0;
     max-width: none;

@@ -47,23 +47,23 @@ const VendorAddBook = () => {
       return;
     }
 
-    const payload = {
-      ...dane,
-      liczba_stron: dane.liczba_stron ? parseInt(dane.liczba_stron) : null,
-      cena: parseFloat(dane.cena),
-      cena_promocyjna: dane.cena_promocyjna ? parseFloat(dane.cena_promocyjna) : null,
-      okladka: okladka ? okladka.name : null,
-      plik: plik ? plik.name : null,
-    };
+    const formData = new FormData();
+
+    for (const key in dane) {
+      if (key === "liczba_stron" && dane[key] === "") continue;
+      formData.append(key, dane[key]);
+    }
+
+    if (okladka) formData.append("okladka", okladka);
+    if (plik) formData.append("plik", plik);
 
     try {
       const response = await fetch("http://localhost:8000/api/ebooki", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${userData.token}`,
         },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
       const result = await response.json();
@@ -83,72 +83,123 @@ const VendorAddBook = () => {
 
   return (
     <div className="panel vendor-edit-book-details-wrapper">
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="tytul" placeholder="Tytuł *" value={dane.tytul} onChange={handleChange} />
-        <input type="text" name="autor" placeholder="Autor *" value={dane.autor} onChange={handleChange} />
-        <textarea name="opis" placeholder="Opis" value={dane.opis} onChange={handleChange} />
-        <input type="text" name="isbn" placeholder="ISBN" value={dane.isbn} onChange={handleChange} />
-        <input type="number" name="liczba_stron" placeholder="Liczba stron" value={dane.liczba_stron} onChange={handleChange} />
-        <input type="text" name="wydawnictwo" placeholder="Wydawnictwo" value={dane.wydawnictwo} onChange={handleChange} />
-        <select name="kategoria" value={dane.kategoria} onChange={handleChange}>
-          <option value="">Wybierz kategorię</option>
-          <option value="Atlasy i albumy">Atlasy i albumy</option>
-          <option value="Biografie">Biografie</option>
-          <option value="Biznes">Biznes</option>
-          <option value="Dla dzieci">Dla dzieci</option>
-          <option value="Fantastyka">Fantastyka</option>
-          <option value="Historia">Historia</option>
-          <option value="Horror">Horror</option>
-          <option value="Informatyka">Informatyka</option>
-          <option value="Komiksy">Komiksy</option>
-          <option value="Kryminał, sensacja, thriller">Kryminał, sensacja, thriller</option>
-          <option value="Kuchnia">Kuchnia</option>
-          <option value="Kultura i sztuka">Kultura i sztuka</option>
-          <option value="Lektury">Lektury</option>
-          <option value="Literatura faktu">Literatura faktu</option>
-          <option value="Literatura piękna">Literatura piękna</option>
-          <option value="Literatura popularnonaukowa">Literatura popularnonaukowa</option>
-          <option value="Nauka języków">Nauka języków</option>
-          <option value="Nauki ścisłe, medycyna">Nauki ścisłe, medycyna</option>
-          <option value="Podróże i turystyka">Podróże i turystyka</option>
-          <option value="Poezja i dramat">Poezja i dramat</option>
-          <option value="Poradniki">Poradniki</option>
-          <option value="Prasa">Prasa</option>
-          <option value="Prawo">Prawo</option>
-          <option value="Religia">Religia</option>
-          <option value="Romanse">Romanse</option>
-          <option value="Sport">Sport</option>
-        </select>
-        <select name="jezyk" value={dane.jezyk} onChange={handleChange}>
-          <option value="">Wybierz język</option>
-          <option value="polski">Polski</option>
-          <option value="angielski">Angielski</option>
-          <option value="niemiecki">Niemiecki</option>
-          <option value="francuski">Francuski</option>
-          <option value="hiszpański">Hiszpański</option>
-          <option value="włoski">Włoski</option>
-          <option value="inny">Inny</option>
-        </select>
-        <input type="date" name="data_wydania" placeholder="Data wydania" value={dane.data_wydania} onChange={handleChange} />
-        <input type="number" name="cena" placeholder="Cena *" step="0.01" value={dane.cena} onChange={handleChange} />
-        <input type="number" name="cena_promocyjna" placeholder="Cena promocyjna" step="0.01" value={dane.cena_promocyjna} onChange={handleChange} />
-        <select name="format" value={dane.format} onChange={handleChange}>
-          <option value="EPUB">EPUB</option>
-          <option value="PDF">PDF</option>
-          <option value="MOBI">MOBI</option>
-        </select>
+      <div className="container mt-5" style={{ maxWidth: "900px" }}>
+        <div className="card shadow-sm">
+          <div className="card-header text-center fw-bold fs-5 bg-light">
+            <h4 className="mb-0">Dodaj nowy e-book</h4>
+          </div>
+          <form onSubmit={handleSubmit}>
+            <div className="card-body">
+              <div className="row">
+                {/* LEWA KOLUMNA – formularz */}
+                <div className="col-md-7 border-end pe-4">
+                    <div className="mb-2">
+                      <label className="form-label">Tytuł *</label>
+                      <input type="text" className="form-control" name="tytul" value={dane.tytul} onChange={handleChange} />
+                    </div>
 
-        <div>
-          <label>Okładka (.jpg, opcjonalnie):</label>
-          <input type="file" accept=".jpg" onChange={handleCoverChange} />
-        </div>
-        <div>
-          <label>Plik książki (.epub, opcjonalnie):</label>
-          <input type="file" accept=".epub" onChange={handleBookChange} />
-        </div>
+                    <div className="mb-3">
+                      <label className="form-label">Autor *</label>
+                      <input type="text" className="form-control" name="autor" value={dane.autor} onChange={handleChange} />
+                    </div>
 
-        <button type="submit">Dodaj e-booka</button>
-      </form>
+                    <div className="mb-3">
+                      <label className="form-label">Opis</label>
+                      <textarea className="form-control" name="opis" value={dane.opis} onChange={handleChange} />
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label">ISBN</label>
+                      <input type="text" className="form-control" name="isbn" value={dane.isbn} onChange={handleChange} />
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label">Liczba stron</label>
+                      <input type="number" className="form-control" name="liczba_stron" value={dane.liczba_stron} onChange={handleChange} />
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label">Kategoria</label>
+                      <select className="form-select" name="kategoria" value={dane.kategoria} onChange={handleChange}>
+                        <option value="">Wybierz kategorię</option>
+                        <option value="Atlasy i albumy">Atlasy i albumy</option>
+                        <option value="Biografie">Biografie</option>
+                        <option value="Biznes">Biznes</option>
+                        <option value="Dla dzieci">Dla dzieci</option>
+                        <option value="Fantastyka">Fantastyka</option>
+                        <option value="Historia">Historia</option>
+                        <option value="Horror">Horror</option>
+                        <option value="Informatyka">Informatyka</option>
+                        <option value="Komiksy">Komiksy</option>
+                        <option value="Kryminał, sensacja, thriller">Kryminał, sensacja, thriller</option>
+                        <option value="Kuchnia">Kuchnia</option>
+                        <option value="Kultura i sztuka">Kultura i sztuka</option>
+                        <option value="Lektury">Lektury</option>
+                        <option value="Literatura faktu">Literatura faktu</option>
+                        <option value="Literatura piękna">Literatura piękna</option>
+                        <option value="Literatura popularnonaukowa">Literatura popularnonaukowa</option>
+                        <option value="Nauka języków">Nauka języków</option>
+                        <option value="Nauki ścisłe, medycyna">Nauki ścisłe, medycyna</option>
+                        <option value="Podróże i turystyka">Podróże i turystyka</option>
+                        <option value="Poezja i dramat">Poezja i dramat</option>
+                        <option value="Poradniki">Poradniki</option>
+                        <option value="Prasa">Prasa</option>
+                        <option value="Prawo">Prawo</option>
+                        <option value="Religia">Religia</option>
+                        <option value="Romanse">Romanse</option>
+                        <option value="Sport">Sport</option>
+                        <option value="Inne">Inne</option>
+                      </select>
+                    </div>
+
+
+                </div>
+
+                {/* PRAWA KOLUMNA – okładka i podgląd */}
+                <div className="col-md-5">
+                  <div className="mb-2">
+                    <label className="form-label">Plik książki (.epub, .mobi, .pdf)</label>
+                    <input type="file" className="form-control" accept=".epub" onChange={handleBookChange} />
+                  </div>
+                  <div className="mb-2">
+                    <label className="form-label">Okładka (.jpg, .jpeg, .png)</label>
+                    <input type="file" className="form-control" accept=".jpg" onChange={handleCoverChange} />
+                  </div>
+
+                  {okladka && (
+                      <div className="mt-3">
+                        <label className="form-label">Podgląd okładki:</label>
+                        <img
+                            src={URL.createObjectURL(okladka)}
+                            alt="Podgląd okładki"
+                            style={{
+                              width: "100%",          // szerokość kolumny
+                              maxWidth: "180px",      // typowa szerokość okładki
+                              aspectRatio: "2 / 3",   // proporcje pionowe (np. 600x900)
+                              objectFit: "cover",     // dopasowanie przycięte
+                              borderRadius: "4px",
+                              border: "1px solid #ccc",
+                              boxShadow: "0 0 6px rgba(0,0,0,0.1)",
+                              display: "block",
+                              margin: "0 auto",
+                              marginTop: "10px"
+                            }}
+                        />
+                      </div>
+                  )}
+                </div>
+                <div className="row mt-3">
+                  <div className="col text-center">
+                    <button type="submit" className="btn w-50" style={{ backgroundColor: "#4C7766", color: "white" }}>
+                      Dodaj e-booka
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };
