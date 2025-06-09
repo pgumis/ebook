@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { viewActions } from "../../store/view";
-const AdminPanelMessagesList = () => {
-  const dispatch = useDispatch();
+
+const AdminPanelMessagesShowAll = () => {
+    const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -35,7 +36,7 @@ const AdminPanelMessagesList = () => {
   }, []);
 
   return (
-    <>
+    <div className="panel">
       <h3 style={{ marginTop: 0 }}>Skrzynka wiadomości</h3>
       <table className="admin-panel-messages-list">
         <thead>
@@ -47,8 +48,11 @@ const AdminPanelMessagesList = () => {
           </tr>
         </thead>
         <tbody>
-          {data.slice(0, 10).map((wiadomosc) => (
-            <tr>
+          {data.map((wiadomosc) => (
+            <tr onClick={()=>{
+                dispatch(viewActions.setSelectedMessage(wiadomosc));
+                dispatch(viewActions.changeView("adminPanelMessageDetails"));
+            }}>
               <td>{wiadomosc.id}</td>
               <td>{wiadomosc.temat}</td>
               <td>{wiadomosc.od}</td>
@@ -65,16 +69,7 @@ const AdminPanelMessagesList = () => {
           ))}
         </tbody>
       </table>
-      <span
-        style={{ float: "right", textDecoration: "underline", cursor:'pointer' }}
-        onClick={() => {
-          console.log("klikam");
-          dispatch(viewActions.changeView("adminPanelMessagesShowAll"));
-        }}
-      >
-        Pokaż więcej
-      </span>
-    </>
+    </div>
   );
 };
-export default AdminPanelMessagesList;
+export default AdminPanelMessagesShowAll;

@@ -6,28 +6,38 @@ import Logo from "../Logo/Logo";
 
 const ContactForm = () => {
   const userData = useSelector((state) => state.userData);
-  console.log(userData);
   const [dane, setDane] = useState({
+    imie: "",
     email: "",
     telefon: "",
     powodKontaktu: "",
     wiadomosc: "",
   });
   const [isInputValid, setIsInputValid] = useState({
+    imie: true,
     email: true,
     telefon: true,
     powodKontaktu: true,
     wiadomosc: true,
   });
-  useEffect(()=>{
-    if(userData.loggedIn){
-      setDane({...dane, email: userData.email, telefon: userData.phoneNumber})
-    }
-  },[userData]);
   const [komunikat, setKomunikat] = useState("");
   const [dlugoscTextArea, setDlugoscTextArea] = useState(0);
+
+  useEffect(() => {
+    if (userData.loggedIn) {
+      setDane((prev) => ({
+        ...prev,
+        imie: userData.userName || "",
+        email: userData.email || "",
+        telefon: userData.phoneNumber || "",
+      }));
+    }
+  }, [userData]);
+
   const handleChange = (e) => {
-    if (e.target.name === "telefon") {
+    const { name, value } = e.target;
+
+    if (name === "telefon") {
       const inputChar = e.nativeEvent.data;
       if (inputChar && !/[\d\+]/.test(inputChar)) {
         return;
@@ -39,46 +49,105 @@ const ContactForm = () => {
         return;
       }
     }
-    setDane({ ...dane, [e.target.name]: e.target.value });
-    setIsInputValid({ ...isInputValid, [e.target.name]: true });
-    e.target.name === "wiadomosc" && setDlugoscTextArea(e.target.value.length);
+
+    setDane((prev) => ({ ...prev, [name]: value }));
+    setIsInputValid((prev) => ({ ...prev, [name]: true }));
+    if (name === "wiadomosc") {
+      setDlugoscTextArea(value.length);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(localStorage.getItem("token"));
+    console.log('wysylam')
     let isValid = true;
-    for (const element in dane) {
-      if (dane[element] === "") {
-        setIsInputValid((prevState) => ({
-          ...prevState,
-          [element]: false,
-        }));
+    const newIsInputValid = { ...isInputValid };
+
+    if (!userData.loggedIn) {
+      if (!dane.imie || dane.imie.length < 2) {
+        newIsInputValid.imie = false;
+        isValid = false;
+      }
+      if (!dane.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(dane.email)) {
+        newIsInputValid.email = false;
         isValid = false;
       }
     }
 
-    if (dane.powodKontaktu === "Wybierz" || dane.powodKontaktu === "") {
-      setIsInputValid((prevState) => ({
-        ...prevState,
-        ["powodKontaktu"]: false,
-      }));
+    if (!dane.powodKontaktu || dane.powodKontaktu === "Wybierz") {
+      newIsInputValid.powodKontaktu = false;
       isValid = false;
     }
-    //TRZEBA DODAĆ CAŁĄ LOGIKE PRZESYŁANIA WIADOMOŚCI I WALIDACJI, CZY WIADOMOŚĆ WYSŁANA PRAWIDŁOWO
 
-    // const response = await fetch("http://localhost:8000/api/rejestracja", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(dane),
-    // });
+    if (!dane.wiadomosc || dane.wiadomosc.length < 20) {
+      newIsInputValid.wiadomosc = false;
+      isValid = false;
+    }
 
-    // const wynik = await response.json();
+    setIsInputValid(newIsInputValid);
 
-    // if (response.ok) {
-    //   setKomunikat(wynik.komunikat);
-    // } else {
-    //   setKomunikat("Błąd: " + JSON.stringify(wynik.bledy));
-    // }
+    if (!isValid) {
+      setKomunikat("Proszę wypełnić wszystkie wymagane pola poprawnie.");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      // if (userData.loggedIn && token) {
+      //   headers["Authorization"] = `Bearer ${token}`;
+      // }
+
+      const payload = userData.loggedIn
+        ? {
+            temat: dane.powodKontaktu,
+            tresc: dane.wiadomosc,
+          }
+        : {
+            imie: dane.imie,
+            email: dane.email,
+            temat: dane.powodKontaktu,
+            tresc: dane.wiadomosc,
+          };
+
+      const response = await fetch("http://localhost:8000/api/wiadomosci", {
+        method: "POST",
+        headers,
+        body: JSON.stringify(payload),
+      });
+
+      const wynik = await response.json();
+
+      if (response.ok) {
+        setKomunikat(wynik.message || "Wiadomość została wysłana.");
+        setDane({
+          imie: userData.loggedIn ? userData.userName || "" : "",
+          email: userData.loggedIn ? userData.email || "" : "",
+          telefon: userData.loggedIn ? userData.phoneNumber || "" : "",
+          powodKontaktu: "",
+          wiadomosc: "",
+        });
+        setDlugoscTextArea(0);
+        setIsInputValid({
+          imie: true,
+          email: true,
+          telefon: true,
+          powodKontaktu: true,
+          wiadomosc: true,
+        });
+      } else {
+        setKomunikat(
+          wynik.message || wynik.bledy
+            ? Object.values(wynik.bledy).flat().join(", ")
+            : "Błąd podczas wysyłania wiadomości."
+        );
+      }
+    } catch (error) {
+      setKomunikat("Błąd: " + error.message);
+    }
   };
 
   return (
@@ -91,49 +160,57 @@ const ContactForm = () => {
         <form onSubmit={handleSubmit} style={{ width: "100%" }}>
           <div className="contact-form-center">
             <div className="form-whole-line">
-              <label for="nazwisko">Adres email</label>
+              <label htmlFor="imie">Imię</label>
               <input
                 type="text"
+                name="imie"
+                value={dane.imie}
+                onChange={handleChange}
+                placeholder={!isInputValid.imie ? "Podaj imię" : ""}
+                className={!isInputValid.imie ? "invalid" : ""}
+              />
+            </div>
+
+            <div className="form-whole-line">
+              <label htmlFor="email">Adres email</label>
+              <input
+                type="email"
                 name="email"
                 value={dane.email}
                 onChange={handleChange}
-                placeholder={!isInputValid["email"] ? "Podaj adres email" : ""}
-                className={!isInputValid["email"] ? "invalid" : ""}
+                placeholder={!isInputValid.email ? "Podaj adres email" : ""}
+                className={!isInputValid.email ? "invalid" : ""}
                 disabled={userData.loggedIn}
               />
             </div>
             <div className="form-whole-line">
-              <label for="nazwisko">Numer telefonu</label>
+              <label htmlFor="telefon">Numer telefonu</label>
               <input
                 type="tel"
                 name="telefon"
                 value={dane.telefon}
                 onChange={handleChange}
                 placeholder={
-                  !isInputValid["telefon"] ? "Podaj numer telefonu" : ""
+                  !isInputValid.telefon ? "Podaj numer telefonu" : ""
                 }
-                className={!isInputValid["telefon"] ? "invalid" : ""}
+                className={!isInputValid.telefon ? "invalid" : ""}
                 disabled={userData.loggedIn}
               />
             </div>
             <div className="form-whole-line">
-              <label for="email">Powód kontaktu</label>
+              <label htmlFor="powodKontaktu">Powód kontaktu</label>
               <select
                 name="powodKontaktu"
                 value={dane.powodKontaktu}
                 onChange={handleChange}
-                className={!isInputValid["powodKontaktu"] ? "invalid" : ""}
-                onClick={
-                  () =>
-                    setIsInputValid((prevState) => ({
-                      ...prevState,
-                      ["powodKontaktu"]: true,
-                    })) //wylaczenie czerwonego podswietlenia
+                className={!isInputValid.powodKontaktu ? "invalid" : ""}
+                onClick={() =>
+                  setIsInputValid((prev) => ({ ...prev, powodKontaktu: true }))
                 }
               >
                 <option value="Wybierz">Wybierz...</option>
                 <option value="Problem z logowaniem">
-                  Problem z logowanie
+                  Problem z logowaniem
                 </option>
                 <option value="Założenie konta autora">
                   Założenie konta autora
@@ -148,11 +225,16 @@ const ContactForm = () => {
               <textarea
                 maxLength={1000}
                 name="wiadomosc"
+                value={dane.wiadomosc}
                 onChange={handleChange}
                 placeholder={
-                  !isInputValid["wiadomosc"] ? "Podaj treść wiadomości" : ""
+                  !isInputValid.wiadomosc ? "Podaj treść wiadomości" : ""
                 }
-                className={!isInputValid["wiadomosc"] ? "invalid contact-form-textarea" : "contact-form-textarea"}
+                className={
+                  !isInputValid.wiadomosc
+                    ? "invalid contact-form-textarea"
+                    : "contact-form-textarea"
+                }
               ></textarea>
               <div className="text-area-word-counter">
                 {dlugoscTextArea}/1000
@@ -160,7 +242,9 @@ const ContactForm = () => {
             </div>
           </div>
           <div className="contact-form-buttons-container">
-            <button className="contact-form-cancel-button">Anuluj</button>
+            <button type="button" className="contact-form-cancel-button">
+              Anuluj
+            </button>
             <button type="submit" className="form-submit contact-form-send">
               <svg
                 fill="none"
@@ -188,4 +272,3 @@ const ContactForm = () => {
 };
 
 export default ContactForm;
-

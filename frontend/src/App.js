@@ -21,7 +21,8 @@ import VendorEditBookDetails from "./components/VendorEditBookDetails/VendorEdit
 import VendorAddBook from "./components/VendorAddBook/VendorAddBook";
 import AdminPanel from "./components/AdminPanel/AdminPanel";
 import AdminPanelManage from "./components/AdminPanel/AdminPanelManage/AdminPanelManage";
-
+import AdminPanelMessagesShowAll from "./components/AdminPanel/AdminPanelMessagesShowAll";
+import AdminPanelMessageDetails from "./components/AdminPanel/AdminPanelMessageDetails";
 function App() {
   const dispatch = useDispatch();
   const currView = useSelector((state) => state.view);
@@ -60,7 +61,8 @@ function App() {
           {currView.selectedView === "adminPanelManageEbooks" && <AdminPanelManage />}
           {currView.selectedView === "adminPanelManageRatings" && <AdminPanelManage />}
           {currView.selectedView === "adminPanelManageOrders" && <AdminPanelManage />}
-          {currView.selectedView === "adminPanelManageMessages" && <AdminPanelManage />}
+          {currView.selectedView === "adminPanelMessagesShowAll" && <AdminPanelMessagesShowAll />}
+         {currView.selectedView === "adminPanelMessageDetails" && <AdminPanelMessageDetails />}
         </div>
         <Footer />
       </div>

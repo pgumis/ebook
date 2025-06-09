@@ -5,6 +5,7 @@ const viewSlice = createSlice({
     initialState:{
         selectedView: 'home',
         bookDetailsObj: undefined,
+        selectedMessage: undefined,
     },
     reducers: {
         changeView(state, action){
@@ -12,7 +13,10 @@ const viewSlice = createSlice({
         },
         setBookDetailsObj(state,action){
             state.bookDetailsObj = action.payload
-        }
+        },
+        setSelectedMessage(state,action){
+            state.selectedMessage = action.payload
+        },
     }
 })
 export const viewActions = viewSlice.actions;

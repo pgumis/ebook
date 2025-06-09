@@ -16,7 +16,6 @@ const AdminPanelManage = () => {
             throw new Error("Błąd podczas pobierania ebooków");
           }
           const dane = await response.json();
-          console.log(dane);
           setData(
             dane.map((item) => ({
               id: item.id,
