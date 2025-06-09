@@ -16,18 +16,111 @@ nav{
     width: 1.5rem;
     cursor: pointer;
 }
+
+.nav-icon-btn svg {
+    /* Ustawienie rozmiaru SVG, jeśli nie jest już ustawione, i kursor */
+    width: 1.5rem; /* Przykład rozmiaru, dostosuj jeśli potrzebujesz */
+    height: 1.5rem; /* Ustawienie wysokości dla proporcjonalności skalowania */
+    cursor: pointer;
+    /* Domyślny kolor obrysu, zgodny z SVG */
+    stroke: black;
+    /* Dodaj transition dla płynnej animacji powiększenia i zmiany koloru */
+    transition: transform 0.2s ease-in-out, stroke 0.1s ease-in-out;
+}
+
+.nav-icon-btn svg:hover {
+    transform: scale(1.25); /* Powiększenie o 25% */
+    fill: #ebe6e0;
+}
+
 .nav-right-side button{
     cursor: pointer;
     padding: 0;
+
 }
+
+.search-bar-and-button {
+    display: flex; /* Użyj flexbox, aby ułożyć elementy w rzędzie */
+    gap: 0.5rem; /* Mały odstęp między inputem a przyciskiem */
+    width: 1200px; /* Całkowita szerokość zestawu wyszukiwarki (dostosuj) */
+}
+
+.search-button{
+
+    background-color: #222;
+    border-radius: 4px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    max-width: none;
+    min-height: 30px;
+    min-width: 10px;
+    outline: none;
+    overflow: hidden;
+    padding: 9px 20px 8px;
+    position: relative;
+    text-align: center;
+    text-transform: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
+
+}
+.search-button:hover,
+.search-button:focus {
+    opacity: .75;
+}
+
+.advanced-search-button{
+
+    background-color: #4C7766;
+    border-radius: 4px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    max-width: none;
+    min-height: 30px;
+    min-width: 10px;
+    outline: none;
+    overflow: hidden;
+    padding: 9px 20px 8px;
+    position: relative;
+    text-align: center;
+    text-transform: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
+
+}
+.advanced-search-button:hover,
+.advanced-search-button:focus {
+    opacity: .75;
+}
+
+
 .nav-search-bar{
     background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black"><path d="M20 20L15.9497 15.9497C17.2165 14.683 18 12.933 18 11C18 7.134 14.866 4 11 4C7.134 4 4 7.134 4 11C4 14.866 7.134 18 11 18C12.933 18 14.683 17.2165 15.9497 15.9497Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>') no-repeat 10px center;
     padding-left:50px;
     width: 50%;
     margin: 0 1rem;
-    height: 1.5rem;
+    height: 2rem;
     border-radius: 10px;
     border: 2px solid #c9c0b5;
+    box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.2);
 }
   
 .nav-icon-btn{

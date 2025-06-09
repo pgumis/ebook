@@ -40,6 +40,16 @@ const TopBar = () => {
 
       dispatch(viewActions.changeView("home"));
   };
+
+    const handleSearch = () => {
+        console.log("Przycisk Szukaj kliknięty! (funkcjonalność do zaimplementowania)");
+    };
+
+    const handleAdvancedSearchClick = (e) => {
+        e.preventDefault();
+        console.log("Przycisk Szukanie zaawansowane kliknięty! (funkcjonalność do zaimplementowania)");
+    };
+
   return (
     <nav>
       <Logo
@@ -47,7 +57,15 @@ const TopBar = () => {
           dispatch(viewActions.changeView("home"));
         }}
       />
-      <input type="text" className="nav-search-bar" />
+        <div className="search-bar-and-button">
+            <input type="search" placeholder="Szukaj ebooka..." className="nav-search-bar" />
+            <button className="search-button" onClick={handleSearch}>
+                Szukaj
+            </button>
+            <button className="advanced-search-button" onClick={handleAdvancedSearchClick}>
+                Szukanie zaawansowane
+            </button>
+        </div>
       <div className="nav-right-side">
         <button
           className="nav-icon-btn"
