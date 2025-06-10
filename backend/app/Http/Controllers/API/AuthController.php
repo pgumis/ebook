@@ -179,19 +179,44 @@ class AuthController extends Controller
     {
         $uzytkownik = $request->user();
 
-        $request->validate([
+        if (!$uzytkownik) {
+            return response()->json(['message' => 'Użytkownik nieautoryzowany.'], 401);
+        }
+
+        $validator = Validator::make($request->all(), [
             'imie' => 'required|string|min:2|max:30',
             'nazwisko' => 'required|string|min:2|max:40',
             'email' => 'required|email|max:60|unique:uzytkownicy,email,' . $uzytkownik->id,
+            'numer_telefonu' => 'required|string|min:7|max:13',
+            'profilePic' => 'nullable|string|max:255',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+
 
         $uzytkownik->update([
             'imie' => $request->imie,
             'nazwisko' => $request->nazwisko,
             'email' => $request->email,
+            'numer_telefonu' => $request->numer_telefonu,
+            'zdjecie_profilowe' => $request->profilePic,
         ]);
 
-        return response()->json(['message' => 'Dane profilu zostały zaktualizowane.']);
+        return response()->json([
+            'message' => 'Dane profilu zostały zaktualizowane.',
+            'user' => [
+                'id' => $uzytkownik->id,
+                'imie' => $uzytkownik->imie,
+                'nazwisko' => $uzytkownik->nazwisko,
+                'email' => $uzytkownik->email,
+                'rola' => $uzytkownik->rola,
+                'numer_telefonu' => $uzytkownik->numer_telefonu,
+                'profilePic' => $uzytkownik->zdjecie_profilowe,
+            ]
+        ]);
     }
 
     public function zmienHaslo(Request $request)

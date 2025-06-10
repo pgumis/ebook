@@ -42,8 +42,13 @@ const VendorsBookList = () => {
               ...item,
               title: item.tytul,
               author: item.autor,
+              category: item.kategoria,
+              publisher: item.wydawnictwo,
+              isbn: item.isbn,
+              format: item.format,
               price: item.cena_promocyjna || item.cena,
-              rating: 4, // Możesz pobierać prawdziwą ocenę z backendu
+              rating: item.ocena,
+              status: item.status,
             }))
         );
       } catch (error) {
@@ -76,6 +81,33 @@ const VendorsBookList = () => {
     );
   }
 
+  // Funkcja do formatowania daty
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Brak daty';
+    const date = new Date(dateString);
+    // Możesz dostosować format, np. 'pl-PL' dla polskiego formatu daty
+    return date.toLocaleDateString('pl-PL', {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  const getStatusClassName = (status) => {
+    switch (status) {
+      case 'aktywny':
+        return 'status-active';
+      case 'wycofany':
+        return 'status-withdrawn';
+      case 'oczekujący':
+        return 'status-pending';
+      default:
+        return '';
+    }
+  };
+
   return (
       <>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -88,27 +120,43 @@ const VendorsBookList = () => {
         <table>
           <thead>
           <tr>
-            <th>ID</th>
+            <th>Lp.</th>
             <th>Tytuł</th>
-            <th>Cena</th>
-            <th>Śr. ocena</th>
-
-            <th>Akcje</th> {/* Dodaj kolumnę na akcje, np. edycję/usuwanie */}
+            <th>Autor</th>
+            <th>Kategoria</th>
+            <th>Wydawnictwo</th>
+            <th>ISBN</th>
+            <th>Format</th>
+            <th>Aktualna cena</th>
+            <th>Średnia ocena</th>
+            <th>Data dodania</th>
+            <th>Ostatnia modyfikacja</th>
+            <th>Status</th>
+            <th>Akcje</th>
           </tr>
           </thead>
           <tbody>
-          {books.map((book) => (
+          {books.map((book, index) => (
               <tr
                   key={book.id} // Zawsze dodawaj key do elementów w listach
                   onClick={() => {
                     handleOpenBookDetails(book);
                   }}
               >
-                <td>{book.id}</td>
+                <td>{index + 1}</td>
                 <td>{book.title}</td>
-                <td>{book.price} PLN</td> {/* Dodaj PLN */}
+                <td>{book.author}</td>
+                <td>{book.category}</td>
+                <td>{book.publisher}</td>
+                <td>{book.isbn}</td>
+                <td>{book.format}</td>
+                <td>{book.price} zł</td>
                 <td>{book.rating}</td> {/* lub {generateStars(book.rating)} jeśli masz taką funkcję */}
-
+                <td>{formatDate(book.created_at)}</td>
+                <td>{formatDate(book.updated_at)}</td>
+                <td><span className={getStatusClassName(book.status)}>
+                    {book.status}
+                  </span></td>
                 <td>
                   {/* Tutaj możesz dodać przyciski edycji/usuwania, które będą wywoływać osobne funkcje */}
                   <button className="btn btn-sm btn-danger" onClick={(e) => { e.stopPropagation(); /* handleDelete(book.id) */ }}>Wycofaj</button>

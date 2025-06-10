@@ -7,6 +7,7 @@ use App\Http\Controllers\API\RecenzjaController;
 use App\Http\Controllers\API\UploadController;
 use App\Http\Controllers\API\WiadomoscController;
 use App\Http\Controllers\API\ZamowienieController;
+use App\Http\Controllers\API\DashboardController;
 use App\Mail\TestMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
