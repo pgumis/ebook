@@ -1,40 +1,45 @@
-.admin-panel-button{
+.admin-panel-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr; /* Zwiększamy lekko szerokość menu */
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.admin-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.admin-sidebar li {
+    padding: 15px 20px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    transition: background-color 0.2s, color 0.2s, transform 0.2s ease;
+
+    /* -> NOWE STYLE: Ustawiamy elementy w rzędzie i wyrównujemy */
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    gap: 1.5rem;
-    width: 18rem;
-    height: 12rem;
+    gap: 15px; /* Odstęp między ikoną a tekstem */
+}
+
+.admin-sidebar li:hover {
+    background-color: #f0f0f0;
+    transform: translateX(5px);
+}
+
+.admin-sidebar li.active {
+    background-color: #4C7766;
     color: white;
     font-weight: bold;
-    background-color: #C9C0B5;
-    border: none;
-    border-radius: 10px;
-    font-size: 1.1rem;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    cursor: pointer;
+    transform: translateX(0);
 }
-.admin-panel-buttons-container{
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    width: 100%;
-}
-.admin-panel-buttons-row{
-    display: flex;
-    justify-content: space-between;
-}
-.admin-panel{
-    display: flex;
-}
-.admin-panel-container{
-    height: 100%;
-    display: flex;
-    justify-content: center;
-}
-.admin-panel-messages-container{
-    width: 100%;
-    padding: 0 4rem;
-    font-size: 14px;
+
+/* -> NOWE STYLE: Nadajemy stałą szerokość ikonom dla równego ułożenia */
+.admin-sidebar li i {
+    width: 20px; /* Stała szerokość kontenera ikony */
+    text-align: center; /* Wyśrodkowanie ikony w jej kontenerze */
+    font-size: 1.1rem; /* Rozmiar samej ikony */
 }

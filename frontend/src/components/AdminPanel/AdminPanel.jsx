@@ -1,49 +1,66 @@
-import { useDispatch } from "react-redux";
-import { viewActions } from "../../store/view";
-import AdminPanelButton from "./AdminPanelButton";
-import AdminPanelMessagesList from "./AdminPanelMessagesList";
-import "./AdminPanel.css";
-
-const handleButtonClick = (type, index, dispatch) => {
-  console.log('halo')
-  if (type === "tile") {
-    if (index === 0) {
-      dispatch(viewActions.changeView("adminPanelManageUsers"))
-    } else if (index === 1) {
-      dispatch(viewActions.changeView("adminPanelManageEbooks"))
-    } else if (index === 2) {
-      dispatch(viewActions.changeView("adminPanelManageRatings"))
-    } else {
-      dispatch(viewActions.changeView("adminPanelManageOrders"))
-    }
-  } else {
-    return;
-  }
-};
-
+import React, { useState } from 'react';
+import './AdminPanel.css';
+import UserManagement from './UserManagement';
+import EbookManagement from "./EbookManagement";
+import ReviewManagement from "./ReviewManagement";
+import OrderManagement from "./OrderManagement";
+import MessageInbox from "./MessageInbox";
+import UserDetails from './UserDetails';
 const AdminPanel = () => {
-  const dispatch = useDispatch();
+  const [activeView, setActiveView] = useState('users');
+
+  const renderActiveView = () => {
+    switch (activeView) {
+      case 'users':
+        return <UserManagement />;
+
+      case 'ebooks':
+        return <EbookManagement />;
+      case 'reviews':
+        return <ReviewManagement />;
+      case 'orders':
+        return <OrderManagement />;
+      case 'messages':
+        return <MessageInbox />;
+      default:
+        return <UserManagement />;
+    }
+  };
 
   return (
-    <div className="panel admin-panel">
-      <div className="admin-panel-buttons-container">
-        <div className="admin-panel-buttons-row">
-          <AdminPanelButton index={0} onClick = {()=>{handleButtonClick('tile', 0, dispatch)}}>
-            Zarządzanie użytkownikami
-          </AdminPanelButton>
-          <AdminPanelButton index={1} onClick = {()=>{handleButtonClick('tile', 1, dispatch)}}>Zarządzanie e-bookami</AdminPanelButton>
-        </div>
-        <div className="admin-panel-buttons-row">
-          <AdminPanelButton index={2} onClick = {()=>{handleButtonClick('tile', 2, dispatch)}}>Zarządzanie recenzjami</AdminPanelButton>
-          <AdminPanelButton index={3} onClick = {()=>{handleButtonClick('tile', 3, dispatch)}}>
-            Zarządzanie zamówieniami
-          </AdminPanelButton>
-        </div>
+      <div className="panel admin-panel-layout">
+        <aside className="admin-sidebar">
+          <nav>
+            <ul>
+              {/* -> DODANE IKONY DO KAŻDEJ POZYCJI */}
+              <li className={activeView === 'users' ? 'active' : ''} onClick={() => setActiveView('users')}>
+                <i className="fas fa-users"></i>
+                <span>Zarządzaj użytkownikami</span>
+              </li>
+              <li className={activeView === 'ebooks' ? 'active' : ''} onClick={() => setActiveView('ebooks')}>
+                <i className="fas fa-book"></i>
+                <span>Zarządzaj e-bookami</span>
+              </li>
+              <li className={activeView === 'reviews' ? 'active' : ''} onClick={() => setActiveView('reviews')}>
+                <i className="fas fa-star"></i>
+                <span>Zarządzaj recenzjami</span>
+              </li>
+              <li className={activeView === 'orders' ? 'active' : ''} onClick={() => setActiveView('orders')}>
+                <i className="fas fa-receipt"></i>
+                <span>Zarządzaj zamówieniami</span>
+              </li>
+              <li className={activeView === 'messages' ? 'active' : ''} onClick={() => setActiveView('messages')}>
+                <i className="fas fa-inbox"></i>
+                <span>Skrzynka wiadomości</span>
+              </li>
+            </ul>
+          </nav>
+        </aside>
+        <main className="admin-content">
+          {renderActiveView()}
+        </main>
       </div>
-      <div className="admin-panel-messages-container">
-        <AdminPanelMessagesList onClick/>
-      </div>
-    </div>
   );
 };
+
 export default AdminPanel;
