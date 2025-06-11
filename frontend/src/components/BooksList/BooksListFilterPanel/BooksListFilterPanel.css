@@ -1,25 +1,46 @@
-.active-category {
-    color: #4C7766;
-    font-weight: bold;
-    text-decoration: underline;
+/* BooksListFilterPanel.css */
+
+.filter-panel {
+    background-color: #f9f9f9; /* Jaśniejsze tło dla lepszego kontrastu */
+    padding: 20px;
+    border-radius: 12px;
+    height: 100%; /* Aby panel wypełniał dostępną wysokość */
 }
 
-.panel ul li:hover {
-    background-color: #f0f0f0; /* jasnoszare tło */
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
+.filter-panel h3 {
+    font-size: 1.25rem;
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
 }
 
-.panel ul li {
-    padding: 6px 2px;
-    margin-bottom: 2px;
-    font-size: 16px;
+.filter-panel-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.filter-panel-list li {
+    padding: 8px 15px; /* Większy padding dla łatwiejszego klikania */
+    margin-bottom: 5px;
+    border-radius: 8px; /* Bardziej zaokrąglone rogi */
     cursor: pointer;
-    transition: background-color 0.2s ease;
-    text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
+    font-weight: 500;
+    color: #555;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
-.panel ul li:hover {
-    background-color: #f0f0f0;
-    border-radius: 4px;
+.filter-panel-list li:hover {
+    background-color: #e9e9e9;
+    color: #111;
+    transform: translateX(5px); /* Lekkie wysunięcie w prawo */
+}
+
+/* Styl dla aktywnej kategorii */
+.filter-panel-list li.active-category {
+    background-color: #4C7766;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(76, 119, 102, 0.3);
+    transform: translateX(0); /* Reset transformu dla aktywnego elementu */
 }

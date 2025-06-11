@@ -90,16 +90,7 @@ code {
 .form-info a:visited {
   color: #c9c0b5;
 }
-.form-submit {
-  background-color: #c9c0b5;
-  height: 2rem;
-  border-radius: 10px;
-  color: #fff;
-  font-weight: bold;
-  border: none;
-  width: 23.5rem;
-  cursor: pointer;
-}
+
 .form-second-button{
   background-color: #4C7766;
 }

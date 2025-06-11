@@ -1,0 +1,23 @@
+/* src/components/BooksList/BooksListMainPanel/BooksListMainPanel.css */
+
+.all-books-section {
+    margin-top: 40px;
+}
+
+.all-books-section h2 {
+    margin-bottom: 20px;
+}
+
+/* --- Tutaj dzieje się cała magia --- */
+.books-grid {
+    display: grid;
+
+    /* Tworzy tyle kolumn, ile zmieści się na ekranie.
+       Każda kolumna będzie mieć minimum 200px szerokości,
+       ale będzie się rozciągać, aby wypełnić dostępną przestrzeń (1fr). */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+
+    /* Odstęp 30px między książkami, zarówno w pionie, jak i w poziomie.
+       To rozwiązuje problem "stykania się brzegów". */
+    gap: 30px;
+}

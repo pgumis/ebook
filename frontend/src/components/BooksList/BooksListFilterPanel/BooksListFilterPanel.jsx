@@ -1,75 +1,63 @@
-// frontend/src/components/BooksListFilterPanel/BooksListFilterPanel.jsx
+// src/components/BooksList/BooksListFilterPanel/BooksListFilterPanel.jsx
+
 import React, { useState, useEffect } from 'react';
 import './BooksListFilterPanel.css';
-// Ten komponent przyjmuje dwie właściwości (props):
-// - onSelectCategory: Funkcja, która zostanie wywołana, gdy użytkownik wybierze kategorię.
-// - selectedKategoria: Aktualnie wybrana kategoria, służy do podświetlania aktywnego elementu.
-const BooksListFilterPanel = ({ onSelectCategory, selectedKategoria }) => {
-    const [kategorie, setKategorie] = useState([]); // Stan do przechowywania listy kategorii
-    const [loading, setLoading] = useState(true);   // Stan do zarządzania ładowaniem
-    const [error, setError] = useState(null);       // Stan do obsługi błędów
 
-    // useEffect uruchomi się tylko raz po pierwszym renderowaniu komponentu,
-    // aby pobrać listę kategorii z API.
+// Komponent otrzymuje nową funkcję 'onCloseMenu' jako prop
+const BooksListFilterPanel = ({ onSelectCategory, selectedKategoria, onCloseMenu }) => {
+    const [kategorie, setKategorie] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
     useEffect(() => {
         const pobierzKategorie = async () => {
-            setLoading(true); // Ustaw, że ładowanie się rozpoczęło
-            setError(null);   // Wyczyść ewentualne poprzednie błędy
-
+            setLoading(true);
+            setError(null);
             try {
-                // Wykonaj zapytanie do endpointu API Laravela dla kategorii
                 const response = await fetch('http://localhost:8000/api/kategorie');
-
-                if (!response.ok) {
-                    // Jeśli odpowiedź HTTP nie jest OK (np. status 404, 500), rzuć błąd
-                    throw new Error(`Błąd HTTP: ${response.status} - ${response.statusText}`);
-                }
-
-                const dane = await response.json(); // Parsuj odpowiedź JSON na tablicę stringów
-                setKategorie(dane); // Zapisz pobrane kategorie w stanie
+                if (!response.ok) throw new Error(`Błąd HTTP: ${response.status}`);
+                const dane = await response.json();
+                setKategorie(dane);
             } catch (blad) {
                 console.error("Błąd przy pobieraniu kategorii:", blad);
-                setError(blad); // Zapisz błąd w stanie
+                setError(blad);
             } finally {
-                setLoading(false); // Zakończ ładowanie, niezależnie od wyniku
+                setLoading(false);
             }
         };
+        pobierzKategorie();
+    }, []);
 
-        pobierzKategorie(); // Wywołaj funkcję pobierającą kategorie
-    }, []); // Pusta tablica zależności oznacza, że efekt uruchomi się tylko raz
+    // Nowa funkcja, która wywołuje dwie akcje
+    const handleCategoryClick = (kategoria) => {
+        onSelectCategory(kategoria);
+        onCloseMenu(); // Zawsze zamykaj menu po kliknięciu
+    };
 
-    // Warunkowe renderowanie w zależności od stanu ładowania i błędów
-    if (loading) {
-        return <div className="panel" style={{ textAlign: 'center', padding: '20px' }}>Ładowanie kategorii...</div>;
-    }
+    if (loading) return <div className="filter-panel">Ładowanie...</div>;
+    if (error) return <div className="filter-panel" style={{ color: 'red' }}>Błąd ładowania.</div>;
 
-    if (error) {
-        return <div className="panel" style={{ color: 'red', textAlign: 'center', padding: '20px' }}>Błąd: {error.message}</div>;
-    }
-
-    // Renderowanie listy kategorii
     return (
-        <div className="panel">
-            <h3 style={{marginBottom: '0'}}>Kategorie</h3>
-            <br />
-            <ul style={{listStyle: "none", padding: 0, margin: 0}}>
-                {/* Opcja "Wszystkie Ebooki" - resetuje filtr, pokazując wszystkie książki */}
+        <div className="panel filter-panel">
+            <div className="filter-panel-header">
+                <h3>Kategorie</h3>
+                {/* Przycisk zamykania - widoczny tylko na mobilce (dzięki CSS) */}
+                <button className="close-menu-btn" onClick={onCloseMenu} aria-label="Zamknij menu">
+                    <i className="fas fa-times"></i>
+                </button>
+            </div>
+            <ul className="filter-panel-list">
                 <li
-                    // Dodaj klasę 'active-category' (lub inną, którą masz w CSS), jeśli aktualnie wybrana kategoria to 'null'
-                    className={selectedKategoria === null ? 'active-category' : ''}
-                    onClick={() => onSelectCategory(null)} // Wywołaj funkcję z null, aby usunąć filtr
-                    style={{ cursor: 'pointer', fontWeight: selectedKategoria === null ? 'bold' : 'normal' }}
+                    className={!selectedKategoria ? 'active-category' : ''}
+                    onClick={() => handleCategoryClick(null)}
                 >
-                    Wszystkie Ebooki
+                    Wszystkie
                 </li>
-                {/* Mapowanie po pobranych kategoriach i renderowanie ich */}
                 {kategorie.map((kategoria, index) => (
                     <li
-                        key={index} // Klucz jest ważny w listach Reacta
-                        // Dodaj klasę 'active', jeśli ta kategoria jest aktualnie wybrana
+                        key={index}
                         className={selectedKategoria === kategoria ? 'active-category' : ''}
-                        onClick={() => onSelectCategory(kategoria)} // Wywołaj funkcję z nazwą kategorii
-                        style={{ textShadow: '1px 2px 4px rgba(0, 0, 0, 0.3);',cursor: 'pointer', fontWeight: selectedKategoria === kategoria ? 'bold' : 'normal' }}
+                        onClick={() => handleCategoryClick(kategoria)}
                     >
                         {kategoria}
                     </li>

@@ -20,6 +20,7 @@ class Uzytkownik extends Authenticatable
         'email',
         'haslo',
         'rola',
+        'zdjecie_profilowe',
         'status',
         'numer_telefonu', // jeśli jest w bazie
     ];
@@ -43,4 +44,10 @@ class Uzytkownik extends Authenticatable
     {
         return $this->hasMany(Recenzja::class, 'uzytkownik_id');
     }
+
+    public function ebooki()
+    {
+        return $this->hasMany(Ebook::class, 'uzytkownik_id');
+    }
+
 }

@@ -57,12 +57,15 @@ class EbookController extends Controller
         $ebook->cena_promocyjna = $request->cena_promocyjna;
         $ebook->jezyk = $request->jezyk;
         $ebook->kategoria = $request->kategoria;
-        $ebook->formaty = json_encode($request->formaty);
 
         // Upload pliku e-booka na S3
         if ($request->hasFile('plik')) {
-            $plikPath = $request->file('plik')->store('ebooki', 's3');
+            $plik = $request->file('plik');
+            $plikPath = $plik->store('ebooki', 's3');
             $ebook->plik = Storage::disk('s3')->url($plikPath);
+
+            // Ustaw format na podstawie rozszerzenia (np. "pdf" → "PDF")
+            $ebook->format = strtoupper($plik->getClientOriginalExtension());
         }
 
         // Upload okładki na S3 (opcjonalnie)
@@ -82,7 +85,8 @@ class EbookController extends Controller
 
     public function szczegoly($id)
     {
-        $ebook = Ebook::where('id', $id)
+        $ebook = Ebook::withAvg('recenzje', 'ocena')
+            ->where('id', $id)
             ->where('status', 'aktywny')
             ->first();
 
@@ -196,10 +200,11 @@ class EbookController extends Controller
             return $query;
         };
 
-        $nowosci = Ebook::where('status', 'aktywny');
+        $nowosci = Ebook::withAvg('recenzje', 'ocena')
+        ->where('status', 'aktywny');
         $nowosci = $applyCategoryFilter($nowosci)
             ->orderBy('created_at', 'desc')
-            ->take(6)
+            ->take(12)
             ->get();
 
         $bestsellery = Ebook::select(
@@ -210,9 +215,12 @@ class EbookController extends Controller
             'ebooki.cena_promocyjna',
             'ebooki.format',
             'ebooki.okladka', // DODAŁEM OKLADKE, bo jest potrzebna w Book.jsx
-            DB::raw('COUNT(ebook_zamowienie.ebook_id) as liczba_sprzedazy')
+            DB::raw('COUNT(DISTINCT ebook_zamowienie.ebook_id) as liczba_sprzedazy'),
+            DB::raw('AVG(recenzje.ocena) as recenzje_avg_ocena')
+
         )
             ->join('ebook_zamowienie', 'ebooki.id', '=', 'ebook_zamowienie.ebook_id')
+            ->leftJoin('recenzje', 'ebooki.id', '=', 'recenzje.ebook_id')
             ->where('ebook_zamowienie.created_at', '>=', $dataPoczatkowa)
             ->where('ebooki.status', 'aktywny');
 
@@ -224,19 +232,20 @@ class EbookController extends Controller
                 'ebooki.cena',
                 'ebooki.cena_promocyjna',
                 'ebooki.format',
-                'ebooki.okladka' // GRUPUJ TEŻ PO OKŁADCE
+                'ebooki.okladka'
             )
             ->orderByDesc('liczba_sprzedazy')
-            ->take(6)
+            ->take(12)
             ->get();
 
 
-        $promocje = Ebook::whereNotNull('cena_promocyjna')
+        $promocje = Ebook::withAvg('recenzje', 'ocena')
+            ->whereNotNull('cena_promocyjna')
             ->whereColumn('cena_promocyjna', '<', 'cena')
             ->where('status', 'aktywny');
 
         $promocje = $applyCategoryFilter($promocje)
-            ->take(6)
+            ->take(12)
             ->get();
 
         return response()->json([
@@ -249,7 +258,8 @@ class EbookController extends Controller
     public function ebookiKategorii(Request $request)
     {
         $kategoria = $request->query('kategoria'); // Pobierz kategorię z parametru zapytania URL
-        $query = Ebook::where('status', 'aktywny');
+        $query = Ebook::withAvg('recenzje', 'ocena')->where('status', 'aktywny');
+
 
         if ($kategoria) {
             $query->where('kategoria', $kategoria);
@@ -275,7 +285,8 @@ class EbookController extends Controller
 
     public function promocje()
     {
-        $promocje = Ebook::where('status', 'aktywny')
+        $promocje = Ebook::withAvg('recenzje', 'ocena')
+            ->where('status', 'aktywny')
             ->whereNotNull('cena_promocyjna')
             ->whereColumn('cena_promocyjna', '<', 'cena')
             ->orderBy('created_at', 'desc')
@@ -286,7 +297,8 @@ class EbookController extends Controller
 
     public function nowosci()
     {
-        $nowosci = Ebook::where('status', 'aktywny')
+        $nowosci = Ebook::withAvg('recenzje', 'ocena')
+            ->where('status', 'aktywny')
             ->orderBy('created_at', 'desc')
             ->paginate(12);
 
@@ -323,6 +335,7 @@ class EbookController extends Controller
             ->join('ebook_zamowienie', 'ebooki.id', '=', 'ebook_zamowienie.ebook_id')
             ->where('ebook_zamowienie.created_at', '>=', $dataPoczatkowa)
             ->where('status', 'aktywny')
+            ->withAvg('recenzje', 'ocena')
             ->groupBy(
                 'ebooki.id',
                 'ebooki.tytul',
@@ -339,7 +352,8 @@ class EbookController extends Controller
 
     public function moje(Request $request)
     {
-        $query = Ebook::where('uzytkownik_id', $request->user()->id)
+        $query = Ebook::withAvg('recenzje', 'ocena')
+            ->where('uzytkownik_id', $request->user()->id)
             ->orderBy('created_at', 'desc');
 
         if ($request->has('status')) {
@@ -349,7 +363,22 @@ class EbookController extends Controller
         return response()->json($query->get());
     }
 
+    public function listaDostawcy(Request $request, $providerId)
+    {
+        // Sprawdź, czy zalogowany użytkownik jest tym samym dostawcą, którego książki chce pobrać
 
+        if ($request->user()->id != $providerId && $request->user()->role !== 'admin') {
+            return response()->json(['message' => 'Brak autoryzacji do przeglądania tych książek.'], 403);
+        }
+
+
+        $ebooks = Ebook::withAvg('recenzje', 'ocena')
+        ->where('uzytkownik_id', $providerId)
+        ->get();
+
+
+        return response()->json($ebooks);
+    }
 
 
 }

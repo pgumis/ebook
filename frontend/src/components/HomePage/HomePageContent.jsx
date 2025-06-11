@@ -1,32 +1,53 @@
-// frontend/src/components/HomePageContent/HomePageContent.jsx
+// src/components/HomePage/HomePageContent.jsx
+
 import React, { useState } from 'react';
-// Upewnij się, że ścieżki importu są poprawne
 import BooksListFilterPanel from '../BooksList/BooksListFilterPanel/BooksListFilterPanel';
 import BooksListMainPanel from '../BooksList/BooksListMainPanel/BooksListMainPanel';
+import './HomePageContent.css'; // -> Importujemy nowy plik CSS
 
 function HomePageContent() {
-    // Stan do przechowywania aktualnie wybranej kategorii
-    // `null` oznacza, że żadna kategoria nie jest wybrana (wyświetlaj wszystkie ebooki)
     const [selectedKategoria, setSelectedKategoria] = useState(null);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    // Funkcja, która będzie przekazana do BooksListFilterPanel.
-    const obsluzWyborKategorii = (kategoria) => {
-        console.log("Wybrano kategorię w HomePageContent:", kategoria);
-        setSelectedKategoria(kategoria); // Aktualizuje stan, co spowoduje ponowne renderowanie
+    const handleSelectCategory = (kategoria) => {
+        setSelectedKategoria(kategoria);
+        // Po wybraniu kategorii na mobilce, zawsze zamykaj menu
+        if (isMenuOpen) {
+            setIsMenuOpen(false);
+        }
+    };
+
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
     };
 
     return (
-        <div style={{ display: 'flex', gap: '20px', padding: '0px' }}>
-            {/* Panel boczny z filtrem kategorii */}
-            <BooksListFilterPanel
-                onSelectCategory={obsluzWyborKategorii}
-                selectedKategoria={selectedKategoria}
-            />
+        // Używamy klas CSS zamiast stylów inline dla lepszego zarządzania
+        <div className="home-page-layout">
 
-            {/* Główny panel z listą ebooków (nowości, bestsellery, promocje) */}
-            <BooksListMainPanel
-                selectedKategoria={selectedKategoria}
-            />
+            {/* Przycisk hamburgera - widoczny tylko na mobilce */}
+            <button className="hamburger-menu-btn" onClick={toggleMenu} aria-label="Otwórz menu kategorii">
+                <i className="fas fa-bars"></i>
+            </button>
+
+            {/* Panel boczny z filtrem kategorii */}
+            <aside className={`sidebar-panel ${isMenuOpen ? 'menu-open' : ''}`}>
+                <BooksListFilterPanel
+                    selectedKategoria={selectedKategoria}
+                    onSelectCategory={handleSelectCategory}
+                    onCloseMenu={() => setIsMenuOpen(false)} // Przekazujemy funkcję do zamykania
+                />
+            </aside>
+
+            {/* Główny panel z listą ebooków */}
+            <main className="content-panel">
+                <BooksListMainPanel
+                    selectedKategoria={selectedKategoria}
+                />
+            </main>
+
+            {/* Nakładka przyciemniająca tło, gdy menu jest otwarte */}
+            {isMenuOpen && <div className="overlay" onClick={toggleMenu}></div>}
         </div>
     );
 }

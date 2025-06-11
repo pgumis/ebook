@@ -21,3 +21,134 @@
   margin-top: 1rem;
   text-align: left;
 }
+/* frontend/src/components/Profile/Profile.css */
+
+/* Stary .profile-card, niepotrzebny, gdy używasz Bootstrap Card */
+/* .profile-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+} */
+
+.profile-avatar {
+  width: 150px; /* Określona szerokość */
+  height: 150px; /* Określona wysokość */
+  object-fit: cover; /* Upewnij się, że obrazek wypełnia koło bez zniekształceń */
+  /* Klasa Bootstrap 'rounded-circle' już zaokrągli */
+  /* Klasa Bootstrap 'img-fluid' już sprawi, że będzie responsywny */
+}
+
+/* Stary .profile-info, niepotrzebny, gdy używasz Bootstrap mb-3 */
+/* .profile-info {
+  margin-top: 1rem;
+  text-align: left;
+} */
+
+/* Możesz dodać ogólne style dla panelu, jeśli potrzebujesz, np. padding i tło */
+.panel { /* Jeśli używasz klasy panel na divie nadrzędnym dla całego profilu */
+  background-color: #f8f9fa; /* Jasne tło, pasujące do Bootstrapa */
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+}
+
+.edit-button{
+  background-color: #4C7766;
+  border-radius: 4px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  max-width: none;
+  min-height: 30px;
+  min-width: 10px;
+  outline: none;
+  overflow: hidden;
+  padding: 9px 20px 8px;
+  position: relative;
+  text-align: center;
+  text-transform: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
+}
+
+.edit-button:hover,
+.edit-button:focus {
+  opacity: .75;
+}
+
+.save-button{
+  background-color: #4C7766;
+  border-radius: 4px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  max-width: none;
+  min-height: 30px;
+  min-width: 10px;
+  outline: none;
+  overflow: hidden;
+  padding: 9px 20px 8px;
+  position: relative;
+  text-align: center;
+  text-transform: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
+}
+
+.save-button:hover,
+.save-button:focus {
+  opacity: .75;
+}
+
+.avatar-picker {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Wyśrodkuj awatary */
+  gap: 10px; /* Odstępy między awatarami */
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.avatar-thumbnail {
+  width: 60px; /* Rozmiar miniaturki awatara */
+  height: 60px;
+  border-radius: 50%; /* Okrągłe awatary */
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent; /* Domyślna ramka przezroczysta */
+  transition: border-color 0.2s ease, transform 0.2s ease; /* Płynne przejście */
+}
+
+.avatar-thumbnail:hover {
+  border-color: #007bff; /* Podświetlenie przy najechaniu */
+  transform: scale(1.05); /* Lekkie powiększenie */
+}
+
+.avatar-thumbnail.selected-avatar {
+  border-color: #28a745; /* Zielona ramka dla wybranego awatara */
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.5); /* Lekki cień dla wyróżnienia */
+}

@@ -7,6 +7,7 @@ use App\Http\Controllers\API\RecenzjaController;
 use App\Http\Controllers\API\UploadController;
 use App\Http\Controllers\API\WiadomoscController;
 use App\Http\Controllers\API\ZamowienieController;
+use App\Http\Controllers\API\DashboardController;
 use App\Mail\TestMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -59,6 +60,11 @@ Route::get('/ebooki/{id}', [EbookController::class, 'szczegoly']);
 Route::middleware(['auth:sanctum', 'sprawdz.role:admin,dostawca'])
     ->put('/ebooki/{id}', [EbookController::class, 'edytuj']);
 
+Route::middleware(['auth:sanctum', 'sprawdz.role:admin,dostawca'])
+    ->get('/ebooki/dostawca/{id}', [EbookController::class, 'listaDostawcy']);
+
+Route::middleware(['auth:sanctum', 'sprawdz.role:admin,dostawca'])
+    ->get('/dostawca/dashboard-stats', [DashboardController::class, 'statystykaDostawcy']);
 
 Route::middleware(['auth:sanctum', 'sprawdz.role:admin'])
     ->delete('/ebooki/{id}', [EbookController::class, 'usun']);
@@ -115,6 +121,9 @@ Route::get('/ebooki-kategoria', [EbookController::class, 'ebookiKategorii']);
 
 Route::middleware(['auth:sanctum', 'sprawdz.role:dostawca'])
     ->get('/moje-ebooki', [EbookController::class, 'moje']);
+
+Route::middleware('auth:sanctum')
+    ->get('/recenzje/sprawdz/{ebook_id}', [RecenzjaController::class, 'sprawdzMozliwoscRecenzji']);
 
 Route::middleware('auth:sanctum')
     ->post('/recenzje', [RecenzjaController::class, 'dodaj']);

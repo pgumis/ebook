@@ -1,240 +1,120 @@
+import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { viewActions } from "../../store/view";
-import "./TopBar.css";
-import Logo from "../Logo/Logo";
-import { useState, useRef, useEffect } from "react";
-import TopBarListOption from "./TopBarListOption";
 import { userDataActions } from "../../store/userData";
+import TopBarListOption from "./TopBarListOption";
+import "./TopBar.css";
+import {cartActions} from "../../store/cart";
+
+// Definicje ikon SVG jako komponenty lub stałe dla czystości kodu
+const ProfileIcon = () => <svg fill="none" height="24" viewBox="0 0 24 24" width="24"><path d="M17 17C17 14.7909 14.7614 13 12 13C9.23858 13 7 14.7909 7 17M12 10C13.6569 10 15 8.65685 15 7C15 5.34315 13.6569 4 12 4C10.3431 4 9 5.34315 9 7C9 8.65685 10.3431 10 12 10Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+const HistoryIcon = () => <svg fill="none" height="24" viewBox="0 0 24 24" width="24"><path d="M12 6.60324C13.6667 5.33178 17.5 3.74246 21 6.60324V19C17.5 16.1392 13.6667 17.7285 12 19M12 6.60324C10.3333 5.33178 6.5 3.74246 3 6.60324V19C6.5 16.1392 10.3333 17.7285 12 19M12 6.60324V19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+const LogoutIcon = () => <svg fill="none" height="24" viewBox="0 0 24 24" width="24"><path d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15M8 17L12 12M12 12L8 7M12 12H3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>;
 
 const TopBar = () => {
-  const dispatch = useDispatch();
-  const userData = useSelector((state) => state.userData);
-  const [showProfileDetails, setShowProfileDetails] = useState(false);
-  const profileDetailsRef = useRef(null);
-  const profilePictureRef = useRef(null);
+    const dispatch = useDispatch();
+    const userData = useSelector((state) => state.userData);
+    const cartItems = useSelector((state) => state.cart.items); // Pobieramy dane koszyka
+    const cartItemCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        profileDetailsRef.current &&
-        !profileDetailsRef.current.contains(event.target) &&
-        profilePictureRef.current &&
-        !profilePictureRef.current.contains(event.target)
-      ) {
-        setShowProfileDetails(false);
-      }
-    };
+    const [searchTerm, setSearchTerm] = useState("");
+    const [showProfileMenu, setShowProfileMenu] = useState(false);
+    const profileMenuRef = useRef(null);
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+    // Zamykanie menu profilu po kliknięciu na zewnątrz
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+                setShowProfileMenu(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
-
-  const handleSignOut = async () => {
-   
-      dispatch(userDataActions.clearData());
-
-      localStorage.removeItem("userData");
-
-      dispatch(viewActions.changeView("home"));
-  };
-
-    const handleSearch = () => {
-        console.log("Przycisk Szukaj kliknięty! (funkcjonalność do zaimplementowania)");
-    };
-
-    const handleAdvancedSearchClick = (e) => {
+    const handleSearchSubmit = (e) => {
         e.preventDefault();
-        console.log("Przycisk Szukanie zaawansowane kliknięty! (funkcjonalność do zaimplementowania)");
+        if (!searchTerm.trim()) return;
+        console.log(`Wyszukiwanie frazy: ${searchTerm}`);
+        // TODO: Dodać logikę zmiany widoku na stronę z wynikami wyszukiwania
+        // dispatch(viewActions.changeView("searchResults"));
+        // dispatch(viewActions.setSearchTerm(searchTerm));
     };
 
-  return (
-    <nav>
-      <Logo
-        onClick={() => {
-          dispatch(viewActions.changeView("home"));
-        }}
-      />
-        <div className="search-bar-and-button">
-            <input type="search" placeholder="Szukaj ebooka..." className="nav-search-bar" />
-            <button className="search-button" onClick={handleSearch}>
-                Szukaj
-            </button>
-            <button className="advanced-search-button" onClick={handleAdvancedSearchClick}>
-                Szukanie zaawansowane
-            </button>
-        </div>
-      <div className="nav-right-side">
-        <button
-          className="nav-icon-btn"
-          onClick={() => {
-            dispatch(viewActions.changeView("home"));
-          }}
-        >
-          <svg
-            fill="none"
-            height="24"
-            viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M20 19V10.5C20 10.1852 19.8518 9.88885 19.6 9.7L12.6 4.45C12.2444 4.18333 11.7556 4.18333 11.4 4.45L4.4 9.7C4.14819 9.88885 4 10.1852 4 10.5V19C4 19.5523 4.44772 20 5 20H9C9.55228 20 10 19.5523 10 19V16C10 15.4477 10.4477 15 11 15H13C13.5523 15 14 15.4477 14 16V19C14 19.5523 14.4477 20 15 20H19C19.5523 20 20 19.5523 20 19Z"
-              stroke="black"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-            />
-          </svg>
-        </button>
-        <button
-          className="nav-icon-btn"
-          onClick={() => {
-            dispatch(viewActions.changeView("contact"));
-          }}
-        >
-          <svg
-            fill="none"
-            height="24"
-            viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 9H16M8 12H16M8 15H11M21 12C21 16.9706 16.9706 21 12 21C10.2289 21 8.57736 20.4884 7.18497 19.605L3 21L4.39499 16.815C3.51156 15.4226 3 13.7711 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
-              stroke="black"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-            />
-          </svg>
-        </button>
-        <button
-          className="nav-icon-btn"
-          onClick={() => {
-            dispatch(viewActions.changeView("cart"));
-          }}
-          hidden={!userData.loggedIn}
-        >
-          <svg
-            fill="none"
-            height="24"
-            viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M3 3H5L5.5 6M5.5 6L7 15H18L21 6H5.5Z"
-              stroke="black"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-            />
-            <circle
-              cx="8"
-              cy="20"
-              r="1"
-              stroke="black"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-            />
-            <circle
-              cx="17"
-              cy="20"
-              r="1"
-              stroke="black"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-            />
-          </svg>
-        </button>
-        <div
-          style={{ cursor: "pointer", position: "relative" }}
-          hidden={!userData.loggedIn}
-        >
-          <img
-            ref={profilePictureRef}
-            src={userData.profilePic}
-            className="top-bar-profile-picture"
-            onClick={() => {
-              setShowProfileDetails(!showProfileDetails);
-            }}
-          />
-          <div
-            ref={profileDetailsRef}
-            hidden={!showProfileDetails}
-            style={{
-              position: "absolute",
-              top: 32,
-              right: 0,
-              minWidth: "max-content",
-              backgroundColor: "#fff",
-              boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
-              borderRadius: "10px",
-            }}
-          >
-            <TopBarListOption
-              first
-              onClick={() => {
-                dispatch(viewActions.changeView("profileDetails"));
-                setShowProfileDetails(false);
-              }}
-            >
-              Zarządzaj profilem
-            </TopBarListOption>
-            <TopBarListOption
-              onClick={() => {
-                dispatch(viewActions.changeView("purchaseHistory"));
-                setShowProfileDetails(false);
-              }}
-            >
-              Historia zamówień
-            </TopBarListOption>
-            <TopBarListOption
-              last
-              onClick={() => {
-                dispatch(viewActions.changeView("settings"));
-                setShowProfileDetails(false);
-              }}
-            >
-              Ustawienia
-            </TopBarListOption>
-            <TopBarListOption
-              last
-              onClick={() => {
-                handleSignOut();
-              }}
-            >
-              Wyloguj
-            </TopBarListOption>
-          </div>
-        </div>
+    const handleSignOut = () => {
+        dispatch(userDataActions.clearData());
+        dispatch(cartActions.clearCart());
+        localStorage.clear();
+        dispatch(viewActions.changeView("home"));
+    };
 
-        <button
-          className="sign-in nav-buttons"
-          onClick={() => {
-            dispatch(viewActions.changeView("signIn"));
-          }}
-          hidden={userData.loggedIn}
-        >
-          Zaloguj się
-        </button>
-        <button
-          className="sign-up nav-buttons"
-          onClick={() => {
-            dispatch(viewActions.changeView("signUp"));
-          }}
-          hidden={userData.loggedIn}
-        >
-          Zarejestruj się
-        </button>
-        
-      </div>
-    </nav>
-  );
+    return (
+        <nav className="top-bar">
+            <img
+                className="top-bar-logo"
+                src="/e-book na wynos logo.png"
+                alt="Logo E-book na wynos"
+                onClick={() => dispatch(viewActions.changeView("home"))}
+            />
+
+            <form className="search-bar-form" onSubmit={handleSearchSubmit}>
+                <input
+                    type="search"
+                    placeholder="Wyszukaj tytuł lub autora..."
+                    className="nav-search-bar"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <button type="submit" className="search-icon-btn" aria-label="Szukaj">
+                    <i className="fas fa-search"></i>
+                </button>
+            </form>
+
+            <div className="nav-right-side">
+                <button className="nav-icon-btn" onClick={() => dispatch(viewActions.changeView("contact"))} title="Kontakt">
+                    <i className="fas fa-envelope"></i>
+                </button>
+
+                {userData.loggedIn ? (
+                    <>
+                        <button className="nav-icon-btn cart-btn" onClick={() => dispatch(viewActions.changeView("cart"))} title="Koszyk">
+                            <i className="fas fa-shopping-cart"></i>
+                            {cartItemCount > 0 && <span className="cart-badge">{cartItemCount}</span>}
+                        </button>
+
+                        <div className="profile-section" ref={profileMenuRef}>
+                            <div className="profile-activator" onClick={() => setShowProfileMenu(!showProfileMenu)}>
+                                <span className="profile-greeting">Witaj, {userData.imie}</span>
+                                <img src={userData.zdjecie_profilowe || "/default-avatar.png"} className="top-bar-profile-picture" alt="Avatar"/>
+                            </div>
+                            {showProfileMenu && (
+                                <div className="profile-dropdown-menu">
+                                    <TopBarListOption icon={<ProfileIcon />} onClick={() => dispatch(viewActions.changeView("profileDetails"))}>
+                                        Zarządzaj profilem
+                                    </TopBarListOption>
+                                    <TopBarListOption icon={<HistoryIcon />} onClick={() => dispatch(viewActions.changeView("purchaseHistory"))}>
+                                        Historia zamówień
+                                    </TopBarListOption>
+                                    <TopBarListOption icon={<LogoutIcon />} onClick={handleSignOut} last>
+                                        Wyloguj
+                                    </TopBarListOption>
+                                </div>
+                            )}
+                        </div>
+                    </>
+                ) : (
+                    <div className="logged-out-buttons">
+                        <button className="sign-in-btn" onClick={() => dispatch(viewActions.changeView("signIn"))}>
+                            Zaloguj się
+                        </button>
+                        <button className="sign-up-btn" onClick={() => dispatch(viewActions.changeView("signUp"))}>
+                            Zarejestruj się
+                        </button>
+                    </div>
+                )}
+            </div>
+        </nav>
+    );
 };
+
 export default TopBar;

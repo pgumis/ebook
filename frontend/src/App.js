@@ -26,6 +26,7 @@ import AdminPanelMessageDetails from "./components/AdminPanel/AdminPanelMessageD
 import HomePageContent from "./components/HomePage/HomePageContent";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { cartActions } from "./store/cart";
 
 
 function App() {
@@ -36,9 +37,24 @@ function App() {
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
+      const parsedData = JSON.parse(storedData);
       dispatch(userDataActions.setData(JSON.parse(storedData)));
+      if (parsedData.token) {
+        dispatch(cartActions.fetchCartData(parsedData.token));
+      }
     }
   }, [dispatch]);
+
+  // Drugi useEffect, który reaguje na zmianę tokena (np. po nowym logowaniu)
+  useEffect(() => {
+    // Jeśli token się pojawił (czyli ktoś się właśnie zalogował), a nie było go wcześniej,
+    // również pobierz koszyk. To obsłuży świeże logowania.
+    if (userData.token) {
+      // Można by tu dodać warunek, żeby nie pobierać, jeśli już jest załadowany,
+      // ale dla prostoty i pewności, pobranie przy każdej zmianie tokena jest OK.
+      dispatch(cartActions.fetchCartData(userData.token));
+    }
+  }, [userData.token, dispatch]);
 
   return (
     <div className="App">
@@ -48,7 +64,9 @@ function App() {
           <button onClick={()=>{dispatch(userDataActions.setData({...userData, role: 'klient'}))}}>klient</button>
           <button onClick={()=>{dispatch(userDataActions.setData({...userData, role: 'dostawca'}))}}>dostawca</button>
           <button onClick={()=>{dispatch(userDataActions.setData({...userData, role: 'admin'}))}}>admin</button>
-          {(currView.selectedView === "home" && (userData.role === 'klient' || userData.role === 'user'))&& <HomePageContent />}
+          {currView.selectedView === "home" && (
+              !userData.role || userData.role === "klient" || userData.role === "user"
+          ) && <HomePageContent />}
           {(currView.selectedView === "home" && userData.role === 'dostawca')&& <VendorPanel />}
           {(currView.selectedView === "home" && userData.role === 'admin')&& <AdminPanel />}
           {currView.selectedView === "signUp" && <SignUp />}

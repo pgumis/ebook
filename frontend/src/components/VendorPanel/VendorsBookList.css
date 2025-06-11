@@ -11,6 +11,7 @@ table {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
   }
   th {
     background-color: #C9C0B5;
@@ -24,12 +25,48 @@ table {
   }
 
 .vendors-book-list-add-new-book{
-  height: 3rem;
-  width: 10rem;
-  background-color: #C9C0B5;
-  border: none;
-  border-radius: 10px;
-  color: white;
-  font-weight: bold;
+  background-color: #4C7766;
+  border-radius: 4px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #fff;
   cursor: pointer;
+  display: inline-block;
+  font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  max-width: none;
+  min-height: 30px;
+  min-width: 10px;
+  outline: none;
+  overflow: hidden;
+  padding: 9px 20px 8px;
+  position: relative;
+  text-align: center;
+  text-transform: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
+}
+
+.vendors-book-list-add-new-book:hover,
+.vendors-book-list-add-new-book:focus {
+  opacity: .75;
+}
+
+.status-active {
+  color: green;
+  font-weight: bold;
+}
+
+.status-withdrawn {
+  color: red;
+  font-weight: bold;
+}
+
+.status-pending {
+  color: orange;
+  font-weight: bold;
 }

@@ -24,3 +24,8 @@ li{
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     gap: 2rem 0;
 }
+
+.pagination-item.active .pagination-button{
+    background-color: #4C7766;
+    border-color: #4C7766;
+}

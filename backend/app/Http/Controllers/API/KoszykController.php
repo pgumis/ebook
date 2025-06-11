@@ -15,8 +15,15 @@ class KoszykController extends Controller
             ->where('uzytkownik_id', $request->user()->id)
             ->get();
 
+        // -> POPRAWIONA LOGIKA SUMOWANIA
+        // Sumujemy ceny z dołączonego modelu Ebook, a nie z tabeli koszyk
         $suma = $pozycje->sum(function ($pozycja) {
-            return $pozycja->cena_jednostkowa;
+            // Sprawdź, czy ebook istnieje, aby uniknąć błędu
+            if ($pozycja->ebook) {
+                $cena = $pozycja->ebook->cena_promocyjna ?? $pozycja->ebook->cena;
+                return $cena * $pozycja->ilosc;
+            }
+            return 0;
         });
 
         return response()->json([
@@ -33,14 +40,13 @@ class KoszykController extends Controller
         ]);
 
         $ebook = Ebook::find($request->ebook_id);
+        $user_id = $request->user()->id;
 
         if ($ebook->status !== 'aktywny') {
             return response()->json(['komunikat' => 'Ten e-book jest niedostępny.'], 400);
         }
 
-        $cena = $ebook->cena_promocyjna ?? $ebook->cena;
-
-        $istnieje = Koszyk::where('uzytkownik_id', $request->user()->id)
+        $istnieje = Koszyk::where('uzytkownik_id', $user_id)
             ->where('ebook_id', $ebook->id)
             ->exists();
 
@@ -48,35 +54,46 @@ class KoszykController extends Controller
             return response()->json(['komunikat' => 'Ten e-book już znajduje się w koszyku.'], 409);
         }
 
+        // -> POPRAWIONY ZAPIS DO BAZY
+        // Zapisujemy tylko te pola, które istnieją w tabeli 'koszyk'
         $pozycja = Koszyk::create([
-            'uzytkownik_id' => $request->user()->id,
+            'uzytkownik_id' => $user_id,
             'ebook_id' => $ebook->id,
-            'cena_jednostkowa' => $cena,
+            'ilosc' => 1, // Zawsze dodajemy 1 sztukę
         ]);
+
+        // Aby odpowiedź była kompletna dla frontendu, dołączamy dane ebooka
+        $pozycja->load('ebook');
 
         return response()->json([
             'komunikat' => 'E-book został dodany do koszyka',
-            'pozycja' => $pozycja
+            'pozycja' => $pozycja // Teraz odpowiedź zawiera też info o książce
         ], 201);
     }
 
 
-    public function usun($id, Request $request)
+    public function usun(Request $request, $ebook_id)
     {
-        $pozycja = Koszyk::find($id);
+        // Pobierz ID zalogowanego użytkownika
+        $uzytkownik_id = $request->user()->id;
 
-        if (!$pozycja) {
-            return response()->json(['komunikat' => 'Pozycja nie istnieje.'], 404);
+        // Znajdź pozycję w koszyku, która należy do TEGO użytkownika
+        // i dotyczy TEJ książki. Używamy Twojego modelu 'Koszyk'.
+        $pozycjaWKoszyku = Koszyk::where('uzytkownik_id', $uzytkownik_id)
+            ->where('ebook_id', $ebook_id)
+            ->first();
+
+        // Jeśli znaleziono taką pozycję, usuń ją
+        if ($pozycjaWKoszyku) {
+            $pozycjaWKoszyku->delete();
+            // Zwróć potwierdzenie usunięcia
+            return response()->json(['komunikat' => 'Produkt został usunięty z koszyka.'], 200);
         }
 
-        if ($pozycja->uzytkownik_id !== $request->user()->id) {
-            return response()->json(['komunikat' => 'Brak uprawnień.'], 403);
-        }
-
-        $pozycja->delete();
-
-        return response()->json(['komunikat' => 'Pozycja została usunięta z koszyka.']);
+        // Jeśli z jakiegoś powodu nie znaleziono, zwróć błąd 404
+        return response()->json(['komunikat' => 'Pozycja nie istnieje w koszyku.'], 404);
     }
+
 
 
 }
