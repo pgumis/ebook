@@ -291,3 +291,10 @@
   padding-bottom: 1rem;
   margin-bottom: 1rem;
 }
+
+@media (max-width: 992px) {
+    .book-details-main-info{
+      display: flex;
+      flex-direction: column;
+    }
+}

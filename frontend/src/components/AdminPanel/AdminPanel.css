@@ -4,6 +4,9 @@
     gap: 30px;
     align-items: flex-start;
 }
+.admin-content{
+  width: 100%;
+}
 
 .admin-sidebar ul {
     list-style: none;
@@ -42,4 +45,59 @@
     width: 20px; /* Stała szerokość kontenera ikony */
     text-align: center; /* Wyśrodkowanie ikony w jej kontenerze */
     font-size: 1.1rem; /* Rozmiar samej ikony */
+}
+.mobile-button-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 16px;
+  width: 100%;
+}
+.management-table th,
+.management-table td {
+  white-space: nowrap;
+  padding: 10px 15px;
+}
+
+.mobile-button-grid button {
+  padding: 15px 20px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15px;
+  border: none;
+  background-color: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s, color 0.2s, transform 0.2s ease;
+  font-size: 1rem;
+}
+
+.mobile-button-grid button:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+.mobile-button-grid button.active {
+  background-color: #4C7766;
+  color: white;
+  font-weight: bold;
+}
+
+.mobile-button-grid button i {
+  width: 20px;
+  text-align: center;
+  font-size: 1.1rem;
+}
+.mobile-button-grid button:nth-child(5) {
+  grid-column: span 2;
+}
+@media (max-width:1189px) {
+    .admin-panel-layout{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 }
