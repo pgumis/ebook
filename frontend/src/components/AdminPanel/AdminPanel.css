@@ -4,9 +4,12 @@
     gap: 30px;
     align-items: flex-start;
 }
+<<<<<<< HEAD
 .admin-content{
   width: 100%;
 }
+=======
+>>>>>>> adef5599ccf4de75fde88fce6788f87c49593eb1
 
 .admin-sidebar ul {
     list-style: none;
@@ -45,6 +48,7 @@
     width: 20px; /* Stała szerokość kontenera ikony */
     text-align: center; /* Wyśrodkowanie ikony w jej kontenerze */
     font-size: 1.1rem; /* Rozmiar samej ikony */
+<<<<<<< HEAD
 }
 .mobile-button-grid {
   display: grid;
@@ -100,4 +104,6 @@
         flex-direction: column;
         align-items: center;
     }
+=======
+>>>>>>> adef5599ccf4de75fde88fce6788f87c49593eb1
 }
