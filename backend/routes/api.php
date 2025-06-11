@@ -136,5 +136,14 @@ Route::middleware('auth:sanctum')
 
 Route::middleware(['auth:sanctum', 'sprawdz.role:admin'])->prefix('admin')->group(function () {
     Route::get('/uzytkownicy', [AdminController::class, 'wszyscyUzytkownicy']);
+    Route::get('/uzytkownicy/{id}', [AdminController::class, 'szczegolyUzytkownika']);
+    Route::get('/ebooki', [AdminController::class, 'wszystkieEbooki']);
+    Route::put('/ebooki/{id}/status', [AdminController::class, 'zmienStatusEbooka']);
     Route::get('/recenzje', [AdminController::class, 'wszystkieRecenzje']);
+    Route::delete('/recenzje/{id}', [AdminController::class, 'usunRecenzje']);
+    Route::get('/zamowienia', [AdminController::class, 'wszystkieZamowienia']);
+    Route::put('/zamowienia/{id}/status', [AdminController::class, 'zmienStatusZamowienia']);
+    Route::get('/wiadomosci', [AdminController::class, 'wszystkieWiadomosci']);
+    Route::put('/wiadomosci/{id}/przeczytaj', [AdminController::class, 'oznaczJakoPrzeczytana']);
+    Route::delete('/wiadomosci/{id}', [AdminController::class, 'usunWiadomosc']);
 });
