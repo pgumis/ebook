@@ -1,0 +1,105 @@
+/* src/components/HomePage/HomePageContent.css */
+
+.home-page-layout {
+    display: grid;
+    /* Układ na duże ekrany: panel boczny 280px, reszta to treść */
+    grid-template-columns: 280px 1fr;
+    gap: 30px;
+}
+
+.sidebar-panel {
+    transition: transform 0.3s ease-in-out;
+}
+
+.content-panel {
+    width: 100%;
+    min-width: 0; /* Ważne dla poprawnego działania karuzeli wewnątrz siatki */
+}
+
+/* Domyślnie ukrywamy elementy mobilne na dużych ekranach */
+.hamburger-menu-btn,
+.close-menu-btn,
+.overlay {
+    display: none;
+}
+
+/* Nagłówek w panelu bocznym - potrzebny do umieszczenia przycisku X */
+.filter-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.filter-panel-header h3 {
+    margin: 0;
+}
+
+
+/* === Media Query dla ekranów mniejszych niż 992px === */
+@media (max-width: 992px) {
+    .home-page-layout {
+        /* Układ jednokolumnowy, panel boczny znika z głównego przepływu */
+        grid-template-columns: 1fr;
+    }
+
+    /* Styl dla wysuwanego panelu bocznego */
+    .sidebar-panel {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 300px;
+        height: 100vh; /* Pełna wysokość ekranu */
+        background-color: #fff;
+        z-index: 1000;
+        transform: translateX(-100%); /* Domyślnie schowany w lewo */
+        box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+        overflow-y: auto; /* Umożliwia przewijanie, jeśli kategorii jest dużo */
+    }
+
+    .sidebar-panel.menu-open {
+        transform: translateX(0); /* Wysuwa panel do widoku */
+    }
+
+    /* Pokazujemy przyciski mobilne */
+    .hamburger-menu-btn {
+        display: flex; /* Zmieniamy na flex/block, aby był widoczny */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 80px;  /* Dopasuj pozycję do swojego nagłówka */
+        left: 15px;
+        z-index: 990;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .close-menu-btn {
+        display: block; /* Pokazujemy przycisk X wewnątrz panelu */
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #888;
+        cursor: pointer;
+    }
+
+    /* Styl dla przyciemniającej nakładki */
+    .overlay {
+        display: block; /* Pokazujemy overlay */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 998; /* Jest pod menu, ale nad resztą treści */
+    }
+}

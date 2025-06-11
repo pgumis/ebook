@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { viewActions } from "../../store/view";
 import { userDataActions } from "../../store/userData";
-
+import "./SignIn.css";
 import Logo from "../Logo/Logo";
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -71,7 +71,7 @@ const SignIn = () => {
   return (
     <div className="screen-center">
       <div className="form-wrapper">
-        <Logo />
+        <img className="signin-logo" src={"e-book na wynos logo.png"}/>
         <h3>Witamy!</h3>
         <form onSubmit={handleSubmit} style={{ marginTop: 0 }}>
           <div className="form-whole-line">

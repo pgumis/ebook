@@ -123,6 +123,9 @@ Route::middleware(['auth:sanctum', 'sprawdz.role:dostawca'])
     ->get('/moje-ebooki', [EbookController::class, 'moje']);
 
 Route::middleware('auth:sanctum')
+    ->get('/recenzje/sprawdz/{ebook_id}', [RecenzjaController::class, 'sprawdzMozliwoscRecenzji']);
+
+Route::middleware('auth:sanctum')
     ->post('/recenzje', [RecenzjaController::class, 'dodaj']);
 
 Route::middleware('auth:sanctum')

@@ -1,0 +1,64 @@
+.form-submit{
+    background-color: #4C7766;
+    border-radius: 4px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    max-width: none;
+    min-height: 30px;
+    min-width: 10px;
+    outline: none;
+    overflow: hidden;
+    padding: 9px 20px 8px;
+    position: relative;
+    text-align: center;
+    text-transform: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
+}
+
+.form-submit:hover,
+.form-submit:focus {
+    opacity: .75;
+}
+
+.error-text {
+    color: red;
+    font-size: 0.85em;
+    margin-top: 5px;
+    margin-bottom: 5px; /* Dodaj trochę marginesu, żeby nie przylegało do inputa */
+}
+
+.success-message {
+    color: green;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 15px;
+}
+
+/* Możesz też dodać style dla inputów z błędami */
+input.error-border {
+    border-color: red;
+}
+
+.signup-logo {
+    width: 230px; /* Zwiększ szerokość logo */
+    height: auto; /* Zachowaj proporcje */
+    margin-bottom: 30px; /* Zwiększ odstęp pod logo */
+    margin-top: 0; /* Upewnij się, że nie ma górnego marginesu, jeśli Logo ma swój własny */
+}

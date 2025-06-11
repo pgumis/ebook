@@ -3,13 +3,11 @@ import React, { useEffect, useState } from "react";
 import Book from "../Book/Book"; // Ścieżka do Book.jsx jest poprawna
 import Pagination from '../../Pagination/Pagination'; // Ścieżka do Pagination.jsx jest poprawna
 import BooksCarouselSection from "../../BooksCarousel/BooksCarouselSection";
+import './BooksListMainPanel.css';
+
 // Funkcja pomocnicza do transformacji danych książki z API na format oczekiwany przez komponent Book
 const transformBookData = (bookItem) => {
     if (!bookItem) return null; // Zabezpieczenie przed pustym obiektem
-
-    // Domyślna wartość dla rating, jeśli nie jest dostępny z API
-    // Możesz zmienić to na 0 lub inną wartość, jeśli chcesz
-    const defaultRating = 4;
 
     return {
         ...bookItem, // zachowaj wszystkie oryginalne pola
@@ -18,9 +16,7 @@ const transformBookData = (bookItem) => {
         author: bookItem.autor, // Zmieniamy 'autor' na 'author'
         price: bookItem.cena_promocyjna !== null && bookItem.cena_promocyjna !== undefined ? bookItem.cena_promocyjna : bookItem.cena, // Obsługa ceny promocyjnej
         okladka: bookItem.okladka, // Zapewniamy, że okładka jest dostępna
-        rating: bookItem.rating || defaultRating, // Użyj rating z API, jeśli jest, w przeciwnym razie domyślny
-        // Możesz dodać inne pola, jeśli BooksListFilterPanel ich potrzebuje
-        // np. opis: bookItem.opis,
+        rating: bookItem.recenzje_avg_ocena,
     };
 };
 
@@ -159,31 +155,14 @@ const BooksListMainPanel = ({ selectedKategoria }) => {
             )}
 
             {/* Pełna lista książek z paginacją (zawsze wyświetlana) */}
-            <section className="all-books-section" style={{ marginTop: '40px' }}>
+            <section className="all-books-section">
                 <h2>{selectedKategoria ? `Wszystkie ebooki w kategorii ${selectedKategoria}` : 'Wszystkie ebooki'}</h2>
-                {loadingAllBooks ? (
-                    <p>Ładowanie wszystkich ebooków...</p>
-                ) : (
+                {loadingAllBooks ? <p>Ładowanie...</p> : (
                     <>
-                        <div className="books-grid" style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
-                            gap: '20px',
-                            justifyContent: 'center',
-                            padding: '20px 0'
-                        }}>
-                            {allBooks.map((book) => (
-                                // Sprawdź, czy book nie jest null po transformacji
-                                book ? <Book key={book.id} bookObj={book} /> : null
-                            ))}
+                        <div className="books-grid">
+                            {allBooks.map(book => book ? <Book key={book.id} bookObj={book} /> : null)}
                         </div>
-                        {totalBooks > 0 && (
-                            <Pagination
-                                currentPage={currentPage}
-                                lastPage={lastPage}
-                                onPageChange={handlePageChange}
-                            />
-                        )}
+                        <Pagination currentPage={currentPage} lastPage={lastPage} onPageChange={handlePageChange} />
                     </>
                 )}
             </section>

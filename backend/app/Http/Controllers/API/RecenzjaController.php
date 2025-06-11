@@ -98,4 +98,26 @@ class RecenzjaController extends Controller
         return response()->json($recenzje);
     }
 
+    public function sprawdzMozliwoscRecenzji(Request $request, $ebook_id)
+    {
+        $user = $request->user();
+
+        // Sprawdzenie, czy użytkownik kupił e-booka (ta sama logika co w metodzie dodaj)
+        $kupil = Zamowienie::where('uzytkownik_id', $user->id)
+            ->whereHas('ebooki', function ($q) use ($ebook_id) {
+                $q->where('ebooki.id', $ebook_id);
+            })
+            ->exists();
+
+        // Sprawdzenie, czy już nie dodał recenzji
+        $dodalRecenzje = Recenzja::where('uzytkownik_id', $user->id)
+            ->where('ebook_id', $ebook_id)
+            ->exists();
+
+        // Zwróć prostą odpowiedź, którą frontend łatwo zrozumie true lub false
+        return response()->json([
+            'mozeRecenzowac' => $kupil && !$dodalRecenzje
+        ]);
+    }
+
 }

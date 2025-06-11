@@ -19,8 +19,8 @@ nav{
 
 .nav-icon-btn svg {
     /* Ustawienie rozmiaru SVG, jeśli nie jest już ustawione, i kursor */
-    width: 1.5rem; /* Przykład rozmiaru, dostosuj jeśli potrzebujesz */
-    height: 1.5rem; /* Ustawienie wysokości dla proporcjonalności skalowania */
+    width: 1.8rem; /* Przykład rozmiaru, dostosuj jeśli potrzebujesz */
+    height: 1.8rem; /* Ustawienie wysokości dla proporcjonalności skalowania */
     cursor: pointer;
     /* Domyślny kolor obrysu, zgodny z SVG */
     stroke: black;
@@ -33,11 +33,6 @@ nav{
     fill: #ebe6e0;
 }
 
-.nav-right-side button{
-    cursor: pointer;
-    padding: 0;
-
-}
 
 .search-bar-and-button {
     display: flex; /* Użyj flexbox, aby ułożyć elementy w rzędzie */
@@ -135,12 +130,76 @@ nav{
 }
 .sign-in{
     background-color: #C9C0B5;
+    border-radius: 4px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    max-width: none;
+    min-height: 30px;
+    min-width: 10px;
+    outline: none;
+    overflow: hidden;
+    padding: 9px 20px 8px;
+    position: relative;
+    text-align: center;
+    text-transform: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
 }
 .sign-up{
     background-color: #4C7766;
+    border-radius: 4px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    max-width: none;
+    min-height: 30px;
+    min-width: 20px;
+    outline: none;
+    overflow: hidden;
+    padding: 9px 20px 8px;
+    position: relative;
+    text-align: center;
+    text-transform: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
 }
+
+.sign-in:hover,
+.sign-in:focus {
+    opacity: .75;
+}
+
+.sign-up:hover,
+.sign-up:focus {
+    opacity: .75;
+}
+
 .top-bar-profile-picture{
     width: 32px;
     aspect-ratio: 1;
     border-radius: 50%;
+}
+
+.top-bar-logo{
+    width: 160px; /* Zwiększ szerokość logo */
+    height: auto; /* Zachowaj proporcje */
+    margin-top: 0; /* Upewnij się, że nie ma górnego marginesu, jeśli Logo ma swój własny */
+    cursor: pointer;
 }

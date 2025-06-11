@@ -48,7 +48,9 @@ function App() {
           <button onClick={()=>{dispatch(userDataActions.setData({...userData, role: 'klient'}))}}>klient</button>
           <button onClick={()=>{dispatch(userDataActions.setData({...userData, role: 'dostawca'}))}}>dostawca</button>
           <button onClick={()=>{dispatch(userDataActions.setData({...userData, role: 'admin'}))}}>admin</button>
-          {(currView.selectedView === "home" && (userData.role === 'klient' || userData.role === 'user'))&& <HomePageContent />}
+          {currView.selectedView === "home" && (
+              !userData.role || userData.role === "klient" || userData.role === "user"
+          ) && <HomePageContent />}
           {(currView.selectedView === "home" && userData.role === 'dostawca')&& <VendorPanel />}
           {(currView.selectedView === "home" && userData.role === 'admin')&& <AdminPanel />}
           {currView.selectedView === "signUp" && <SignUp />}

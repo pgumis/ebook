@@ -52,7 +52,7 @@ const TopBar = () => {
 
   return (
     <nav>
-      <Logo
+        <img className="top-bar-logo" src={"e-book na wynos logo.png"}
         onClick={() => {
           dispatch(viewActions.changeView("home"));
         }}
@@ -215,7 +215,7 @@ const TopBar = () => {
         </div>
 
         <button
-          className="sign-in nav-buttons"
+          className="sign-in"
           onClick={() => {
             dispatch(viewActions.changeView("signIn"));
           }}
@@ -224,7 +224,7 @@ const TopBar = () => {
           Zaloguj się
         </button>
         <button
-          className="sign-up nav-buttons"
+          className="sign-up"
           onClick={() => {
             dispatch(viewActions.changeView("signUp"));
           }}

@@ -126,7 +126,7 @@ const Profile = () => {
                     <div className="mt-2">
                       <button
                           type="button" // Zawsze type="button"
-                          className="btn btn-sm edit-button"
+                          className="btn-sm edit-button"
                           onClick={() => setShowAvatarPicker((prev) => !prev)}
                       >
                         {showAvatarPicker ? "Ukryj wybór awatara" : "Zmień awatar"}
@@ -249,7 +249,7 @@ const Profile = () => {
                       {/* Przyciski w trybie edycji (Zapisz/Anuluj) - ZAWSZE W FORMULARZU */}
                       <div className="row">
                         <div className="col-sm-12 text-end">
-                          <button type="submit" className="btn save-button me-2" disabled={isLoading}>
+                          <button type="submit" className="save-button me-2" disabled={isLoading}>
                             {isLoading ? "Zapisywanie..." : "Zapisz zmiany"}
                           </button>
                           <button type="button" className="btn btn-secondary" onClick={toggleEditMode} disabled={isLoading}>
