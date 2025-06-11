@@ -97,9 +97,9 @@ const ContactForm = () => {
       const headers = {
         "Content-Type": "application/json",
       };
-      // if (userData.loggedIn && token) {
-      //   headers["Authorization"] = `Bearer ${token}`;
-      // }
+      if (userData.loggedIn && token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
 
       const payload = userData.loggedIn
         ? {
@@ -113,7 +113,7 @@ const ContactForm = () => {
             tresc: dane.wiadomosc,
           };
 
-      const response = await fetch("http://localhost:8000/api/wiadomosci", {
+      const response = await fetch("http://localhost:8000/api/wiadomosci/wyslij", {
         method: "POST",
         headers,
         body: JSON.stringify(payload),

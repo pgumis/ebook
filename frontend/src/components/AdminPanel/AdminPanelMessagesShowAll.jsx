@@ -18,6 +18,7 @@ const AdminPanelMessagesShowAll = () => {
         const dane = await response.json();
         setData(
           dane.map((item) => ({
+            ...item,
             id: item.id,
             temat: item.temat,
             od: item.email,
