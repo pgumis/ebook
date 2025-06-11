@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { viewActions } from "../../../store/view";
 import { cartActions } from "../../../store/cart"; // Importujemy akcje koszyka
 import generateStars from "../../../utils/generateStars";
@@ -12,6 +12,10 @@ const titleSliced = (title) => {
 
 const Book = ({ bookObj }) => {
     const dispatch = useDispatch();
+    const userData = useSelector(state => state.userData);
+    const cartItems = useSelector(state => state.cart.items);
+    const isInCart = cartItems.some(item => item.id === bookObj.id);
+
     const title = bookObj.title.length >= 25 ? titleSliced(bookObj.title) : bookObj.title;
 
     // --- Logika nawigacji i dodawania do koszyka ---
@@ -21,12 +25,10 @@ const Book = ({ bookObj }) => {
     };
 
     const handleAddToCart = (e) => {
-        // Zatrzymujemy propagację, aby kliknięcie przycisku
-        // nie uruchomiło przejścia do szczegółów książki. To bardzo ważne!
         e.stopPropagation();
-        dispatch(cartActions.addItem({ ...bookObj, quantity: 1 }));
-        // Można dodać jakieś powiadomienie "Dodano!"
-        console.log(`Dodano do koszyka: ${bookObj.title}`);
+        if (!userData.token) return alert("Musisz być zalogowany.");
+        // -> UŻYWAMY POPRAWNEJ AKCJI ASYNCHRONICZNEJ
+        dispatch(cartActions.addItemToCart({ token: userData.token, bookData: bookObj }));
     };
 
     // Logika do rozróżniania kliknięcia od przeciągania w karuzeli
@@ -72,10 +74,13 @@ const Book = ({ bookObj }) => {
                     </div>
                 </div>
                 <div className="book-footer">
-                    <p className="book-price">{bookObj.price} zł</p>
-                    {/* Ten przycisk będzie widoczny tylko po najechaniu myszką (dzięki CSS) */}
-                    <button className="book-add-to-cart-btn" onClick={handleAddToCart}>
-                        <i className="fas fa-cart-plus"></i>
+                    <p className="book-price">{parseFloat(bookObj.price).toFixed(2)} zł</p>
+                    {}
+                    <button className="book-add-to-cart-btn" onClick={handleAddToCart}
+                            disabled={isInCart}
+                            title={isInCart ? "Produkt już jest w koszyku" : "Dodaj do koszyka"}
+                    >{}
+                        <i className={isInCart ? "fas fa-check" : "fas fa-cart-plus"}></i>
                     </button>
                 </div>
             </div>
