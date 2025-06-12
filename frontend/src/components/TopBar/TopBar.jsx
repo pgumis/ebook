@@ -139,23 +139,6 @@ const TopBar = () => {
                 </a>
               </>
             )}
-
-            <a
-              onClick={() => {
-                handleMenuClose();
-                dispatch(viewActions.changeView("contact"));
-              }}
-            >
-              Kontakt
-            </a>
-            <a
-              onClick={() => {
-                handleMenuClose();
-                dispatch(viewActions.changeView("cart"));
-              }}
-            >
-              Koszyk
-            </a>
             <a
               onClick={() => {
                 handleMenuClose();
@@ -167,11 +150,29 @@ const TopBar = () => {
             <a
               onClick={() => {
                 handleMenuClose();
+                dispatch(viewActions.changeView("cart"));
+              }}
+            >
+              Koszyk
+            </a>
+
+            <a
+              onClick={() => {
+                handleMenuClose();
                 dispatch(viewActions.changeView("purchaseHistory"));
               }}
             >
               Historia zamówień
             </a>
+            <a
+              onClick={() => {
+                handleMenuClose();
+                dispatch(viewActions.changeView("contact"));
+              }}
+            >
+              Kontakt
+            </a>
+
             <a
               onClick={() => {
                 handleMenuClose();

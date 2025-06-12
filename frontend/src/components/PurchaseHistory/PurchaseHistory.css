@@ -1,5 +1,5 @@
 .purchase-history-container{
-
+    overflow-x: auto;
 }
 .single-purchase{
     min-height: 8rem;
@@ -11,4 +11,9 @@
     align-items: center;
     padding: 0 2rem;
     cursor: pointer;
+}
+.purchase-history-open-details-btn{
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
