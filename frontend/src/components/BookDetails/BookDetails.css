@@ -291,3 +291,43 @@
   padding-bottom: 1rem;
   margin-bottom: 1rem;
 }
+
+/* BookDetails.css - dodaj na końcu */
+
+.book-details-layout-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr; /* Szerokość panelu bocznego i reszta */
+  gap: 30px;
+}
+
+.details-sidebar-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-top: 32px;
+}
+
+.filter-panel {
+  background: white;
+  box-shadow: none;
+  padding: 10px;
+}
+
+/* Na mobilce chcemy, żeby panel kategorii był na górze, a szczegóły pod nim */
+@media (max-width: 992px) {
+  .book-details-layout-grid {
+    grid-template-columns: 1fr; /* Jedna kolumna */
+  }
+
+  .details-sidebar-panel {
+    margin-bottom: 2rem; /* Odstęp między panelem a szczegółami książki */
+  }
+}
+
+.details-main-content{
+
+  margin-top: 16px;
+}

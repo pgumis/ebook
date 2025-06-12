@@ -25,4 +25,11 @@ class Zamowienie extends Model
             ->withTimestamps();
     }
 
+    public function uzytkownik()
+    {
+        return $this->belongsTo(Uzytkownik::class);
+    }
+
+
+
 }

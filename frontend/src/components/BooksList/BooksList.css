@@ -21,11 +21,27 @@ li{
     /*overflow-y: scroll;
     height: 400px;*/
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    gap: 2rem 0;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 3rem;
 }
 
 .pagination-item.active .pagination-button{
     background-color: #4C7766;
     border-color: #4C7766;
+}
+
+.book-list-grid {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    /* Domyślny układ: panel boczny 280px, reszta to treść */
+    grid-template-columns: 280px 1fr;
+    gap: 30px; /* Odstęp między panelem bocznym a głównym */
+}
+
+/* Na mniejszych ekranach przełączamy na układ jednokolumnowy */
+@media (max-width: 992px) {
+    .book-list-grid {
+        grid-template-columns: 1fr;
+    }
 }

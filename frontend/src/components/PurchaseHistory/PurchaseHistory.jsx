@@ -1,20 +1,47 @@
-import "./PurchaseHistory.css";
-import { useDispatch, useSelector } from "react-redux";
+// PurchaseHistory.jsx
+import React, { useState, useEffect } from 'react';
+import { useSelector } from "react-redux";
 import SinglePurchase from "./SinglePurchase";
-//pobieramy wszystkie zamowienia uzytkownika i wszystkie produkty ktore byly zamawiane
-const purchases = [{purchaseNumber: 'ABC123123', items: [{name:'item1'}, {name:'item2'}]},{purchaseNumber: 'XYZ999999', items: [{name:'item3'}, {name:'item4'}, {name: 'item5'}]}];
+import "./PurchaseHistory.css";
+
 const PurchaseHistory = () => {
-  return (
-    <div className="panel purchase-history-container">
-      <h3>Historia zamówień</h3>
-      {purchases.map((purchase, index) => (
-        <SinglePurchase
-          key={purchase.id}
-          purchaseObj={purchase}
-          first={index === 0}
-        />
-      ))}
-    </div>
-  );
+    const [purchases, setPurchases] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const token = useSelector(state => state.userData.token);
+
+    useEffect(() => {
+        const fetchHistory = async () => {
+            if (!token) return;
+            setLoading(true);
+            try {
+                const response = await fetch('http://localhost:8000/api/historia-zamowien', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+                setPurchases(data);
+            } catch (error) {
+                console.error("Błąd pobierania historii zamówień:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchHistory();
+    }, [token]);
+
+    if (loading) return <div className="panel"><p>Ładowanie historii zamówień...</p></div>;
+
+    return (
+        <div className="panel purchase-history-container">
+            <h3>Historia zamówień</h3>
+            {purchases.length > 0 ? (
+                purchases.map((purchase) => (
+                    <SinglePurchase key={purchase.id} purchaseObj={purchase} />
+                ))
+            ) : (
+                <p>Nie masz jeszcze żadnych zamówień.</p>
+            )}
+        </div>
+    );
 };
+
 export default PurchaseHistory;

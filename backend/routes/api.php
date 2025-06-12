@@ -3,6 +3,8 @@
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\EbookController;
 use App\Http\Controllers\API\KoszykController;
+use App\Http\Controllers\API\OwnerDashboardController;
+use App\Http\Controllers\API\ProfilController;
 use App\Http\Controllers\API\RecenzjaController;
 use App\Http\Controllers\API\UploadController;
 use App\Http\Controllers\API\WiadomoscController;
@@ -80,8 +82,6 @@ Route::get('/zamowienia', [ZamowienieController::class, 'lista']);
 
 Route::post('/zamowienia/dodaj', [ZamowienieController::class, 'dodaj']);
 
-Route::middleware(['auth:sanctum', 'sprawdz.role:klient,admin'])
-    ->get('/zamowienia/{id}', [ZamowienieController::class, 'szczegoly']);
 
 Route::put('/zamowienia/{id}', [ZamowienieController::class, 'edytuj']);
 
@@ -146,4 +146,28 @@ Route::middleware(['auth:sanctum', 'sprawdz.role:admin'])->prefix('admin')->grou
     Route::get('/wiadomosci', [AdminController::class, 'wszystkieWiadomosci']);
     Route::put('/wiadomosci/{id}/przeczytaj', [AdminController::class, 'oznaczJakoPrzeczytana']);
     Route::delete('/wiadomosci/{id}', [AdminController::class, 'usunWiadomosc']);
+});
+
+Route::middleware(['auth:sanctum', 'sprawdz.role:wlasciciel'])->prefix('wlasciciel')->group(function () {
+
+    Route::get('/main-dashboard', [OwnerDashboardController::class, 'getMainDashboardStats']);
+    Route::get('/sales-analysis', [OwnerDashboardController::class, 'getSalesAnalysis']);
+    Route::get('/users-analysis', [OwnerDashboardController::class, 'getUsersAnalysis']);
+    Route::get('/products-analysis', [OwnerDashboardController::class, 'getProductsAnalysis']);
+    Route::post('/generate-report', [OwnerDashboardController::class, 'generateReport']);
+});
+
+Route::middleware('auth:sanctum')
+    ->post('/zamowienia/finalizuj', [ZamowienieController::class, 'finalizujZamowienie']);
+
+Route::middleware('auth:sanctum')
+    ->get('/profil/moja-polka', [ProfilController::class, 'pobraneEbooki']);
+
+Route::middleware('auth:sanctum')
+    ->get('/ebooks/{ebook}/pobierz', [EbookController::class, 'pobierzEbook']);
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/historia-zamowien', [ZamowienieController::class, 'historiaZamowien']);
+    Route::get('/zamowienia/{zamowienie}', [ZamowienieController::class, 'szczegolyZamowienia']);
 });

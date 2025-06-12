@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class EbookController extends Controller
 {
@@ -380,5 +381,48 @@ class EbookController extends Controller
         return response()->json($ebooks);
     }
 
+    public function pobierzEbook(Request $request, Ebook $ebook)
+    {
+        // Krok 1: Sprawdź, czy użytkownik ma prawo pobrać ten plik (czy go zakupił)
+        $uzytkownik = $request->user();
+        $maDostep = $uzytkownik
+            ->zamowienia()
+            ->where('status', 'zrealizowane')
+            ->whereHas('ebooki', function ($query) use ($ebook) {
+                $query->where('ebook_id', $ebook->id);
+            })->exists();
 
+        // Admin i dostawca tego e-booka zawsze mają dostęp
+        if (!$maDostep && $uzytkownik->rola !== 'admin' && $ebook->uzytkownik_id !== $uzytkownik->id) {
+            return response()->json(['komunikat' => 'Brak uprawnień do pobrania tego pliku.'], 403);
+        }
+
+        // === POCZĄTEK ZMIANY: Tworzenie nazwy pliku z tytułu ===
+
+        // 1. Stwórz "slug", czyli bezpieczną wersję tytułu (np. "Wielka Podróż" -> "wielka-podroz")
+        $slug = Str::slug($ebook->tytul);
+
+        // 2. Pobierz format pliku i zamień na małe litery (np. "PDF" -> "pdf")
+        $format = strtolower($ebook->format);
+
+        // 3. Połącz wszystko w finalną, bezpieczną nazwę pliku
+        $nazwaDoPobrania = "{$slug}.{$format}";
+
+        // === KONIEC ZMIANY ===
+
+        // Krok 2: Wygeneruj Pre-signed URL z dodatkowymi opcjami
+        // Wyciągamy samą ścieżkę z pełnego URL-a pliku na S3
+        $sciezkaDoPliku = ltrim(parse_url($ebook->plik)['path'], '/');
+
+        $url = Storage::disk('s3')->temporaryUrl(
+            $sciezkaDoPliku,
+            now()->addMinutes(5), // Link będzie ważny przez 5 minut
+            [
+                'ResponseContentDisposition' => 'attachment; filename="' . $nazwaDoPobrania . '"',
+            ]
+        );
+
+        // Krok 3: Przekieruj użytkownika pod wygenerowany adres
+        return response()->json(['download_url' => $url]);
+    }
 }

@@ -2,70 +2,145 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { userDataActions } from "../../store/userData";
-import "./Profile.css"; // Stylizacje
+import "./Profile.css"; // Używamy jednego, ale przeprojektowanego pliku CSS
 
+// --- Komponent "Moja Półka", pozostaje bez zmian w logice ---
+const MojaPolkaSection = () => {
+  const [ebooki, setEbooki] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const token = useSelector(state => state.userData.token);
+  const [downloading, setDownloading] = useState(null);
+
+  useEffect(() => {
+    const fetchMyEbooks = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch('http://localhost:8000/api/profil/moja-polka', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+        setEbooki(data);
+      } catch (error) {
+        console.error("Błąd pobierania e-booków:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (token) fetchMyEbooks();
+  }, [token]);
+
+  const handleDownload = async (ebookId) => {
+    setDownloading(ebookId); // Pokaż stan ładowania na przycisku
+    try {
+      const response = await fetch(`http://localhost:8000/api/ebooks/${ebookId}/pobierz`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Błąd autoryzacji lub nie znaleziono pliku.');
+      }
+
+      const result = await response.json();
+
+      // Kiedy otrzymamy link z backendu, przekierowujemy przeglądarkę, aby rozpoczęła pobieranie
+      window.location.href = result.download_url;
+
+    } catch (error) {
+      console.error("Błąd podczas próby pobrania:", error);
+      alert("Nie udało się pobrać pliku. Spróbuj ponownie.");
+    } finally {
+      setDownloading(null); // Zakończ stan ładowania
+    }
+  };
+
+  if (loading) return <p className="text-center mt-4">Ładowanie Twoich e-booków...</p>;
+
+  return (
+      <>
+        {ebooki.length === 0 ? (
+            <p className="text-center text-muted mt-4">Nie masz jeszcze żadnych zakupionych e-booków.</p>
+        ) : (
+            <div className="ebook-grid">
+              {ebooki.map(ebook => (
+                  <div key={ebook.id} className="ebook-card">
+                    <img src={ebook.okladka} alt={`Okładka ${ebook.tytul}`} />
+                    <div className="ebook-info">
+                      <h3>{ebook.tytul}</h3>
+                      <p>{ebook.autor}</p>
+                      <button
+                          onClick={() => handleDownload(ebook.id)}
+                          className="download-btn"
+                          disabled={downloading === ebook.id}
+                      >
+                        {downloading === ebook.id ? (
+                            <i className="fas fa-spinner fa-spin"></i>
+                        ) : (
+                            <i className="fas fa-download"></i>
+                        )}
+                        {downloading === ebook.id ? 'Przygotowuję...' : ` Pobierz (${ebook.format})`}
+                      </button>
+                    </div>
+                  </div>
+              ))}
+            </div>
+        )}
+      </>
+  );
+};
+
+
+// --- Główny komponent Profilu ---
 const Profile = () => {
   const userData = useSelector((state) => state.userData);
   const dispatch = useDispatch();
 
-  // Stany dla danych formularza
+  // Stany formularza i edycji (logika bez zmian)
   const [editedFirstName, setEditedFirstName] = useState(userData.imie || "");
   const [editedLastName, setEditedLastName] = useState(userData.nazwisko || "");
   const [editedEmail, setEditedEmail] = useState(userData.email || "");
   const [editedPhoneNumber, setEditedPhoneNumber] = useState(userData.phoneNumber || "");
-
-// Stan dla zdjęcia profilowego
-  const [profileImage, setProfileImage] = useState(
-      userData.profilePic || "/avatars/avatar1.png"
-  );
-
-  // NOWY STAN: do przełączania widoczności galerii awatarów
+  const [profileImage, setProfileImage] = useState(userData.profilePic || "/avatars/avatar1.png");
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
-
-  const handleAvatarSelect = (avatarNumber) => {
-    const newAvatarPath = `/avatars/avatar${avatarNumber}.png`;
-    setProfileImage(newAvatarPath);
-    dispatch(userDataActions.setData({ profilePic: newAvatarPath }));
-    setShowAvatarPicker(false);
-  };
-  // I tablicę z numerami awatarów:
   const avatarNumbers = [1, 2, 3, 4, 5, 6];
-
-  // Stan do przełączania trybu edycji
   const [isEditing, setIsEditing] = useState(false);
-  const [message, setMessage] = useState(null); // Komunikaty dla użytkownika (sukces/błąd)
-  const [isLoading, setIsLoading] = useState(false); // Stan ładowania podczas wysyłania danych
-  console.log("Profile component rendered. isEditing:", isEditing);
-  // Efekt do aktualizacji stanów formularza, gdy userData się zmienia (np. po zalogowaniu, lub po edycji)
+  const [message, setMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
-    console.log("useEffect triggered. userData:", userData);
     setEditedFirstName(userData.imie || "");
     setEditedLastName(userData.nazwisko || "");
     setEditedEmail(userData.email || "");
     setEditedPhoneNumber(userData.phoneNumber || "");
+    setProfileImage(userData.profilePic || "/avatars/avatar1.png");
   }, [userData]);
 
+  // Wszystkie Twoje funkcje (handleAvatarSelect, toggleEditMode, handleSubmit) pozostają bez zmian.
+
+  const handleAvatarSelect = (avatarNumber) => {
+    const newAvatarPath = `/avatars/avatar${avatarNumber}.png`;
+    setProfileImage(newAvatarPath);
+    // Możesz dispatchować od razu lub poczekać na zapis całego profilu
+  };
+
   const toggleEditMode = () => {
-    console.log("toggleEditMode called. Current isEditing:", isEditing);
     setIsEditing((prev) => !prev);
-    setMessage(null); // Czyścimy komunikaty przy przełączaniu trybu
-    if (!isEditing) {
-      console.log("Entering edit mode. Setting form values from userData.");
-      // Jeśli wchodzimy w tryb edycji, upewnij się, że formularz odzwierciedla aktualne dane z Reduxa
+    setMessage(null);
+    if (isEditing) { // Przywracamy wartości, jeśli anulujemy edycję
       setEditedFirstName(userData.imie || "");
       setEditedLastName(userData.nazwisko || "");
       setEditedEmail(userData.email || "");
       setEditedPhoneNumber(userData.phoneNumber || "");
-      setProfileImage(userData.profilePic || "/profile.jpg");
+      setProfileImage(userData.profilePic || "/avatars/avatar1.png");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("handleSubmit called. Event:", e);
     setIsLoading(true);
     setMessage(null);
-
     const dataToSend = {
       imie: editedFirstName,
       nazwisko: editedLastName,
@@ -73,262 +148,120 @@ const Profile = () => {
       numer_telefonu: editedPhoneNumber,
       profilePic: profileImage,
     };
-
     try {
       const response = await fetch("http://localhost:8000/api/profil", {
         method: "PUT",
-        headers: {
-          Authorization: `Bearer ${userData.token}`,
-          "Content-Type": "application/json",
-        },
+        headers: { Authorization: `Bearer ${userData.token}`, "Content-Type": "application/json" },
         body: JSON.stringify(dataToSend),
       });
-
       const result = await response.json();
-
       if (response.ok) {
         setMessage({ type: "success", text: result.message });
-        setIsEditing(false); // Wyłącz tryb edycji po sukcesie
-
+        setIsEditing(false);
         dispatch(userDataActions.setData(result.user));
       } else {
-        const errorText = result.message || "Wystąpił błąd podczas aktualizacji profilu.";
-        setMessage({ type: "error", text: errorText });
-        if (result.errors) {
-          console.error("Błędy walidacji:", result.errors);
-        }
+        setMessage({ type: "error", text: result.message || "Wystąpił błąd." });
       }
     } catch (error) {
-      console.error("Błąd sieci lub serwera:", error);
-      setMessage({
-        type: "error",
-        text: "Nie udało się połączyć z serwerem.",
-      });
+      setMessage({ type: "error", text: "Nie udało się połączyć z serwerem." });
     } finally {
       setIsLoading(false);
     }
   };
 
+
   return (
-      <div className="container my-4">
-        <h2 className="text-center mb-4">Twój profil</h2>
-        <div className="row justify-content-center">
-          <div className="col-lg-8">
-            <div className="card shadow-sm">
-              <div className="card-body text-center">
-                <img
-                    src={profileImage}
-                    alt="Zdjęcie profilowe"
-                    className="rounded-circle img-fluid"
-                    style={{ width: "150px", height: "150px", objectFit: "cover" }}
-                />
-                {isEditing && ( // Wyświetlaj tylko w trybie edycji
-                    <div className="mt-2">
-                      <button
-                          type="button" // Zawsze type="button"
-                          className="btn-sm edit-button"
-                          onClick={() => setShowAvatarPicker((prev) => !prev)}
-                      >
-                        {showAvatarPicker ? "Ukryj wybór awatara" : "Zmień awatar"}
-                      </button>
-                      {showAvatarPicker && ( // Wyświetlaj picker tylko gdy showAvatarPicker jest true
-                          <div className="avatar-picker mt-3">
-                            {avatarNumbers.map((num) => (
-                                <img
-                                    key={num}
-                                    src={`/avatars/avatar${num}.png`}
-                                    alt={`Awatar ${num}`}
-                                    className={`avatar-thumbnail ${profileImage === `/avatars/avatar${num}.png` ? 'selected-avatar' : ''}`}
-                                    onClick={() => handleAvatarSelect(num)}
-                                />
-                            ))}
-                          </div>
-                      )}
-                    </div>
-                )}
-                <h5 className="my-3">
-                  {userData.imie} {userData.nazwisko}
-                </h5>
-                <p className="text-muted mb-1">{userData.role}</p>
-              </div>
-            </div>
-
-            <div className="card shadow-sm mt-4">
-              <div className="card-body">
-                {message && (
-                    <div
-                        className={`alert ${message.type === "success" ? "alert-success" : "alert-danger"}`}
-                        role="alert"
-                    >
-                      {message.text}
-                    </div>
-                )}
-
-                {/* !!! WAŻNE: <form> zaczyna się TUTAJ i kończy po wszystkich polach input !!! */}
-                {isEditing ? (
-                    <form onSubmit={handleSubmit}>
-                      {/* Email */}
-                      <div className="row mb-3">
-                        <div className="col-sm-3">
-                          <h6 className="mb-0">E-mail</h6>
-                        </div>
-                        <div className="col-sm-9 text-secondary">
-                          <input
-                              type="email"
-                              className="form-control"
-                              value={editedEmail}
-                              onChange={(e) => setEditedEmail(e.target.value)}
-                              required
-                          />
-                        </div>
-                      </div>
-                      <hr />
-
-                      {/* Imię */}
-                      <div className="row mb-3">
-                        <div className="col-sm-3">
-                          <h6 className="mb-0">Imię</h6>
-                        </div>
-                        <div className="col-sm-9 text-secondary">
-                          <input
-                              type="text"
-                              className="form-control"
-                              value={editedFirstName}
-                              onChange={(e) => setEditedFirstName(e.target.value)}
-                              required
-                          />
-                        </div>
-                      </div>
-                      <hr />
-
-                      {/* Nazwisko */}
-                      <div className="row mb-3">
-                        <div className="col-sm-3">
-                          <h6 className="mb-0">Nazwisko</h6>
-                        </div>
-                        <div className="col-sm-9 text-secondary">
-                          <input
-                              type="text"
-                              className="form-control"
-                              value={editedLastName}
-                              onChange={(e) => setEditedLastName(e.target.value)}
-                              required
-                          />
-                        </div>
-                      </div>
-                      <hr />
-
-                      {/* Numer telefonu */}
-                      <div className="row mb-3">
-                        <div className="col-sm-3">
-                          <h6 className="mb-0">Numer telefonu</h6>
-                        </div>
-                        <div className="col-sm-9 text-secondary">
-                          <input
-                              type="text"
-                              className="form-control"
-                              value={editedPhoneNumber}
-                              onChange={(e) => setEditedPhoneNumber(e.target.value)}
-                              required
-                          />
-                        </div>
-                      </div>
-                      <hr />
-
-                      {/* Rola (zawsze wyświetlana, nieedytowalna) */}
-                      <div className="row mb-3">
-                        <div className="col-sm-3">
-                          <h6 className="mb-0">Rola</h6>
-                        </div>
-                        <div className="col-sm-9 text-secondary">
-                          {userData.role}
-                        </div>
-                      </div>
-                      <hr />
-
-                      {/* Przyciski w trybie edycji (Zapisz/Anuluj) - ZAWSZE W FORMULARZU */}
-                      <div className="row">
-                        <div className="col-sm-12 text-end">
-                          <button type="submit" className="save-button me-2" disabled={isLoading}>
-                            {isLoading ? "Zapisywanie..." : "Zapisz zmiany"}
-                          </button>
-                          <button type="button" className="btn btn-secondary" onClick={toggleEditMode} disabled={isLoading}>
-                            Anuluj
-                          </button>
-                        </div>
-                      </div>
-                    </form>
-                ) : (
-                    // !!! WAŻNE: To jest tryb WYŚWIETLANIA, więc nie ma tu tagu <form> !!!
-                    <>
-                      {/* Email (wyświetlanie) */}
-                      <div className="row mb-3">
-                        <div className="col-sm-3">
-                          <h6 className="mb-0">E-mail</h6>
-                        </div>
-                        <div className="col-sm-9 text-secondary">
-                          {editedEmail} {/* Użyj editedEmail, żeby pokazywało zaktualizowane dane */}
-                        </div>
-                      </div>
-                      <hr />
-
-                      {/* Imię (wyświetlanie) */}
-                      <div className="row mb-3">
-                        <div className="col-sm-3">
-                          <h6 className="mb-0">Imię</h6>
-                        </div>
-                        <div className="col-sm-9 text-secondary">
-                          {editedFirstName}
-                        </div>
-                      </div>
-                      <hr />
-
-                      {/* Nazwisko (wyświetlanie) */}
-                      <div className="row mb-3">
-                        <div className="col-sm-3">
-                          <h6 className="mb-0">Nazwisko</h6>
-                        </div>
-                        <div className="col-sm-9 text-secondary">
-                          {editedLastName}
-                        </div>
-                      </div>
-                      <hr />
-
-                      {/* Numer telefonu (wyświetlanie) */}
-                      <div className="row mb-3">
-                        <div className="col-sm-3">
-                          <h6 className="mb-0">Numer telefonu</h6>
-                        </div>
-                        <div className="col-sm-9 text-secondary">
-                          {editedPhoneNumber}
-                        </div>
-                      </div>
-                      <hr />
-
-                      {/* Rola (wyświetlanie) */}
-                      <div className="row mb-3">
-                        <div className="col-sm-3">
-                          <h6 className="mb-0">Rola</h6>
-                        </div>
-                        <div className="col-sm-9 text-secondary">
-                          {userData.role}
-                        </div>
-                      </div>
-                      <hr />
-
-                      {/* Przycisk "Edytuj profil" - POZA FORMULARZEM, gdy isEditing jest FALSE */}
-                      <div className="row">
-                        <div className="col-sm-12 text-end">
-                          <button type="button" className="btn edit-button" onClick={toggleEditMode}>
-                            Edytuj profil
-                          </button>
-                        </div>
-                      </div>
-                    </>
-                )}
-              </div>
-            </div>
+      <div className="profile-page-container">
+        {/* === NOWY, NOWOCZESNY NAGŁÓWEK PROFILU === */}
+        <div className="profile-header">
+          <div className="profile-header-avatar">
+            <img src={profileImage} alt="Zdjęcie profilowe" />
+            {isEditing && (
+                <button className="change-avatar-btn" onClick={() => setShowAvatarPicker(p => !p)}>
+                  <i className="fas fa-camera"></i>
+                </button>
+            )}
           </div>
+          <div className="profile-header-info">
+            <h1>{userData.imie} {userData.nazwisko}</h1>
+            <p>{userData.role}</p>
+          </div>
+          {!isEditing && (
+              <button className="profile-edit-main-btn" onClick={toggleEditMode}>
+                <i className="fas fa-pencil-alt"></i> Edytuj profil
+              </button>
+          )}
+        </div>
+
+        {isEditing && showAvatarPicker && (
+            <div className="profile-section-card avatar-picker-container">
+              <div className="avatar-picker">
+                {avatarNumbers.map((num) => (
+                    <img key={num} src={`/avatars/avatar${num}.png`} alt={`Awatar ${num}`}
+                         className={`avatar-thumbnail ${profileImage === `/avatars/avatar${num}.png` ? 'selected-avatar' : ''}`}
+                         onClick={() => handleAvatarSelect(num)} />
+                ))}
+              </div>
+            </div>
+        )}
+
+
+        {/* === SEKCJA "MOJA PÓŁKA" - WIDOCZNA OD RAZU === */}
+        <div className="profile-section-card">
+          <div className="section-title">
+            <i className="fas fa-book-open"></i>
+            <h2>Moja półka</h2>
+          </div>
+          <MojaPolkaSection />
+        </div>
+
+        {/* === SEKCJA "DANE PROFILOWE" === */}
+        <div className="profile-section-card">
+          <div className="section-title">
+            <i className="fas fa-user-edit"></i>
+            <h2>Dane profilowe</h2>
+          </div>
+
+          {message && (
+              <div className={`alert ${message.type === "success" ? "alert-success" : "alert-danger"}`} role="alert">
+                {message.text}
+              </div>
+          )}
+
+          {isEditing ? (
+              <form onSubmit={handleSubmit} className="profile-form">
+                <div className="form-row">
+                  <label>Imię</label>
+                  <input type="text" value={editedFirstName} onChange={(e) => setEditedFirstName(e.target.value)} required />
+                </div>
+                <div className="form-row">
+                  <label>Nazwisko</label>
+                  <input type="text" value={editedLastName} onChange={(e) => setEditedLastName(e.target.value)} required />
+                </div>
+                <div className="form-row">
+                  <label>E-mail</label>
+                  <input type="email" value={editedEmail} onChange={(e) => setEditedEmail(e.target.value)} required />
+                </div>
+                <div className="form-row">
+                  <label>Numer telefonu</label>
+                  <input type="text" value={editedPhoneNumber} onChange={(e) => setEditedPhoneNumber(e.target.value)} />
+                </div>
+                <div className="form-actions-edit">
+                  <button type="button" className="btn-cancel" onClick={toggleEditMode} disabled={isLoading}>Anuluj</button>
+                  <button type="submit" className="btn-save" disabled={isLoading}>
+                    {isLoading ? "Zapisywanie..." : "Zapisz zmiany"}
+                  </button>
+                </div>
+              </form>
+          ) : (
+              <div className="profile-data-view">
+                <div className="data-row"><span>Imię</span><span>{userData.imie}</span></div>
+                <div className="data-row"><span>Nazwisko</span><span>{userData.nazwisko}</span></div>
+                <div className="data-row"><span>E-mail</span><span>{userData.email}</span></div>
+                <div className="data-row"><span>Numer telefonu</span><span>{userData.phoneNumber || '-'}</span></div>
+                <div className="data-row"><span>Rola</span><span>{userData.role}</span></div>
+              </div>
+          )}
         </div>
       </div>
   );

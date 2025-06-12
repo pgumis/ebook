@@ -50,4 +50,8 @@ class Uzytkownik extends Authenticatable
         return $this->hasMany(Ebook::class, 'uzytkownik_id');
     }
 
+    public function zamowienia()
+    {
+        return $this->hasMany(Zamowienie::class);
+    }
 }

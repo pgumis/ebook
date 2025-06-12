@@ -1,40 +1,112 @@
-.rating{
-    min-height: 3rem;
+/* src/components/Rating/Rating.css */
+
+.review-card {
+    background-color: #ffffff;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+.review-header {
     display: flex;
-    flex-direction: column;
-    padding: 1rem 2rem;
-    gap: 1.5rem;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f0f0f0;
 }
-.rating img{
-    width: 24px;
-    border-radius: 50%;
-}
-.rating-even{
-    background-color: #c9c0b56c;
-}
-.rating-odd{
-    
-}
-.rating-author-container{
+
+.review-author-info {
     display: flex;
-    gap: 1rem;
-}
-.rating-rating-container{
-    display: flex;
-    gap: 0.3rem;
+    align-items: center;
+    gap: 0.75rem;
     font-weight: bold;
 }
 
-.rating-details{
+.review-author-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.review-rating-info {
     display: flex;
     flex-direction: column;
-    gap: 0.1rem;
+    align-items: flex-end;
+    gap: 0.25rem;
 }
-.rating-date{
-    color: #6e6861;;
+
+.review-stars {
+    color: #ffc107; /* Kolor gwiazdek */
+    font-size: 1rem;
 }
+
+.review-date {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.review-body p {
+    margin: 0;
+    line-height: 1.6;
+    color: #343a40;
+}
+
+/* --- Style dla formularza dodawania recenzji --- */
+.add-review-form-wrapper {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+}
+
 .rating-form-label {
     margin-bottom: 0.5rem;
     font-weight: bold;
     color: #333;
+}
+
+.book-details-rating-stars span {
+    transition: color 0.2s;
+}
+
+.review-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    font-size: 1rem;
+    margin: 1rem 0;
+    resize: vertical;
+}
+
+.rating-btns-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.form-submit {
+    padding: 0.7rem 1.5rem;
+    font-weight: bold;
+    color: white;
+    background-color: #4C7766;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.form-submit:disabled {
+    background-color: #a7b8b2;
+    cursor: not-allowed;
+}
+
+.review-form-error {
+    color: #dc3545;
+    font-size: 0.9rem;
+    margin: 1rem 0 0 0;
+    text-align: center;
 }

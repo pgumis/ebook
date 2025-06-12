@@ -4,14 +4,16 @@ import React, { useState } from 'react';
 import BooksListFilterPanel from '../BooksList/BooksListFilterPanel/BooksListFilterPanel';
 import BooksListMainPanel from '../BooksList/BooksListMainPanel/BooksListMainPanel';
 import './HomePageContent.css'; // -> Importujemy nowy plik CSS
+import { viewActions } from '../../store/view';
+import { useSelector, useDispatch } from 'react-redux';
 
 function HomePageContent() {
-    const [selectedKategoria, setSelectedKategoria] = useState(null);
+    const dispatch = useDispatch();
+    const selectedKategoria = useSelector(state => state.view.selectedCategory);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const handleSelectCategory = (kategoria) => {
-        setSelectedKategoria(kategoria);
-        // Po wybraniu kategorii na mobilce, zawsze zamykaj menu
+        dispatch(viewActions.setSelectedCategory(kategoria));
         if (isMenuOpen) {
             setIsMenuOpen(false);
         }

@@ -1,0 +1,170 @@
+/* src/components/OwnerPanel/OwnerPanel.css */
+
+/* Główny layout siatki */
+.owner-panel-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+/* --- Style dla menu bocznego (Sidebar) --- */
+.panel-sidebar {
+    background-color: #ffffff;
+    border-right: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-brand {
+    padding: 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.sidebar-brand h3 {
+    margin: 0;
+    color: #2d3748;
+    font-size: 1.5rem;
+}
+
+.panel-sidebar nav {
+    padding: 1rem;
+}
+
+.panel-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.panel-sidebar li {
+    padding: 15px 20px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    transition: background-color 0.2s, color 0.2s, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #4a5568;
+}
+
+.panel-sidebar li:hover {
+    background-color: #f1f5f9;
+    transform: translateX(5px);
+}
+
+.panel-sidebar li.active {
+    background-color: #4C7766;
+    color: white;
+    font-weight: bold;
+    transform: translateX(0);
+}
+
+.panel-sidebar li i {
+    width: 20px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+/* --- Style dla głównej treści --- */
+.panel-main-content {
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.panel-main-content h2 {
+    margin-top: 0;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    color: #2d3748;
+}
+
+/* Style dla kart ze statystykami (używane w MainDashboardView) */
+.stat-card {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid #e2e8f0;
+}
+.stat-icon i { font-size: 2rem; color: #4C7766; }
+.stat-info h4 { margin: 0; font-size: 1rem; color: #718096; }
+.stat-info p { margin: 0.25rem 0 0 0; font-size: 1.75rem; font-weight: bold; color: #2d3748;}
+
+
+/* Style dla widoków analitycznych (używane m.in. w SalesAnalysisView) */
+.analysis-view {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.date-picker-controls {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+.date-picker-controls label {
+    margin-right: 0.5rem;
+    font-weight: 500;
+}
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+}
+.chart-container, .table-container {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+.chart-wrapper {
+    height: 350px;
+}
+.table-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+th { background-color: #f8f9fa; }
+
+.report-generator-form {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+.report-generator-form select, .report-generator-form button {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+.report-generator-form button {
+    background-color: #4C7766;
+    color: white;
+    cursor: pointer;
+    border: none;
+}
+.report-generator-form button:disabled {
+    background-color: #ccc;
+}

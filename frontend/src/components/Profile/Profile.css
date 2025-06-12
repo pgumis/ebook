@@ -1,154 +1,180 @@
-.profile-card {
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+/* Profile.css - NOWA, PRZEPROJEKTOWANA WERSJA */
+:root {
+  --profile-primary-color: #4C7766;
+  --profile-bg-color: #f8f9fa;
+  --card-bg-color: #ffffff;
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --border-color: #dee2e6;
+  --border-radius: 12px;
 }
 
-.profile-img {
-  width: 150px;
-  height: 150px;
+.profile-page-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* === NOWY NAGŁÓWEK PROFILU === */
+.profile-header {
+  display: flex;
+  align-items: center;
+  background: var(--card-bg-color);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.profile-header-avatar {
+  position: relative;
+  margin-right: 2rem;
+}
+
+.profile-header-avatar img {
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 1rem;
+  border: 4px solid var(--card-bg-color);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
-.profile-info {
-  margin-top: 1rem;
-  text-align: left;
-}
-/* frontend/src/components/Profile/Profile.css */
-
-/* Stary .profile-card, niepotrzebny, gdy używasz Bootstrap Card */
-/* .profile-card {
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+.change-avatar-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--profile-primary-color);
+  color: white;
+  border: 2px solid white;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-} */
-
-.profile-avatar {
-  width: 150px; /* Określona szerokość */
-  height: 150px; /* Określona wysokość */
-  object-fit: cover; /* Upewnij się, że obrazek wypełnia koło bez zniekształceń */
-  /* Klasa Bootstrap 'rounded-circle' już zaokrągli */
-  /* Klasa Bootstrap 'img-fluid' już sprawi, że będzie responsywny */
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.change-avatar-btn:hover {
+  transform: scale(1.1);
 }
 
-/* Stary .profile-info, niepotrzebny, gdy używasz Bootstrap mb-3 */
-/* .profile-info {
-  margin-top: 1rem;
-  text-align: left;
-} */
+.profile-header-info {
+  flex-grow: 1;
+}
 
-/* Możesz dodać ogólne style dla panelu, jeśli potrzebujesz, np. padding i tło */
-.panel { /* Jeśli używasz klasy panel na divie nadrzędnym dla całego profilu */
-  background-color: #f8f9fa; /* Jasne tło, pasujące do Bootstrapa */
+.profile-header-info h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.profile-header-info p {
+  margin: 0;
+  color: var(--text-secondary);
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+.profile-edit-main-btn {
+  background: #f1f3f5;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.profile-edit-main-btn:hover {
+  background: #e9ecef;
+}
+
+/* === KARTY SEKCJI (Moja Półka, Dane) === */
+.profile-section-card {
+  background: var(--card-bg-color);
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
 }
 
-.edit-button{
-  background-color: #4C7766;
-  border-radius: 4px;
-  border-style: none;
-  box-sizing: border-box;
-  color: #fff;
-  cursor: pointer;
-  display: inline-block;
-  font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-  margin: 0;
-  max-width: none;
-  min-height: 30px;
-  min-width: 10px;
-  outline: none;
-  overflow: hidden;
-  padding: 9px 20px 8px;
-  position: relative;
-  text-align: center;
-  text-transform: none;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
-}
-
-.edit-button:hover,
-.edit-button:focus {
-  opacity: .75;
-}
-
-.save-button{
-  background-color: #4C7766;
-  border-radius: 4px;
-  border-style: none;
-  box-sizing: border-box;
-  color: #fff;
-  cursor: pointer;
-  display: inline-block;
-  font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-  margin: 0;
-  max-width: none;
-  min-height: 30px;
-  min-width: 10px;
-  outline: none;
-  overflow: hidden;
-  padding: 9px 20px 8px;
-  position: relative;
-  text-align: center;
-  text-transform: none;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
-}
-
-.save-button:hover,
-.save-button:focus {
-  opacity: .75;
-}
-
-.avatar-picker {
+.section-title {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center; /* Wyśrodkuj awatary */
-  gap: 10px; /* Odstępy między awatarami */
-  margin-top: 15px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f9f9f9;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+.section-title i {
+  color: var(--profile-primary-color);
+  font-size: 1.2rem;
+}
+.section-title h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-primary);
 }
 
-.avatar-thumbnail {
-  width: 60px; /* Rozmiar miniaturki awatara */
-  height: 60px;
-  border-radius: 50%; /* Okrągłe awatary */
-  object-fit: cover;
-  cursor: pointer;
-  border: 2px solid transparent; /* Domyślna ramka przezroczysta */
-  transition: border-color 0.2s ease, transform 0.2s ease; /* Płynne przejście */
+/* === Style dla Półki (z poprzedniej odpowiedzi, lekko dopasowane) === */
+.ebook-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; }
+.ebook-card { border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; }
+.ebook-card:hover { transform: translateY(-5px); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
+.ebook-card img { width: 100%; height: 200px; object-fit: cover; }
+.ebook-info { padding: 1rem; flex-grow: 1; display: flex; flex-direction: column; }
+.ebook-info h3 { font-size: 1rem; margin: 0 0 0.25rem 0; font-weight: 600; }
+.ebook-info p { font-size: 0.85rem; color: #666; margin: 0 0 1rem 0; flex-grow: 1; }
+.download-btn { display: block; text-align: center; padding: 0.7rem; background-color: var(--profile-primary-color); color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.2s; }
+.download-btn:hover { background-color: #3e6052; }
+
+/* === Style dla Danych Profilowych === */
+.profile-data-view .data-row, .profile-form .form-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #f1f3f5;
+}
+.profile-data-view .data-row:last-child, .profile-form .form-row:last-child {
+  border-bottom: none;
+}
+.profile-data-view .data-row span:first-child, .profile-form .form-row label {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.profile-data-view .data-row span:last-child {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+.profile-form input {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  font-size: 1rem;
+}
+.profile-form input:focus {
+  outline: none;
+  border-color: var(--profile-primary-color);
+  box-shadow: 0 0 0 2px rgba(76, 119, 102, 0.2);
 }
 
-.avatar-thumbnail:hover {
-  border-color: #007bff; /* Podświetlenie przy najechaniu */
-  transform: scale(1.05); /* Lekkie powiększenie */
+.form-actions-edit {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
 }
+.btn-save { padding: 0.7rem 1.5rem; border:none; border-radius: 8px; font-weight: 700; cursor: pointer; background-color: var(--profile-primary-color); color: white; }
+.btn-cancel { padding: 0.7rem 1.5rem; border:1px solid var(--border-color); border-radius: 8px; font-weight: 700; cursor: pointer; background-color: #f1f3f5; color: var(--text-primary); }
 
-.avatar-thumbnail.selected-avatar {
-  border-color: #28a745; /* Zielona ramka dla wybranego awatara */
-  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.5); /* Lekki cień dla wyróżnienia */
-}
+/* === Style dla wyboru awatara === */
+.avatar-picker-container { margin-top: -1rem; /* Ustawia się pod headerem */ }
+.avatar-picker { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 10px; }
+.avatar-thumbnail { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 3px solid transparent; transition: all 0.2s; }
+.avatar-thumbnail:hover { transform: scale(1.05); }
+.avatar-thumbnail.selected-avatar { border-color: var(--profile-primary-color); }

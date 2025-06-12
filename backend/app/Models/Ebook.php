@@ -30,7 +30,9 @@ class Ebook extends Model
 
     public function zamowienia()
     {
-        return $this->belongsToMany(Zamowienie::class, 'ebook_zamowienie');
+        return $this->belongsToMany(Zamowienie::class, 'ebook_zamowienie')
+            ->withPivot('cena_jednostkowa')
+            ->withTimestamps();
     }
 
     public function recenzje()

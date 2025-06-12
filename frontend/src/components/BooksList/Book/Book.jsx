@@ -49,6 +49,9 @@ const Book = ({ bookObj }) => {
         }
     };
 
+    const ratingValue = parseFloat(bookObj.rating);
+    const hasRating = !isNaN(ratingValue) && ratingValue > 0;
+
     return (
         <div
             className="book-wrapper"
@@ -65,10 +68,10 @@ const Book = ({ bookObj }) => {
                     <p className="book-title">{title}</p>
                     <p className="book-author">{bookObj.author}</p>
                     <div className="book-rating">
-                        {generateStars(bookObj.rating)}
-                        {bookObj.rating > 0 && (
+                        {generateStars(ratingValue)}
+                        {hasRating && (
                             <span className="book-rating-value">
-                                ({bookObj.rating.toFixed(1)})
+                                ({ratingValue.toFixed(1)})
                             </span>
                         )}
                     </div>

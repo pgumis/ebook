@@ -1,21 +1,29 @@
+// src/components/Rating/Rating.jsx
+import React from 'react';
 import "./Rating.css";
-const Rating = ({ ratingObj, index }) => {
-  const style = index % 2 === 0 ? "rating rating-even" : "rating rating-odd";
-  return (
-    <div className={style}>
-      <div className="rating-author-container">
-        <img src={ratingObj.authorImg} />
-        <span>{ratingObj.author}</span>
-      </div>
-      <div className="rating-rating-container">
-        <span style={{ color: "orange" }}>★</span>
-        <span>{ratingObj.rating}</span>
-      </div>
-      <div className="rating-details">
-        <span className="rating-date">{ratingObj.date}</span>
-        <span>{ratingObj.text}</span>
-      </div>
-    </div>
-  );
+import generateStars from '../../utils/generateStars';
+
+const Rating = ({ ratingObj }) => {
+    // Zabezpieczenie na wypadek, gdyby obiekt był pusty
+    if (!ratingObj) return null;
+
+    return (
+        <div className="review-card">
+            <div className="review-header">
+                <div className="review-author-info">
+                    <img src="/avatars/avatar1.png" alt="Awatar" className="review-author-avatar" />
+                    <span>{ratingObj.author}</span>
+                </div>
+                <div className="review-rating-info">
+                    <div className="review-stars">{generateStars(ratingObj.rating)}</div>
+                    <span className="review-date">{ratingObj.date}</span>
+                </div>
+            </div>
+            <div className="review-body">
+                <p>{ratingObj.text || "Użytkownik nie dodał treści recenzji."}</p>
+            </div>
+        </div>
+    );
 };
+
 export default Rating;

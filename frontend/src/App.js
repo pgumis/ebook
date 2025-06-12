@@ -20,13 +20,12 @@ import VendorPanel from "./components/VendorPanel/VendorPanel";
 import VendorEditBookDetails from "./components/VendorEditBookDetails/VendorEditBookDetails";
 import VendorAddBook from "./components/VendorAddBook/VendorAddBook";
 import AdminPanel from "./components/AdminPanel/AdminPanel";
-import AdminPanelManage from "./components/AdminPanel/AdminPanelManage/AdminPanelManage";
-import AdminPanelMessagesShowAll from "./components/AdminPanel/AdminPanelMessagesShowAll";
-import AdminPanelMessageDetails from "./components/AdminPanel/AdminPanelMessageDetails";
+import CheckoutPage from "./components/CheckoutPage/CheckoutPage";
 import HomePageContent from "./components/HomePage/HomePageContent";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { cartActions } from "./store/cart";
+import OwnerPanel from "./components/OwnerPanel/OwnerPanel";
 
 
 function App() {
@@ -61,14 +60,12 @@ function App() {
       <div className="wrapper">
         <TopBar />
         <div className="content-wrapper">
-          <button onClick={()=>{dispatch(userDataActions.setData({...userData, role: 'klient'}))}}>klient</button>
-          <button onClick={()=>{dispatch(userDataActions.setData({...userData, role: 'dostawca'}))}}>dostawca</button>
-          <button onClick={()=>{dispatch(userDataActions.setData({...userData, role: 'admin'}))}}>admin</button>
           {currView.selectedView === "home" && (
               !userData.role || userData.role === "klient" || userData.role === "user"
           ) && <HomePageContent />}
           {(currView.selectedView === "home" && userData.role === 'dostawca')&& <VendorPanel />}
           {(currView.selectedView === "home" && userData.role === 'admin')&& <AdminPanel />}
+          {(currView.selectedView === "home" && userData.role === 'wlasciciel')&& <OwnerPanel />}
           {currView.selectedView === "signUp" && <SignUp />}
           {currView.selectedView === "signIn" && <SignIn />}
           {currView.selectedView === "contact" && <ContactForm />}
@@ -80,12 +77,7 @@ function App() {
           {currView.selectedView === "profileDetails" && <Profile />}
           {currView.selectedView === "editBookDetails" && <VendorEditBookDetails />}
           {currView.selectedView === "addBook" && <VendorAddBook />}
-          {currView.selectedView === "adminPanelManageUsers" && <AdminPanelManage />}
-          {currView.selectedView === "adminPanelManageEbooks" && <AdminPanelManage />}
-          {currView.selectedView === "adminPanelManageRatings" && <AdminPanelManage />}
-          {currView.selectedView === "adminPanelManageOrders" && <AdminPanelManage />}
-          {currView.selectedView === "adminPanelMessagesShowAll" && <AdminPanelMessagesShowAll />}
-         {currView.selectedView === "adminPanelMessageDetails" && <AdminPanelMessageDetails />}
+          {currView.selectedView === "checkout" && <CheckoutPage />}
         </div>
         <Footer />
       </div>

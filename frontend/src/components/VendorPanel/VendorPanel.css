@@ -1,0 +1,69 @@
+/* src/components/VendorPanel/VendorPanel.css */
+
+/* Układ siatki identyczny jak w AdminPanel.css */
+.vendor-panel-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr; /* */
+    gap: 30px; /* */
+    align-items: flex-start; /* */
+}
+
+/* Sidebar (menu boczne) */
+.panel-sidebar {
+    /* Celowo puste - sidebar nie potrzebuje dodatkowych stylów, dziedziczy tło */
+    /* Wszystkie style są zdefiniowane dla elementów wewnątrz */
+}
+
+.panel-sidebar ul {
+    list-style: none; /* */
+    padding: 0; /* */
+    margin: 0; /* */
+}
+
+.panel-sidebar li {
+    padding: 15px 20px; /* */
+    cursor: pointer; /* */
+    border-radius: 8px; /* */
+    font-weight: 500; /* */
+    margin-bottom: 5px; /* */
+    transition: background-color 0.2s, color 0.2s, transform 0.2s ease; /* */
+    display: flex; /* */
+    align-items: center; /* */
+    gap: 15px; /* */
+}
+
+.panel-sidebar li:hover {
+    background-color: #f0f0f0; /* */
+    transform: translateX(5px); /* */
+}
+
+.panel-sidebar li.active {
+    background-color: #4C7766; /* */
+    color: white; /* */
+    font-weight: bold; /* */
+    transform: translateX(0); /* */
+}
+
+/* Styl dla ikon, zapewniający równe ułożenie tekstu */
+.panel-sidebar li i {
+    width: 20px; /* */
+    text-align: center; /* */
+    font-size: 1.1rem; /* */
+}
+
+
+/* Główna treść panelu i nagłówek */
+.panel-main-content {
+    flex: 1;
+    padding: 0 1rem; /* Zmniejszamy padding, aby pasował do ogólnego layoutu */
+}
+
+.panel-header {
+    margin-bottom: 2rem;
+}
+
+.panel-header h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #2d3748;
+}

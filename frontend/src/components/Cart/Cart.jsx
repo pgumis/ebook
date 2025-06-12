@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { cartActions } from "../../store/cart";
 import CartItem from "./CartItem"; // Importujemy nowy komponent
-
+import { viewActions } from '../../store/view';
 const Cart = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.userData);
@@ -12,6 +12,11 @@ const Cart = () => {
   // Funkcja usuwania, która teraz będzie też wysyłać żądanie do API
   const handleDelete = (id) => {
     dispatch(cartActions.removeItemFromCart({ token: userData.token, itemId: id }));
+  };
+
+
+  const handleGoToCheckout = () => {
+    dispatch(viewActions.changeView('checkout'));
   };
 
   if (status === 'loading') {
@@ -36,13 +41,13 @@ const Cart = () => {
                 <h3>Podsumowanie</h3>
                 <div className="summary-row">
                   <span>Suma częściowa:</span>
-                  <span>{totalAmount.toFixed(2)} PLN</span>
+                  <span>{totalAmount.toFixed(2)} zł</span>
                 </div>
                 <div className="summary-row total">
                   <span>Do zapłaty:</span>
-                  <span>{totalAmount.toFixed(2)} PLN</span>
+                  <span>{totalAmount.toFixed(2)} zł</span>
                 </div>
-                <button className="cart-checkout-btn">
+                <button className="cart-checkout-btn" onClick={handleGoToCheckout}>
                   Przejdź do płatności
                 </button>
               </div>

@@ -1,72 +1,179 @@
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-family: Arial, sans-serif;
-  }
-  thead {
-    background-color: #C9C0B5;
-  }
-  th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-  }
-  th {
-    background-color: #C9C0B5;
-  }
-  tr:nth-child(even) {
-    background-color: #EBE6E0;
-  }
-  tr:hover {
-    background-color: #f1f1f1;
-    cursor: pointer;
-  }
+/* Plik: frontend/src/components/VendorsBookList/VendorsBookList.css */
 
-.vendors-book-list-add-new-book{
-  background-color: #4C7766;
-  border-radius: 4px;
-  border-style: none;
-  box-sizing: border-box;
-  color: #fff;
-  cursor: pointer;
-  display: inline-block;
-  font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-  margin: 0;
-  max-width: none;
-  min-height: 30px;
-  min-width: 10px;
-  outline: none;
-  overflow: hidden;
-  padding: 9px 20px 8px;
-  position: relative;
-  text-align: center;
-  text-transform: none;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
+.vendors-book-list-wrapper {
+  margin-top: 3rem;
+  font-family: Arial, sans-serif;
 }
 
-.vendors-book-list-add-new-book:hover,
-.vendors-book-list-add-new-book:focus {
-  opacity: .75;
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.list-header h4 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* --- NOWE STYLE DLA FILTRA --- */
+.filter-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-container label {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.filter-container select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* --- NOWE STYLE DLA TABELI --- */
+.table-container {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden; /* Aby zaokrąglenie objęło tabelę */
+  border: 1px solid #EBE6E0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+thead {
+  background-color: #f9f9f9;
+}
+
+th {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: #666;
+  font-weight: 600;
+}
+
+tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+  background-color: #f5f8ff;
+  cursor: pointer;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* --- NOWE STYLE DLA PRZYCISKÓW W TABELI --- */
+.actions-cell {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-action {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-action:hover {
+  opacity: 0.8;
+}
+
+.btn-edit {
+  background-color: #e0e7ff;
+  color: #4338ca;
+}
+
+.btn-withdraw {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+/* --- NOWE STYLE DLA STATUSU --- */
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: capitalize;
 }
 
 .status-active {
-  color: green;
-  font-weight: bold;
+  background-color: #dcfce7;
+  color: #166534;
 }
 
 .status-withdrawn {
-  color: red;
-  font-weight: bold;
+  background-color: #fee2e2;
+  color: #991b1b;
 }
 
 .status-pending {
-  color: orange;
-  font-weight: bold;
+  background-color: #ffedd5;
+  color: #9a3412;
+}
+
+/* Pusty stan i brak wyników */
+.empty-list-container, .no-results-info {
+  text-align: center;
+  padding: 3rem;
+  background-color: #fff;
+  border: 1px dashed #ddd;
+  border-radius: 12px;
+  margin-top: 1rem;
+}
+
+.empty-list-container h4 {
+  margin-bottom: 1.5rem;
+}
+
+.no-results-info {
+  color: #777;
+}
+
+/* Główny przycisk dodawania */
+.vendors-book-list-add-new-book {
+  background-color: #4C7766;
+  border-radius: 8px;
+  border-style: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 10px 16px;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+.vendors-book-list-add-new-book:hover {
+  background-color: #3e6052;
 }

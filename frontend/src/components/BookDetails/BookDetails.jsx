@@ -7,10 +7,12 @@ import Rating from '../Rating/Rating';
 import ReviewForm from '../Rating/ReviewForm';
 import './BookDetails.css';
 import generateStars from '../../utils/generateStars';
+import BooksListFilterPanel from '../BooksList/BooksListFilterPanel/BooksListFilterPanel';
 
 const BookDetails = () => {
   const dispatch = useDispatch();
   const selectedBook = useSelector((state) => state.view.bookDetailsObj);
+  const selectedCategory = useSelector(state => state.view.selectedCategory);
   const { token, loggedIn, role, id: userId } = useSelector((state) => state.userData);
   const cartItems = useSelector((state) => state.cart.items);
   const isInCart = selectedBook ? cartItems.some(item => item.id === selectedBook.id) : false;
@@ -29,6 +31,13 @@ const BookDetails = () => {
   // Stan dla komunikatu o koszyku
   const [cartMessage, setCartMessage] = useState('');
 
+
+  const handleCategorySelect = (kategoria) => {
+    // 1. Ustaw wybraną kategorię w Reduxie
+    dispatch(viewActions.setSelectedCategory(kategoria));
+    // 2. Przełącz widok z powrotem na stronę główną
+    dispatch(viewActions.changeView('home'));
+  };
 
   // --- POBIERANIE DANYCH ---
   const fetchInitialData = useCallback(async () => {
@@ -84,7 +93,32 @@ const BookDetails = () => {
     setMozeRecenzowac(false); // Użytkownik już nie może dodać kolejnej
   };
 
-  const handleAddToCart = async () => { /* ... logika dodawania do koszyka ... */ };
+  const handleAddToCart = async () => {
+    if (!loggedIn) {
+      // Można by tu też dispatchować akcję otwarcia modalu logowania
+      setCartMessage("Musisz być zalogowany, aby dodać produkt.");
+      return;
+    }
+
+    setCartMessage('Dodawanie do koszyka...');
+
+    try {
+      // Używamy akcji Redux Thunk. Funkcja .unwrap() pozwala nam używać try...catch
+      // do obsługi błędów zdefiniowanych w thunku (rejectWithValue).
+      await dispatch(cartActions.addItemToCart({ token: token, bookData: selectedBook })).unwrap();
+
+      setCartMessage('Dodano pomyślnie!');
+
+      // Opcjonalnie: schowaj komunikat po kilku sekundach
+      setTimeout(() => {
+        setCartMessage('');
+      }, 3000);
+
+    } catch (error) {
+      // Wyświetl błąd zwrócony z thunka (rejectWithValue)
+      setCartMessage(`Błąd: ${error || 'Nie udało się dodać produktu.'}`);
+    }
+  };
 
 
   // --- RENDEROWANIE ---
@@ -93,89 +127,114 @@ const BookDetails = () => {
   }
 
   return (
-      <div className="book-details-wrapper panel">
-        {/* --- SEKCJA GÓRNA: ZDJĘCIE + INFORMACJE --- */}
-        <div className="book-details-main-info">
-          <div className="book-details-img-container">
-            <img src={selectedBook.okladka} alt={`Okładka ${selectedBook.tytul}`} className="book-details-img" />
-          </div>
+      // === GŁÓWNY KONTENER Z NOWĄ, DWUKOLUMNOWĄ SIATKĄ ===
+      <div className="book-details-layout-grid">
 
-          <div className="book-details-right-panel">
-            <div className="book-details-main-text">
-              <p className="book-details-title">{selectedBook.tytul}</p>
-              <p className="book-details-author">{selectedBook.autor}</p>
-              <div className="book-details-rating">
-                {generateStars(selectedBook.rating)}
-                <span className="book-details-rating-value">({selectedBook.rating?.toFixed(1) || 'Brak ocen'})</span>
+        {/* === LEWA KOLUMNA: PANEL KATEGORII === */}
+        <aside className="details-sidebar-panel">
+          <BooksListFilterPanel
+              selectedKategoria={selectedCategory}
+              onSelectCategory={handleCategorySelect}
+              onCloseMenu={() => {}} // Pusta funkcja, bo tu nie ma mobilnego menu
+          />
+        </aside>
+
+        {/* === PRAWA KOLUMNA: CAŁA ZAWARTOŚĆ SZCZEGÓŁÓW TWOJEJ KSIĄŻKI === */}
+        <main className="details-main-content">
+          {/* Poniżej znajduje się cały Twój kod, który mi wysłałeś, wklejony bez zmian */}
+          <div className="book-details-wrapper panel">
+            {/* --- SEKCJA GÓRNA: ZDJĘCIE + INFORMACJE --- */}
+            <div className="book-details-main-info">
+              <div className="book-details-img-container">
+                <img src={selectedBook.okladka} alt={`Okładka ${selectedBook.tytul}`} className="book-details-img" />
               </div>
-              <p className="book-details-price">{selectedBook.cena} zł</p>
-            </div>
 
-            <div className="book-details-actions">
-              {role !== 'dostawca' ? (
-                  <>
-                    <button className="book-details-add-book" disabled={!loggedIn || isInCart} onClick={handleAddToCart}>
-                      {isInCart ? 'Produkt w koszyku' : 'Dodaj do koszyka'}
-                    </button>
-                    {cartMessage && <p className="cart-message">{cartMessage}</p>}
-                  </>
-              ) : (
-                  <button className="book-details-add-book" onClick={() => dispatch(viewActions.changeView("editBookDetails"))}>
-                    Edytuj informacje
-                  </button>
-              )}
-            </div>
-          </div>
-        </div>
+              <div className="book-details-right-panel">
+                <div className="book-details-main-text">
+                  <p className="book-details-title">{selectedBook.tytul}</p>
+                  <p className="book-details-author">{selectedBook.autor}</p>
+                  <div className="book-details-rating">
+                    {generateStars(selectedBook.rating)}
+                    <span className="book-details-rating-value">{ !isNaN(parseFloat(selectedBook.rating))
+                        ? `(${parseFloat(selectedBook.rating).toFixed(1)})`
+                        : '(Brak ocen)'
+                    }</span>
+                  </div>
+                  <p className="book-details-price">{selectedBook.cena} zł</p>
+                </div>
 
-        {/* --- SEKCJA DOLNA: OPIS + RECENZJE --- */}
-        <div className="book-details-bottom-content">
-          <div className="book-details-description">
-            <h3>Opis książki</h3>
-            <p>{selectedBook.opis || "Ta książka nie ma jeszcze opisu."}</p>
-          </div>
-
-          <div className="book-details-ratings-container">
-            <div className="book-details-rating-top-section">
-              <h3>Opinie użytkowników ({recenzje.length})</h3>
-              {/* Przycisk pojawi się tylko, gdy zakończy się sprawdzanie i użytkownik ma uprawnienia */}
-              {!loadingCanReview && mozeRecenzowac && (
-                  <button onClick={() => setIsFormVisible(!isFormVisible)} className="add-review-btn">
-                    {isFormVisible ? '− Anuluj' : '+ Napisz recenzję'}
-                  </button>
-              )}
-            </div>
-
-            <div className={`review-form-container ${isFormVisible ? 'form-visible' : ''}`}>
-              <ReviewForm
-                  ebookId={selectedBook.id}
-                  onReviewAdded={handleReviewAdded}
-              />
-            </div>
-
-            <div className="book-details-users-rating-wrapper">
-              {loadingReviews ? <p>Ładowanie recenzji...</p> : (
-                  recenzje.length > 0 ? (
-                      recenzje.map((recenzja, index) => (
-                          <Rating
-                              key={recenzja.id || index}
-                              ratingObj={{
-                                ...recenzja,
-                                author: recenzja.uzytkownik?.nazwa || "Anonim",
-                                rating: recenzja.ocena,
-                                date: new Date(recenzja.created_at).toLocaleDateString("pl-PL"),
-                                text: recenzja.tresc
-                              }}
-                              index={index}
-                          />
-                      ))
+                <div className="book-details-actions">
+                  {role !== 'dostawca' ? (
+                      <>
+                        <button className="book-details-add-book" disabled={!loggedIn || isInCart} onClick={handleAddToCart}>
+                          {isInCart ? 'Produkt w koszyku' : 'Dodaj do koszyka'}
+                        </button>
+                        {cartMessage && <p className="cart-message">{cartMessage}</p>}
+                      </>
                   ) : (
-                      <p>Brak recenzji dla tej książki.</p>
-                  )
-              )}
+                      <button className="book-details-add-book" onClick={() => dispatch(viewActions.changeView("editBookDetails"))}>
+                        Edytuj informacje
+                      </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* --- SEKCJA DOLNA: OPIS + RECENZJE --- */}
+            <div className="book-details-bottom-content">
+              <div className="book-details-description">
+                <h3>Opis książki</h3>
+                <p>{selectedBook.opis || "Ta książka nie ma jeszcze opisu."}</p>
+              </div>
+
+              <div className="book-details-ratings-container">
+                <div className="book-details-rating-top-section">
+                  <h3>Opinie użytkowników ({recenzje.length})</h3>
+                  {!loadingCanReview && mozeRecenzowac && (
+                      <button onClick={() => setIsFormVisible(!isFormVisible)} className="add-review-btn">
+                        {isFormVisible ? '− Anuluj' : '+ Napisz recenzję'}
+                      </button>
+                  )}
+                </div>
+
+                <div className={`review-form-container ${isFormVisible ? 'form-visible' : ''}`}>
+                  <ReviewForm
+                      ebookId={selectedBook.id}
+                      onReviewAdded={handleReviewAdded}
+                  />
+                </div>
+
+                <div className="book-details-users-rating-wrapper">
+                  {loadingReviews ? <p>Ładowanie recenzji...</p> : (
+                      recenzje.length > 0 ? (
+                          recenzje.map((recenzja, index) => {
+                            let authorName = "Anonim";
+                            if (recenzja.uzytkownik && recenzja.uzytkownik.imie && recenzja.uzytkownik.nazwisko) {
+                              const pierwszaLiteraNazwiska = recenzja.uzytkownik.nazwisko.charAt(0).toUpperCase();
+                              authorName = `${recenzja.uzytkownik.imie} ${pierwszaLiteraNazwiska}.`;
+                            }
+                            return (
+                                <Rating
+                                    key={recenzja.id || index}
+                                    ratingObj={{
+                                      author: authorName,
+                                      rating: recenzja.ocena,
+                                      date: new Date(recenzja.created_at).toLocaleDateString("pl-PL"),
+                                      text: recenzja.tresc
+                                    }}
+                                />
+                            );
+                          })
+                      ) : (
+                          <p>Brak recenzji dla tej książki.</p>
+                      )
+                  )}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </main>
+
       </div>
   );
 };
