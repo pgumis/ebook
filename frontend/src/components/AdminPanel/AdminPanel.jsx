@@ -88,35 +88,35 @@ const AdminPanel = () => {
             className={activeView === "users" ? "active" : ""}
           >
             <i className="fas fa-users"></i>
-            <span>Użytkownicy</span>
+            {windowWidth > 375 && <span>Użytkownicy</span>}
           </button>
           <button
             onClick={() => setActiveView("ebooks")}
             className={activeView === "ebooks" ? "active" : ""}
           >
             <i className="fas fa-book"></i>
-            <span>E-booki</span>
+            {windowWidth > 375 && <span>E-booki</span>}
           </button>
           <button
             onClick={() => setActiveView("reviews")}
             className={activeView === "reviews" ? "active" : ""}
           >
             <i className="fas fa-star"></i>
-            <span>Recenzje</span>
+            {windowWidth > 375 && <span>Recenzje</span>}
           </button>
           <button
             onClick={() => setActiveView("orders")}
             className={activeView === "orders" ? "active" : ""}
           >
             <i className="fas fa-receipt"></i>
-            <span>Zamówienia</span>
+            {windowWidth > 375 && <span>Zamówienia</span>}
           </button>
           <button
             onClick={() => setActiveView("messages")}
             className={activeView === "messages" ? "active" : ""}
           >
             <i className="fas fa-inbox"></i>
-            <span>Wiadomości</span>
+            {windowWidth > 375 && <span>Wiadomości</span>}
           </button>
         </div>
       )}

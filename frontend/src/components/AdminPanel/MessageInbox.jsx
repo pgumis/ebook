@@ -156,7 +156,7 @@ const MessageInbox = () => {
 
   return (
     <div>
-      <h1>Skrzynka odbiorcza</h1>
+      <h1 className="management-title">Skrzynka odbiorcza</h1>
       <div className="filters-container">
         <input
           type="search"

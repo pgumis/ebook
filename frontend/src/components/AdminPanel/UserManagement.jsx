@@ -87,7 +87,7 @@ const UserManagement = () => {
 
   return (
     <div>
-      <h1>Zarządzanie użytkownikami</h1>
+      <h1 className="management-title">Zarządzanie użytkownikami</h1>
 
       <input
         type="search"

@@ -107,7 +107,7 @@ const ReviewManagement = () => {
 
   return (
     <div>
-      <h1>Zarządzanie recenzjami</h1>
+      <h1  className="management-title">Zarządzanie recenzjami</h1>
 
       <div className="filters-container">
         <input

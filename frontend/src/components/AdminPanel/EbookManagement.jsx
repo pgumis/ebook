@@ -102,7 +102,7 @@ const EbookManagement = () => {
 
   return (
     <div>
-      <h1>Zarządzanie e-bookami</h1>
+      <h1 className="management-title">Zarządzanie e-bookami</h1>
 
       <input
         type="search"

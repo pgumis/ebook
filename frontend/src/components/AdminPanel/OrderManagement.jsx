@@ -112,7 +112,7 @@ const OrderManagement = () => {
 
   return (
     <div>
-      <h1>Zarządzanie zamówieniami</h1>
+      <h1 className="management-title">Zarządzanie zamówieniami</h1>
 
       <div className="filters-container">
         <input
