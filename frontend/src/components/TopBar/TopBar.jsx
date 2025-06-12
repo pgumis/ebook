@@ -62,8 +62,15 @@ const TopBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const profileMenuRef = useRef(null);
-
- 
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize); // nasłuchuj zmiany rozmiaru
+    return () => window.removeEventListener("resize", handleResize); // usuń nasłuchiwacz przy unmount
+  }, [windowWidth]);
 
   // Zamykanie menu profilu po kliknięciu na zewnątrz
   useEffect(() => {
@@ -94,119 +101,214 @@ const TopBar = () => {
     localStorage.clear();
     dispatch(viewActions.changeView("home"));
   };
-const isSearchBarVisible = (userData.role === "" || userData.role === "klient");
-console.log(isSearchBarVisible);
+  const isSearchBarVisible = userData.role === "" || userData.role === "klient";
+
+  const handleMenuOpenning = () => {
+    setIsMobileMenuOpen(true);
+    document.body.classList.add("no-scroll");
+  };
+  const handleMenuClose = () => {
+    setIsMobileMenuOpen(false);
+    document.body.classList.remove("no-scroll");
+  };
   return (
-    <nav className="top-bar">
-      <img
-        className="top-bar-logo"
-        src="/e-book na wynos logo.png"
-        alt="Logo E-book na wynos"
-        onClick={() => dispatch(viewActions.changeView("home"))}
-      />
+    <>
+      {isMobileMenuOpen && (
+        <div className="top-bar-menu-open">
+          <button className="close-menu-button" onClick={handleMenuClose}>
+            ✕
+          </button>
+          <div className="mobile-nav-menu-options">
+            {!userData.loggedIn && (
+              <>
+                <a
+                  onClick={() => {
+                    handleMenuClose();
+                    dispatch(viewActions.changeView("signIn"));
+                  }}
+                >
+                  Zaloguj się
+                </a>
+                <a
+                  onClick={() => {
+                    handleMenuClose();
+                    dispatch(viewActions.changeView("signUp"));
+                  }}
+                >
+                  Zarejestruj się
+                </a>
+              </>
+            )}
 
-      {isSearchBarVisible && (
-        <form className="search-bar-form" onSubmit={handleSearchSubmit}>
-          <input
-            type="search"
-            placeholder="Wyszukaj tytuł lub autora..."
-            className="nav-search-bar"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          {
-            <button
-              type="submit"
-              className="search-icon-btn"
-              aria-label="Szukaj"
+            <a
+              onClick={() => {
+                handleMenuClose();
+                dispatch(viewActions.changeView("contact"));
+              }}
             >
-              <i className="fas fa-search"></i>
-            </button>
-          }
-        </form>
+              Kontakt
+            </a>
+            <a
+              onClick={() => {
+                handleMenuClose();
+                dispatch(viewActions.changeView("cart"));
+              }}
+            >
+              Koszyk
+            </a>
+            <a
+              onClick={() => {
+                handleMenuClose();
+                dispatch(viewActions.changeView("profileDetails"));
+              }}
+            >
+              Zarządzaj profilem
+            </a>
+            <a
+              onClick={() => {
+                handleMenuClose();
+                dispatch(viewActions.changeView("purchaseHistory"));
+              }}
+            >
+              Historia zamówień
+            </a>
+            <a
+              onClick={() => {
+                handleMenuClose();
+                handleSignOut();
+              }}
+            >
+              Wyloguj się
+            </a>
+          </div>
+        </div>
       )}
+      <nav className="top-bar">
+        <img
+          className="top-bar-logo"
+          src="/e-book na wynos logo.png"
+          alt="Logo E-book na wynos"
+          onClick={() => dispatch(viewActions.changeView("home"))}
+        />
 
-      <div className="nav-right-side">
-        <button
-          className="nav-icon-btn"
-          onClick={() => dispatch(viewActions.changeView("contact"))}
-          title="Kontakt"
-        >
-          <i className="fas fa-envelope"></i>
-        </button>
-
-        {userData.loggedIn ? (
-          <>
-            <button
-              className="nav-icon-btn cart-btn"
-              onClick={() => dispatch(viewActions.changeView("cart"))}
-              title="Koszyk"
-            >
-              <i className="fas fa-shopping-cart"></i>
-              {cartItemCount > 0 && (
-                <span className="cart-badge">{cartItemCount}</span>
-              )}
-            </button>
-
-            <div className="profile-section" ref={profileMenuRef}>
-              <div
-                className="profile-activator"
-                onClick={() => setShowProfileMenu(!showProfileMenu)}
+        {isSearchBarVisible && (
+          <form className="search-bar-form" onSubmit={handleSearchSubmit}>
+            <input
+              type="search"
+              placeholder={
+                windowWidth > 824 ? "Wyszukaj tytuł lub autora..." : "Szukaj"
+              }
+              className="nav-search-bar"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {
+              <button
+                type="submit"
+                className="search-icon-btn"
+                aria-label="Szukaj"
               >
-                <span className="profile-greeting">Witaj, {userData.imie}</span>
-                <img
-                  src={userData.zdjecie_profilowe || "/default-avatar.png"}
-                  className="top-bar-profile-picture"
-                  alt="Avatar"
-                />
-              </div>
-              {showProfileMenu && (
-                <div className="profile-dropdown-menu">
-                  <TopBarListOption
-                    icon={<ProfileIcon />}
-                    onClick={() =>
-                      dispatch(viewActions.changeView("profileDetails"))
-                    }
+                <i className="fas fa-search"></i>
+              </button>
+            }
+          </form>
+        )}
+
+        {windowWidth > 768 && (
+          <div className="nav-right-side">
+            <button
+              className="nav-icon-btn"
+              onClick={() => dispatch(viewActions.changeView("contact"))}
+              title="Kontakt"
+            >
+              <i className="fas fa-envelope"></i>
+            </button>
+
+            {userData.loggedIn ? (
+              <>
+                <button
+                  className="nav-icon-btn cart-btn"
+                  onClick={() => dispatch(viewActions.changeView("cart"))}
+                  title="Koszyk"
+                >
+                  <i className="fas fa-shopping-cart"></i>
+                  {cartItemCount > 0 && (
+                    <span className="cart-badge">{cartItemCount}</span>
+                  )}
+                </button>
+
+                <div className="profile-section" ref={profileMenuRef}>
+                  <div
+                    className="profile-activator"
+                    onClick={() => setShowProfileMenu(!showProfileMenu)}
                   >
-                    Zarządzaj profilem
-                  </TopBarListOption>
-                  <TopBarListOption
-                    icon={<HistoryIcon />}
-                    onClick={() =>
-                      dispatch(viewActions.changeView("purchaseHistory"))
-                    }
-                  >
-                    Historia zamówień
-                  </TopBarListOption>
-                  <TopBarListOption
-                    icon={<LogoutIcon />}
-                    onClick={handleSignOut}
-                    last
-                  >
-                    Wyloguj
-                  </TopBarListOption>
+                    <span className="profile-greeting">
+                      Witaj, {userData.imie}
+                    </span>
+                    <img
+                      src={userData.zdjecie_profilowe || "/default-avatar.png"}
+                      className="top-bar-profile-picture"
+                      alt="Avatar"
+                    />
+                  </div>
+                  {showProfileMenu && (
+                    <div className="profile-dropdown-menu">
+                      <TopBarListOption
+                        icon={<ProfileIcon />}
+                        onClick={() =>
+                          dispatch(viewActions.changeView("profileDetails"))
+                        }
+                      >
+                        Zarządzaj profilem
+                      </TopBarListOption>
+                      <TopBarListOption
+                        icon={<HistoryIcon />}
+                        onClick={() =>
+                          dispatch(viewActions.changeView("purchaseHistory"))
+                        }
+                      >
+                        Historia zamówień
+                      </TopBarListOption>
+                      <TopBarListOption
+                        icon={<LogoutIcon />}
+                        onClick={handleSignOut}
+                        last
+                      >
+                        Wyloguj
+                      </TopBarListOption>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          </>
-        ) : (
-          <div className="logged-out-buttons">
-            <button
-              className="sign-in-btn"
-              onClick={() => dispatch(viewActions.changeView("signIn"))}
-            >
-              Zaloguj się
-            </button>
-            <button
-              className="sign-up-btn"
-              onClick={() => dispatch(viewActions.changeView("signUp"))}
-            >
-              Zarejestruj się
-            </button>
+              </>
+            ) : (
+              <div className="logged-out-buttons">
+                <button
+                  className="sign-in-btn"
+                  onClick={() => dispatch(viewActions.changeView("signIn"))}
+                >
+                  Zaloguj się
+                </button>
+                <button
+                  className="sign-up-btn"
+                  onClick={() => dispatch(viewActions.changeView("signUp"))}
+                >
+                  Zarejestruj się
+                </button>
+              </div>
+            )}
           </div>
         )}
-      </div>
-    </nav>
+        {windowWidth < 768 && (
+          <button
+            className="top-bar-burger"
+            aria-label="Otwórz menu kategorii"
+            onClick={handleMenuOpenning}
+          >
+            <i className="fas fa-bars"></i>
+          </button>
+        )}
+      </nav>
+    </>
   );
 };
 
