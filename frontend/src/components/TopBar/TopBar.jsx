@@ -143,6 +143,9 @@ const TopBar = () => {
     setIsMobileMenuOpen(false);
     document.body.classList.remove("no-scroll");
   };
+  const isCustomerView = !userData.role || userData.role === 'klient';
+  const isPrivilegedUser = ['dostawca', 'admin', 'wlasciciel'].includes(userData.role);
+
   return (
     <>
       {isMobileMenuOpen && (

@@ -1,42 +1,4 @@
 /* Plik: src/components/VendorPanel/VendorEditBookDetails.css */
-/* Style skopiowane z VendorAddBook dla spójności */
-
-.vendor-edit-book-details-wrapper {
-    padding: 2rem;
-    background-color: #f8f9fa;
-}
-
-.card-header h4 {
-    color: #333;
-}
-
-.form-label {
-    font-weight: 500;
-    margin-bottom: 0.25rem;
-    font-size: 0.9rem;
-}
-
-.form-control, .form-select {
-    border-radius: 6px;
-    border: 1px solid #ced4da;
-}
-
-.form-control:focus, .form-select:focus {
-    border-color: #4C7766;
-    box-shadow: 0 0 0 3px rgba(76, 119, 102, 0.2);
-}
-
-.cover-preview-img {
-    width: 100%;
-    max-width: 200px;
-    aspect-ratio: 2 / 3;
-    object-fit: cover;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    display: block;
-    margin: 10px auto 0 auto;
-}
 
 .btn-primary-custom {
     background-color: #4C7766;
@@ -52,6 +14,31 @@
     background-color: #3e6052;
 }
 
-/* Używamy klas Bootstrapa, ale możemy je nadpisać w razie potrzeby */
-.container { padding: 0; }
-.card { border: none; }
+.cover-preview-img {
+    width: 100%;
+    max-width: 200px;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: block;
+    margin: 10px auto 0 auto;
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.form-control, .form-select {
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    /* Domyślne style bootstrapa są OK, ale możemy je tu nadpisać w razie potrzeby */
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #4C7766;
+    box-shadow: 0 0 0 3px rgba(76, 119, 102, 0.2);
+}

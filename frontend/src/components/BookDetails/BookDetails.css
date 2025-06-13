@@ -388,3 +388,46 @@
   background-color: #3e6052; /* Ciemniejszy odcień na hover */
   transform: translateY(-2px); /* Efekt lekkiego uniesienia */
 }
+
+.save-to-panel-btn {
+  background-color: #4C7766; /* Główny, zielony kolor aplikacji */
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem; /* Większy padding dla lepszej widoczności */
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold; /* Pogrubiona czcionka */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem; /* Większy odstęp od ikony */
+  transition: background-color 0.2s, transform 0.2s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.save-to-panel-btn:hover {
+  background-color: #3e6052; /* Ciemniejszy odcień na hover */
+  transform: translateY(-2px); /* Efekt lekkiego uniesienia */
+}
+
+.cancel-to-panel-btn {
+  background-color: #6c757d; /* Główny, zielony kolor aplikacji */
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem; /* Większy padding dla lepszej widoczności */
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold; /* Pogrubiona czcionka */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem; /* Większy odstęp od ikony */
+  transition: background-color 0.2s, transform 0.2s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-right: 10px;
+}
+
+.cancel-to-panel-btn:hover {
+  background-color: #545b61; /* Ciemniejszy odcień na hover */
+  transform: translateY(-2px); /* Efekt lekkiego uniesienia */
+}

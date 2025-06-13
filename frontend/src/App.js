@@ -27,7 +27,10 @@ import "slick-carousel/slick/slick-theme.css";
 import { cartActions } from "./store/cart";
 import OwnerPanel from "./components/OwnerPanel/OwnerPanel";
 import SearchOverlay from './components/SearchOverlay/SearchOverlay';
+import { registerLocale } from "react-datepicker";
+import pl from "date-fns/locale/pl";
 
+registerLocale("pl", pl);
 function App() {
   const dispatch = useDispatch();
   const currView = useSelector((state) => state.view);
@@ -54,6 +57,8 @@ function App() {
       dispatch(cartActions.fetchCartData(userData.token));
     }
   }, [userData.token, dispatch]);
+
+
 
   return (
     <div className="App">

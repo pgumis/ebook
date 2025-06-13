@@ -24,9 +24,11 @@
 
 .review-item-widget {
     padding: 1rem 0;
+    border-bottom: 1px solid #919191;
+
 }
 .review-item-widget:not(:last-child) {
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #919191;
 }
 
 .review-item-header {
@@ -88,3 +90,15 @@
 }
 .top-ebooks-widget-card li:not(:last-child) { border-bottom: 1px solid #f0f0f0; }
 .top-ebooks-widget-card strong { color: #4C7766; }
+
+.review-rating-widget {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem; /* Dodaje odstęp między gwiazdkami a liczbą */
+}
+
+.numeric-rating {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #6c757d; /* Delikatnie szary kolor */
+}

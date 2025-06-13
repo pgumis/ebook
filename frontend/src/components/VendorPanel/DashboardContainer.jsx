@@ -87,7 +87,11 @@ const DashboardContainer = () => {
                                 <div key={review.id} className="review-item-widget">
                                     <div className="review-item-header">
                                         <span>{review.ebook.tytul}</span>
-                                        <span className="review-rating-widget">{generateStars(review.ocena)}</span>
+                                        <span className="review-rating-widget">
+                                        {generateStars(review.ocena)}
+                                            {/* Dodajemy ocenę liczbową w nawiasie */}
+                                            <span className="numeric-rating">({parseFloat(review.ocena).toFixed(1)})</span>
+                                            </span>
                                     </div>
                                     <p className="review-comment-widget">"{review.tresc}"</p>
                                     <span className="review-author-widget">- {review.uzytkownik.imie}</span>

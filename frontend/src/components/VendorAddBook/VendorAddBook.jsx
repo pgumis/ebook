@@ -110,9 +110,18 @@ const VendorAddBook = () => {
   return (
     <div className="panel vendor-edit-book-details-wrapper">
       <div className="container mt-5" style={{ maxWidth: "900px" }}>
+
         <div className="card shadow-sm">
           <div className="card-header text-center fw-bold fs-5 bg-light">
             <h4 className="mb-0">Dodaj nowy e-book</h4>
+          </div>
+          <div className="back-to-panel-container">
+            <button
+                onClick={() => dispatch(viewActions.changeView('home'))}
+                className="back-to-panel-btn"
+            >
+              <i className="fas fa-arrow-left"></i> Wróć do listy książek
+            </button>
           </div>
           <form onSubmit={handleSubmit}>
             <div className="card-body">
