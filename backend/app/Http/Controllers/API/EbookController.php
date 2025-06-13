@@ -441,4 +441,68 @@ class EbookController extends Controller
 
         return response()->json($recenzje);
     }
+    // app/Http/Controllers/API/EbookController.php
+
+    public function wyszukaj(Request $request)
+    {
+        // Walidacja dla wszystkich możliwych parametrów
+        $validated = $request->validate([
+            'term'      => 'nullable|string|min:2',
+            'kategoria' => 'nullable|string',
+            'format'    => 'nullable|string|in:PDF,EPUB,MOBI',
+            'cena_min'  => 'nullable|numeric|min:0',
+            'cena_max'  => 'nullable|numeric|min:0',
+            'sort_by'   => 'nullable|string|in:relevance,price_asc,price_desc,latest', // Dodajemy sortowanie
+        ]);
+
+        $term = $validated['term'] ?? null;
+
+        $query = Ebook::select(['id', 'tytul', 'autor', 'okladka', 'cena', 'cena_promocyjna', 'format', 'created_at'])
+            ->where('status', 'aktywny');
+
+        if ($term) {
+            $query->where(function ($q) use ($term) {
+                $q->where('tytul', 'LIKE', "%{$term}%")
+                    ->orWhere('autor', 'LIKE', "%{$term}%");
+            });
+        }
+
+        // --- LOGIKA FILTROWANIA (z nowymi filtrami) ---
+        if (!empty($validated['kategoria'])) {
+            $query->where('kategoria', $validated['kategoria']);
+        }
+        if (!empty($validated['format'])) {
+            $query->where('format', $validated['format']);
+        }
+        if (!empty($validated['cena_min'])) {
+            $query->where('cena', '>=', $validated['cena_min']);
+        }
+        if (!empty($validated['cena_max'])) {
+            $query->where('cena', '<=', $validated['cena_max']);
+        }
+
+        // --- NOWA LOGIKA SORTOWANIA ---
+        $sortBy = $validated['sort_by'] ?? 'relevance';
+
+        switch ($sortBy) {
+            case 'price_asc':
+                $query->orderBy('cena', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('cena', 'desc');
+                break;
+            case 'latest':
+                $query->orderBy('created_at', 'desc');
+                break;
+            default:
+                // Domyślne sortowanie (trafność) - można dodać bardziej skomplikowaną logikę
+                // na razie pozostawiamy domyślne sortowanie bazy danych
+                break;
+        }
+
+        $wyniki = $query->limit(20)->get(); // Zwracamy trochę więcej wyników, gdy są filtry
+
+        return response()->json($wyniki);
+    }
+
 }

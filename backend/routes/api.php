@@ -172,3 +172,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/zamowienia/{zamowienie}', [ZamowienieController::class, 'szczegolyZamowienia']);
     Route::get('/dostawca/recenzje', [EbookController::class, 'recenzjeDostawcy']);
 });
+
+Route::get('/wyszukiwanie', [EbookController::class, 'wyszukaj']);

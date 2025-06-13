@@ -26,7 +26,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { cartActions } from "./store/cart";
 import OwnerPanel from "./components/OwnerPanel/OwnerPanel";
-
+import SearchOverlay from './components/SearchOverlay/SearchOverlay';
 
 function App() {
   const dispatch = useDispatch();
@@ -57,6 +57,7 @@ function App() {
 
   return (
     <div className="App">
+      <SearchOverlay />
       <div className="wrapper">
         <TopBar />
         <div className="content-wrapper">

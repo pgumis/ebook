@@ -8,8 +8,12 @@ const viewSlice = createSlice({
         selectedMessage: undefined,
         selectedItemId: null,
         selectedCategory: null,
+        isSearchOverlayVisible: false,
     },
     reducers: {
+        toggleSearchOverlay(state, action) {
+            state.isSearchOverlayVisible = action.payload;
+        },
         changeView(state, action){
             if (typeof action.payload === 'string') {
                 state.selectedView = action.payload;

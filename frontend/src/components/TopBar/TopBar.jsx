@@ -6,7 +6,14 @@ import TopBarListOption from "./TopBarListOption";
 import "./TopBar.css";
 import { cartActions } from "../../store/cart";
 
-// Definicje ikon SVG jako komponenty lub stałe dla czystości kodu
+const slogans = [
+  "Twoja biblioteka w kieszeni",
+  "Odkryj nową historię",
+  "Książki zawsze pod ręką"
+];
+
+const typingSpeed = 120; // Szybkość pisania (ms na literę)
+const sloganPause = 6000; // Czas pauzy po napisaniu sloganu (ms)
 const ProfileIcon = () => (
   <svg fill="none" height="24" viewBox="0 0 24 24" width="24">
     <path
@@ -58,8 +65,41 @@ const TopBar = () => {
   const cartItems = useSelector((state) => state.cart.items); // Pobieramy dane koszyka
   const currView = useSelector((state) => state.view.selectedView);
   const cartItemCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  const [displayedSlogan, setDisplayedSlogan] = useState('');
+  const [sloganIndex, setSloganIndex] = useState(0);
 
-  const [searchTerm, setSearchTerm] = useState("");
+  useEffect(() => {
+    // Ta funkcja będzie zarządzać całym cyklem animacji dla jednego sloganu
+    const handleTyping = () => {
+      const currentSlogan = slogans[sloganIndex];
+      let charIndex = 0;
+      setDisplayedSlogan(''); // Resetuj na starcie
+
+      // Używamy interwału, który będzie pisał litera po literze
+      const typingInterval = setInterval(() => {
+        if (charIndex < currentSlogan.length) {
+          setDisplayedSlogan(prev => currentSlogan.substring(0, charIndex + 1));
+          charIndex++;
+        } else {
+          // Jeśli skończyliśmy pisać, zatrzymujemy ten interwał...
+          clearInterval(typingInterval);
+          // ...i po chwili pauzy, przechodzimy do następnego sloganu
+          setTimeout(() => {
+            setSloganIndex(prev => (prev + 1) % slogans.length);
+          }, sloganPause);
+        }
+      }, typingSpeed);
+
+      // Zwracamy funkcję czyszczącą, która zatrzyma interwał, jeśli komponent się zmieni
+      return () => clearInterval(typingInterval);
+    };
+
+    // Uruchamiamy cykl pisania
+    const cleanup = handleTyping();
+    return cleanup;
+
+  }, [sloganIndex]);
+
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const profileMenuRef = useRef(null);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -86,14 +126,6 @@ const TopBar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (!searchTerm.trim()) return;
-    console.log(`Wyszukiwanie frazy: ${searchTerm}`);
-    // TODO: Dodać logikę zmiany widoku na stronę z wynikami wyszukiwania
-    // dispatch(viewActions.changeView("searchResults"));
-    // dispatch(viewActions.setSearchTerm(searchTerm));
-  };
 
   const handleSignOut = () => {
     dispatch(userDataActions.clearData());
@@ -185,34 +217,29 @@ const TopBar = () => {
         </div>
       )}
       <nav className="top-bar">
-        <img
-          className="top-bar-logo"
-          src="/e-book na wynos logo.png"
-          alt="Logo E-book na wynos"
-          onClick={() => dispatch(viewActions.changeView("home"))}
-        />
+        <div className="top-bar-left-section">
+          <div className="logo-group" onClick={() => dispatch(viewActions.changeView('home'))}>
+            <img src="/logo.png" alt="Logo - ikona" className="top-bar-logo" />
+            <img src="/logo napis.png" alt="E-book na wynos - napis" className="top-bar-logo-napis" />
+          </div>
+          <div className="slogan-container">
+            <span className="logo-slogan">{displayedSlogan}</span>
+            {/* Kursor jest teraz zawsze widoczny, gdy tekst nie jest w pełni wyświetlony */}
+            {displayedSlogan.length < slogans[sloganIndex].length && (
+                <span className="typing-cursor">|</span>
+            )}
+          </div>
+        </div>
 
         {isSearchBarVisible && (
-          <form className="search-bar-form" onSubmit={handleSearchSubmit}>
-            <input
-              type="search"
-              placeholder={
-                windowWidth > 824 ? "Wyszukaj tytuł lub autora..." : "Szukaj"
-              }
-              className="nav-search-bar"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            {
-              <button
-                type="submit"
-                className="search-icon-btn"
-                aria-label="Szukaj"
-              >
-                <i className="fas fa-search"></i>
-              </button>
-            }
-          </form>
+
+            <div
+                className="search-bar-trigger"
+                onClick={() => dispatch(viewActions.toggleSearchOverlay(true))}
+            >
+              <i className="fas fa-search"></i>
+              <span>Wyszukaj tytuł lub autora...</span>
+            </div>
         )}
 
         {windowWidth > 768 && (
