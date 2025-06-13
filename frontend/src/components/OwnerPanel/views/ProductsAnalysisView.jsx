@@ -32,7 +32,7 @@ const ProductsAnalysisView = () => {
     if (!analysisData) return <p>Brak danych.</p>;
 
     const topCategoriesData = {
-        labels: analysisData.topCategories.map(c => c.nazwa),
+        labels: analysisData.topCategories.map(c => c.kategoria),
         datasets: [{
             label: 'Przychód z kategorii',
             data: analysisData.topCategories.map(c => c.total_revenue),

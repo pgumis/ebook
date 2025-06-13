@@ -83,7 +83,7 @@ const UsersAnalysisView = () => {
                             <td>{customer.imie} {customer.nazwisko}</td>
                             <td>{customer.email}</td>
                             <td>{customer.order_count}</td>
-                            <td>{customer.total_spent.toFixed(2)} zł</td>
+                            <td>{parseFloat(customer.total_spent).toFixed(2)} zł</td>
                         </tr>
                     ))}
                     </tbody>

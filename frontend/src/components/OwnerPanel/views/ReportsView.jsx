@@ -61,22 +61,22 @@ const ReportsView = () => {
         <div className="analysis-view">
             <h2>Generowanie Raportów</h2>
             <div className="report-generator-form">
-                <div>
+                <div className="report-filter-group">
                     <label>Typ raportu:</label>
                     <select value={reportType} onChange={e => setReportType(e.target.value)}>
                         <option value="sales">Raport Sprzedaży</option>
                         <option value="users">Raport Użytkowników</option>
                     </select>
                 </div>
-                <div>
+                <div className="report-filter-group">
                     <label>Od:</label>
-                    <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
+                    <DatePicker selected={startDate} onChange={date => setStartDate(date)} dateFormat="dd.MM.yyyy" locale="pl" />
                 </div>
-                <div>
+                <div className="report-filter-group">
                     <label>Do:</label>
-                    <DatePicker selected={endDate} onChange={date => setEndDate(date)} />
+                    <DatePicker selected={endDate} onChange={date => setEndDate(date)} dateFormat="dd.MM.yyyy" locale="pl" />
                 </div>
-                <button onClick={handleGenerateReport} disabled={loading}>
+                <button onClick={handleGenerateReport} disabled={loading} className="report-generate-btn">
                     {loading ? 'Generowanie...' : 'Pobierz Raport'}
                 </button>
             </div>

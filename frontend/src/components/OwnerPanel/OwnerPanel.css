@@ -241,3 +241,69 @@ th { background-color: #f8f9fa; }
     font-weight: bold !important;
     border: 1px solid #4C7766;
 }
+
+.report-generator-form {
+    background-color: #fff;
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 2rem; /* Większy odstęp między grupami filtrów */
+    flex-wrap: wrap; /* Responsywność na mniejszych ekranach */
+}
+
+.report-filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.report-filter-group label {
+    font-weight: 500;
+    color: #4a5568;
+}
+
+/* Spójne style dla selecta i inputa z DatePicker */
+.report-filter-group select,
+.report-generator-form .react-datepicker-wrapper input {
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    background-color: #f8f9fa;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.report-filter-group select:focus,
+.report-generator-form .react-datepicker-wrapper input:focus {
+    border-color: #4C7766;
+    box-shadow: 0 0 0 3px rgba(76, 119, 102, 0.2);
+    outline: none;
+}
+
+/* Główny przycisk akcji */
+.report-generate-btn {
+    background-color: #4C7766;
+    color: white;
+    font-weight: bold;
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+    margin-left: auto; /* Przesuwa przycisk do prawej krawędzi */
+}
+
+.report-generate-btn:hover:not(:disabled) {
+    background-color: #3e6052;
+    transform: translateY(-2px);
+}
+
+.report-generate-btn:disabled {
+    background-color: #a7b8b2;
+    cursor: not-allowed;
+    transform: none;
+}
