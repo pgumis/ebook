@@ -133,7 +133,6 @@ const TopBar = () => {
     dispatch(cartActions.clearCart());
     localStorage.clear();
     dispatch(viewActions.changeView("home"));
-
   };
   const isSearchBarVisible = userData.role === "" || userData.role === "klient";
 
@@ -160,7 +159,7 @@ const TopBar = () => {
           <div className="mobile-nav-menu-options">
             {userData.role !== "admin" && (
               <>
-                <div
+                {(userData.role === "klient" || userData.role === "")&&<div
                   className="search-bar-trigger"
                   onClick={() => {
                     handleMenuClose();
@@ -169,7 +168,7 @@ const TopBar = () => {
                 >
                   <i className="fas fa-search"></i>
                   <span>Wyszukaj tytuł lub autora...</span>
-                </div>
+                </div>}
                 {!userData.loggedIn && (
                   <>
                     <a
@@ -200,43 +199,49 @@ const TopBar = () => {
                     >
                       Zarządzaj profilem
                     </a>
-                    <a
-                      onClick={() => {
-                        handleMenuClose();
-                        dispatch(viewActions.changeView("cart"));
-                      }}
-                    >
-                      Koszyk
-                    </a>
+                    {userData.role === "klient" && (
+                      <>
+                        <a
+                          onClick={() => {
+                            handleMenuClose();
+                            dispatch(viewActions.changeView("cart"));
+                          }}
+                        >
+                          Koszyk
+                        </a>
 
-                    <a
-                      onClick={() => {
-                        handleMenuClose();
-                        dispatch(viewActions.changeView("purchaseHistory"));
-                      }}
-                    >
-                      Historia zamówień
-                    </a>
-                    <a
-                      onClick={() => {
-                        handleMenuClose();
-                        dispatch(viewActions.changeView("contact"));
-                      }}
-                    >
-                      Kontakt
-                    </a>
+                        <a
+                          onClick={() => {
+                            handleMenuClose();
+                            dispatch(viewActions.changeView("purchaseHistory"));
+                          }}
+                        >
+                          Historia zamówień
+                        </a>
+                      </>
+                    )}
                   </>
                 )}
+                {userData.role !== "admin" && <a
+                  onClick={() => {
+                    handleMenuClose();
+                    dispatch(viewActions.changeView("contact"));
+                  }}
+                >
+                  Kontakt
+                </a>}
               </>
             )}
-            {userData.loggedIn === true && <a
-              onClick={() => {
-                handleMenuClose();
-                handleSignOut();
-              }}
-            >
-              Wyloguj się
-            </a>}
+            {userData.loggedIn === true && (
+              <a
+                onClick={() => {
+                  handleMenuClose();
+                  handleSignOut();
+                }}
+              >
+                Wyloguj się
+              </a>
+            )}
           </div>
         </div>
       )}
@@ -276,7 +281,7 @@ const TopBar = () => {
 
         {(isSearchBarVisible ? windowWidth > 1200 : windowWidth > 834) && (
           <div className="nav-right-side">
-            {userData.role === "klient" && (
+            {userData.role !== "admin" && (
               <button
                 className="nav-icon-btn"
                 onClick={() => dispatch(viewActions.changeView("contact"))}
@@ -317,7 +322,7 @@ const TopBar = () => {
                   </div>
                   {showProfileMenu && (
                     <div className="profile-dropdown-menu">
-                      {userData.role === "klient" && (
+                      {userData.role !== "admin" && (
                         <>
                           <TopBarListOption
                             icon={<ProfileIcon />}
@@ -327,16 +332,18 @@ const TopBar = () => {
                           >
                             Zarządzaj profilem
                           </TopBarListOption>
-                          <TopBarListOption
-                            icon={<HistoryIcon />}
-                            onClick={() =>
-                              dispatch(
-                                viewActions.changeView("purchaseHistory")
-                              )
-                            }
-                          >
-                            Historia zamówień
-                          </TopBarListOption>
+                          {userData.role === "klient" && (
+                            <TopBarListOption
+                              icon={<HistoryIcon />}
+                              onClick={() =>
+                                dispatch(
+                                  viewActions.changeView("purchaseHistory")
+                                )
+                              }
+                            >
+                              Historia zamówień
+                            </TopBarListOption>
+                          )}
                         </>
                       )}
                       <TopBarListOption
