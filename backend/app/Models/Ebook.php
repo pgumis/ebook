@@ -23,6 +23,7 @@ class Ebook extends Model
         'jezyk',
         'data_wydania',
         'cena',
+        'cena_promocyjna',
         'format',
         'plik',
         'okladka',

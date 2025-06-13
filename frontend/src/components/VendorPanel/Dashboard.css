@@ -68,3 +68,22 @@
     font-size: 0.9rem; color: #666; white-space: nowrap;
 }
 .top-ebooks-list .ebook-sales strong { color: #4C7766; }
+
+.placeholder-card {
+    grid-column: 1 / -1; /* Rozciąga się na całą szerokość siatki */
+    border: 2px dashed #e2e8f0;
+    background-color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #64748b;
+    min-height: 150px;
+    padding: 1.5rem;
+}
+
+.placeholder-card h4 {
+    margin-bottom: 0.5rem;
+    color: #475569;
+}

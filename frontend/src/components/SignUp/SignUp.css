@@ -1,64 +1,148 @@
-.form-submit{
-    background-color: #4C7766;
-    border-radius: 4px;
-    border-style: none;
-    box-sizing: border-box;
-    color: #fff;
-    cursor: pointer;
-    display: inline-block;
-    font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
-    font-size: 14px;
-    line-height: 1.5;
-    margin: 0;
-    max-width: none;
-    min-height: 30px;
-    min-width: 10px;
-    outline: none;
-    overflow: hidden;
-    padding: 9px 20px 8px;
-    position: relative;
+/* Style dla strony rejestracji, wzorowane na stronie logowania */
+
+.signup-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    background-color: #f4f7f6;
+    padding: 20px;
+}
+
+.signup-card {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 550px; /* Nieco szersza karta, żeby zmieścić więcej pól */
     text-align: center;
-    text-transform: none;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
-}
-
-.form-submit:hover,
-.form-submit:focus {
-    opacity: .75;
-}
-
-.error-text {
-    color: red;
-    font-size: 0.85em;
-    margin-top: 5px;
-    margin-bottom: 5px; /* Dodaj trochę marginesu, żeby nie przylegało do inputa */
-}
-
-.success-message {
-    color: green;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 15px;
-}
-
-.error-message {
-    color: red;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 15px;
-}
-
-/* Możesz też dodać style dla inputów z błędami */
-input.error-border {
-    border-color: red;
 }
 
 .signup-logo {
-    width: 230px; /* Zwiększ szerokość logo */
-    height: auto; /* Zachowaj proporcje */
-    margin-bottom: 30px; /* Zwiększ odstęp pod logo */
-    margin-top: 0; /* Upewnij się, że nie ma górnego marginesu, jeśli Logo ma swój własny */
+    max-width: 250px;
+    height: auto;
+    margin-bottom: 30px;
+}
+
+.signup-card h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 2rem;
+    color: #222;
+}
+
+.signup-subtitle {
+    margin-top: 0;
+    margin-bottom: 30px;
+    color: #666;
+}
+
+.signup-form .input-group {
+    margin-bottom: 15px; /* Mniejszy margines, bo jest więcej pól */
+    text-align: left;
+}
+
+.signup-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #444;
+}
+
+.signup-form input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.signup-form input:focus {
+    outline: none;
+    border-color: #4C7766;
+    box-shadow: 0 0 0 3px rgba(76, 119, 102, 0.2);
+}
+
+/* Styl dla wiersza z imieniem i nazwiskiem */
+.signup-name-row {
+    display: flex;
+    gap: 15px;
+}
+.signup-name-row .input-group {
+    flex: 1;
+}
+
+/* Styl dla komunikatów o błędach pod polami */
+.error-text {
+    color: #d9534f;
+    font-size: 0.8rem;
+    margin-top: 4px;
+    height: 1em; /* Zapewnia stałą wysokość, aby formularz nie "skakał" */
+}
+
+/* Główny komunikat (o sukcesie lub błędzie) */
+.signup-main-message {
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+.signup-main-message.error {
+    background-color: #fde8e8;
+    color: #a33;
+}
+.signup-main-message.success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.signup-submit-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #4C7766;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-top: 10px;
+}
+
+.signup-submit-btn:hover:not(:disabled) {
+    background-color: #3a5a4e;
+    transform: translateY(-2px);
+}
+
+.signup-submit-btn:disabled {
+    background-color: #a7b8b2;
+    cursor: not-allowed;
+}
+
+.signup-helper-links {
+    margin-top: 25px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.signup-helper-links a {
+    color: #4C7766;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.signup-helper-links a:hover {
+    text-decoration: underline;
+}
+
+.signup-helper-links .author-info {
+    margin-top: 10px;
+    font-size: 0.85rem;
 }

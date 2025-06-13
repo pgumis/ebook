@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
-
+import { useSelector, useDispatch } from "react-redux";
+import { viewActions } from "../../store/view";
 const VendorAddBook = () => {
   const userData = useSelector((state) => state.userData);
+  const dispatch = useDispatch();
 
   const [dane, setDane] = useState({
     tytul: "",
@@ -40,27 +41,34 @@ const VendorAddBook = () => {
 
   const handleBookChange = (e) => {
     const file = e.target.files[0];
+    if (!file) return;
     // Akceptowane typy MIME dla ebooków
-    const acceptedEbookTypes = [
-      'application/epub+zip', // .epub
-      'application/pdf',      // .pdf
-      'application/x-mobipocket-ebook', // .mobi (często używany typ MIME)
-      // Możesz również sprawdzić po rozszerzeniu, jeśli typ MIME jest niepewny:
-      // file.name.endsWith(".epub") || file.name.endsWith(".pdf") || file.name.endsWith(".mobi")
-    ];
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+    const acceptedExtensions = ['pdf', 'epub', 'mobi'];
 
-    if (file && acceptedEbookTypes.includes(file.type)) {
+    if (acceptedExtensions.includes(fileExtension)) {
+      // Plik jest poprawny, więc robimy dwie rzeczy:
+      // 1. Zapisujemy obiekt pliku w stanie 'plik'
       setPlik(file);
+
+      // 2. Zapisujemy rozszerzenie (jako wielkie litery) w stanie 'dane' pod kluczem 'format'
+      setDane(prevState => ({
+        ...prevState,
+        format: fileExtension.toUpperCase()
+      }));
+
     } else {
       alert("Proszę przesłać plik ebooka w formacie .epub, .pdf lub .mobi");
+      // Opcjonalnie: wyczyść input, jeśli plik był niepoprawny
+      e.target.value = null;
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!dane.tytul || !dane.autor || !dane.cena || !dane.format) {
-      alert("Uzupełnij wszystkie wymagane pola: tytuł, autor, cena, format.");
+    if (!dane.tytul || !dane.autor || !dane.cena ) {
+      alert("Uzupełnij wszystkie wymagane pola.");
       return;
     }
 
@@ -91,7 +99,7 @@ const VendorAddBook = () => {
         alert("Błąd dodawania książki: " + JSON.stringify(result.bledy || result));
         return;
       }
-
+      dispatch(viewActions.changeView('home'));
       alert("E-book został dodany!");
     } catch (err) {
       console.error("Błąd sieci:", err.message || err);

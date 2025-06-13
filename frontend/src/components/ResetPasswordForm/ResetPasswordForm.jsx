@@ -1,11 +1,15 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { viewActions } from "../../store/view";
-import Logo from "../Logo/Logo";
+import "./ResetPasswordForm.css"; // Importujemy nowe style
 
-const ResetPasswordEmailForm = () => {
+// Zmieniamy nazwę komponentu dla spójności z nazwą pliku
+const ResetPasswordForm = () => {
   const dispatch = useDispatch();
-  const [emailConfirmed, setEmailConfirmed] = useState(false);
+
+  // Stan kontrolujący, który krok formularza jest widoczny
+  const [emailSent, setEmailSent] = useState(false);
+
   const [dane, setDane] = useState({
     email: "",
     haslo: "",
@@ -13,125 +17,127 @@ const ResetPasswordEmailForm = () => {
     token: "",
   });
 
-  const [komunikat, setKomunikat] = useState("");
+  const [komunikat, setKomunikat] = useState({ text: "", type: "" });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setDane({ ...dane, [e.target.name]: e.target.value });
   };
+
+  // Krok 1: Wysyłanie prośby o link do resetu
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setKomunikat({ text: "", type: "" });
 
-    const response = await fetch("http://localhost:8000/api/zapomniane-haslo", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: dane.email }),
-    });
+    try {
+      const response = await fetch("http://localhost:8000/api/zapomniane-haslo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: dane.email }),
+      });
+      const wynik = await response.json();
 
-    const wynik = await response.json();
-
-    if (response.ok) {
-      setKomunikat(wynik.komunikat);
-      console.log(wynik.token);
-      setDane((prev) => ({ ...prev, token: wynik.token }));
-      setDane({ ...dane, ["token"]: wynik.token });
-      console.log(dane);
-      setEmailConfirmed(true);
-    } else {
-      setKomunikat("Błąd: " + JSON.stringify(wynik.bledy));
+      if (response.ok) {
+        setKomunikat({ text: wynik.komunikat, type: "success" });
+        // Poprawiony i jedyny poprawny sposób aktualizacji stanu
+        setDane(prev => ({ ...prev, token: wynik.token }));
+        setEmailSent(true); // Pokaż drugi krok formularza
+      } else {
+        setKomunikat({ text: `Błąd: ${wynik.message || "Sprawdź poprawność adresu e-mail."}`, type: "error" });
+      }
+    } catch (err) {
+      setKomunikat({ text: "Błąd połączenia z serwerem.", type: "error" });
+    } finally {
+      setLoading(false);
     }
   };
-  const handleSubmit = async (e) => {
+
+  // Krok 2: Wysyłanie nowego hasła z tokenem
+  const handlePasswordResetSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:8000/api/reset-hasla", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: dane.email,
-        token: dane.token,
-        haslo: dane.haslo,
-        haslo_confirmation: dane.powtorzHaslo,
-      }),
-    });
+    if (dane.haslo.length < 6 || dane.haslo !== dane.powtorzHaslo) {
+      setKomunikat({ text: "Hasła muszą być identyczne i mieć co najmniej 6 znaków.", type: "error" });
+      return;
+    }
+    setLoading(true);
+    setKomunikat({ text: "", type: "" });
 
-    const wynik = await response.json();
+    try {
+      const response = await fetch("http://localhost:8000/api/reset-hasla", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: dane.email,
+          token: dane.token,
+          haslo: dane.haslo,
+          haslo_confirmation: dane.powtorzHaslo,
+        }),
+      });
+      const wynik = await response.json();
 
-    if (response.ok) {
-      setKomunikat(wynik.komunikat);
-    } else {
-      setKomunikat("Błąd: " + JSON.stringify(wynik.bledy));
+      if (response.ok) {
+        setKomunikat({ text: "Hasło zostało zmienione! Możesz się teraz zalogować.", type: "success" });
+        // Po sukcesie możemy zablokować formularz i pokazać tylko link do logowania
+        setTimeout(() => dispatch(viewActions.changeView("signIn")), 2000);
+      } else {
+        setKomunikat({ text: `Błąd: ${wynik.message || "Wystąpił błąd."}`, type: "error" });
+      }
+    } catch (err) {
+      setKomunikat({ text: "Błąd połączenia z serwerem.", type: "error" });
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
-    <>
-      {!emailConfirmed && (
-        <div className="screen-center">
-          <div className="form-wrapper">
-            <Logo />
-            <form onSubmit={handleEmailSubmit} style={{ marginTop: 0 }}>
-              <div className="form-whole-line">
-                <label for="email">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  onChange={handleChange}
-                  value={dane.email}
-                  required
-                />
-              </div>
+      <div className="reset-password-page-container">
+        <div className="reset-password-card">
+          <img src="/e-book na wynos logo.png" alt="Logo" className="reset-password-logo" />
+          <h2>Zresetuj hasło</h2>
+          <p className="reset-password-subtitle">
+            {!emailSent
+                ? "Wpisz swój e-mail, aby otrzymać instrukcje."
+                : "Sprawdź swoją skrzynkę i ustaw nowe hasło."}
+          </p>
 
-              <p className="form-info">
-                ⓘ Na podany przez Ciebie adres email wyślemy link do <br />
-                zresetowania hasła
-              </p>
-              <button
-                type="submit"
-                className="form-submit"
-                onClick={() => {
-                  dispatch(viewActions.changeView("resetPassword"));
-                }}
-              >
-                Zresetuj hasło
-              </button>
-            </form>
-            {komunikat && <p>{komunikat}</p>}
+          <form onSubmit={emailSent ? handlePasswordResetSubmit : handleEmailSubmit} className="reset-password-form" noValidate>
+
+            {/* ----- KROK 1: Pytanie o email ----- */}
+            {!emailSent && (
+                <div className="input-group">
+                  <label htmlFor="email">Adres e-mail</label>
+                  <input id="email" type="email" name="email" value={dane.email} onChange={handleChange} required disabled={loading}/>
+                </div>
+            )}
+
+            {/* ----- KROK 2: Wprowadzanie nowego hasła ----- */}
+            {emailSent && (
+                <>
+                  <div className="input-group">
+                    <label htmlFor="haslo">Nowe hasło</label>
+                    <input id="haslo" type="password" name="haslo" value={dane.haslo} onChange={handleChange} required disabled={loading}/>
+                  </div>
+                  <div className="input-group">
+                    <label htmlFor="powtorzHaslo">Powtórz nowe hasło</label>
+                    <input id="powtorzHaslo" type="password" name="powtorzHaslo" value={dane.powtorzHaslo} onChange={handleChange} required disabled={loading}/>
+                  </div>
+                </>
+            )}
+
+            {komunikat.text && <p className={`reset-password-main-message ${komunikat.type}`}>{komunikat.text}</p>}
+
+            <button type="submit" className="reset-password-submit-btn" disabled={loading}>
+              {loading ? "Przetwarzanie..." : (emailSent ? "Zmień hasło" : "Wyślij instrukcje")}
+            </button>
+          </form>
+
+          <div className="reset-password-helper-links">
+            <p>Pamiętasz hasło? <a href="#" onClick={() => dispatch(viewActions.changeView("signIn"))}>Wróć do logowania</a></p>
           </div>
         </div>
-      )}
-      {emailConfirmed && (
-        <div className="screen-center">
-          <div className="form-wrapper">
-            <Logo />
-            <form onSubmit={handleSubmit} style={{ marginTop: 0 }}>
-              <div className="form-whole-line">
-                <label for="email">Nowe hasło</label>
-                <input
-                  type="password"
-                  name="haslo"
-                  value={dane.haslo}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="form-whole-line">
-                <label for="email">Powtórz nowe hasło</label>
-                <input
-                  type="password"
-                  name="powtorzHaslo"
-                  value={dane.powtorzHaslo}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <button type="submit" className="form-submit">
-                Zresetuj hasło
-              </button>
-            </form>
-            {komunikat && <p>{komunikat}</p>}
-          </div>
-        </div>
-      )}
-    </>
+      </div>
   );
 };
-export default ResetPasswordEmailForm;
+
+export default ResetPasswordForm;

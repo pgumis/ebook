@@ -1,0 +1,49 @@
+/* ZMIENIONA SEKCJA */
+.panel-sidebar-vendor {
+    position: sticky;
+    top: 140px;
+
+    /* --- NOWE STYLE NADAJĄCE WYGLĄD KARTY --- */
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 1rem; /* Dodajemy wewnętrzny odstęp */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #EBE6E0;
+}
+
+.panel-sidebar-vendor ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.panel-sidebar-vendor li {
+    padding: 15px 20px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    transition: background-color 0.2s, color 0.2s, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.panel-sidebar-vendor li:hover {
+    background-color: #f1f5f9;
+    transform: translateX(5px);
+}
+
+.panel-sidebar-vendor li.active {
+    background-color: #4C7766;
+    color: white;
+    font-weight: bold;
+    transform: translateX(0);
+    box-shadow: 0 4px 10px rgba(76, 119, 102, 0.2);
+}
+
+.panel-sidebar-vendor li i {
+    width: 20px;
+    text-align: center;
+    font-size: 1.1rem;
+}

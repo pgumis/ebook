@@ -40,8 +40,7 @@ class EbookController extends Controller
             'data_wydania' => 'nullable|date',
             'cena' => 'required|numeric|min:0',
             'cena_promocyjna' => 'nullable|numeric|min:0|lt:cena',
-            'format' => 'required|string|in:PDF,EPUB,MOBI',
-            'plik' => 'required|file|mimes:pdf,epub,mobi|max:51200',
+            'plik' => 'required|file|extensions:pdf,epub,mobi|max:51200',
             'okladka' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
         ]);
 
@@ -49,15 +48,13 @@ class EbookController extends Controller
             return response()->json(['bledy' => $validator->errors()], 422);
         }
 
-        $ebook = new Ebook($validator->validated());
+        // Pobierz tylko zwalidowane dane
+        $dane = $validator->validated();
+
+        // Utwórz nowy, pusty model e-booka
+        $ebook = new Ebook($dane);
 
         $ebook->uzytkownik_id = $request->user()->id;
-        $ebook->tytul = $request->tytul;
-        $ebook->opis = $request->opis;
-        $ebook->cena = $request->cena;
-        $ebook->cena_promocyjna = $request->cena_promocyjna;
-        $ebook->jezyk = $request->jezyk;
-        $ebook->kategoria = $request->kategoria;
 
         // Upload pliku e-booka na S3
         if ($request->hasFile('plik')) {

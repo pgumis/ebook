@@ -1,14 +1,16 @@
-// frontend/src/components/VendorPanel/VendorPanel.jsx
+// src/components/VendorPanel/VendorPanel.jsx
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import "./VendorPanel.css"; // Nowy plik CSS dla layoutu
-import Sidebar from "./Sidebar"; // Nowy komponent Sidebar
-import DashboardView from "./DashboardView"; // Nowy komponent dla widoku pulpitu
-import VendorsBookList from "./VendorsBookList"; // Istniejący komponent
+import "./VendorPanel.css";
+import Sidebar from "./Sidebar";
+import DashboardView from "./DashboardView";
+import VendorsBookList from "./VendorsBookList";
+import FinanceView from "./FinanceView"; // <-- NOWY IMPORT
+import ReviewsView from "./ReviewsView"; // <-- NOWY IMPORT
 
 const VendorPanel = () => {
     const userData = useSelector((state) => state.userData);
-    const [activeView, setActiveView] = useState('dashboard'); // Domyślny widok
+    const [activeView, setActiveView] = useState('dashboard');
 
     const renderView = () => {
         switch (activeView) {
@@ -17,9 +19,9 @@ const VendorPanel = () => {
             case 'books':
                 return <VendorsBookList />;
             case 'finance':
-                return <div>Widok Finansów (w budowie)</div>; // Placeholder
+                return <FinanceView />;
             case 'reviews':
-                return <div>Widok Recenzji (w budowie)</div>; // Placeholder
+                return <ReviewsView />;
             default:
                 return <DashboardView />;
         }
@@ -31,7 +33,6 @@ const VendorPanel = () => {
             <main className="panel-main-content">
                 <header className="panel-header">
                     <h2>Witaj, {userData.imie} 👋</h2>
-                    {/* Tutaj można dodać np. przycisk wylogowania, profilu etc. */}
                 </header>
                 {renderView()}
             </main>
