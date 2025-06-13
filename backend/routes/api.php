@@ -170,4 +170,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/historia-zamowien', [ZamowienieController::class, 'historiaZamowien']);
     Route::get('/zamowienia/{zamowienie}', [ZamowienieController::class, 'szczegolyZamowienia']);
+    Route::get('/dostawca/recenzje', [EbookController::class, 'recenzjeDostawcy']);
 });

@@ -17,6 +17,9 @@ const BookDetails = () => {
   const cartItems = useSelector((state) => state.cart.items);
   const isInCart = selectedBook ? cartItems.some(item => item.id === selectedBook.id) : false;
 
+
+  const privilegedRoles = ['dostawca', 'admin', 'wlasciciel'];
+  const shouldShowCategorySidebar = !privilegedRoles.includes(role);
   // Stany dla recenzji
   const [recenzje, setRecenzje] = useState([]);
   const [loadingReviews, setLoadingReviews] = useState(true);
@@ -103,19 +106,15 @@ const BookDetails = () => {
     setCartMessage('Dodawanie do koszyka...');
 
     try {
-      // Używamy akcji Redux Thunk. Funkcja .unwrap() pozwala nam używać try...catch
-      // do obsługi błędów zdefiniowanych w thunku (rejectWithValue).
       await dispatch(cartActions.addItemToCart({ token: token, bookData: selectedBook })).unwrap();
 
       setCartMessage('Dodano pomyślnie!');
 
-      // Opcjonalnie: schowaj komunikat po kilku sekundach
       setTimeout(() => {
         setCartMessage('');
       }, 3000);
 
     } catch (error) {
-      // Wyświetl błąd zwrócony z thunka (rejectWithValue)
       setCartMessage(`Błąd: ${error || 'Nie udało się dodać produktu.'}`);
     }
   };
@@ -127,21 +126,33 @@ const BookDetails = () => {
   }
 
   return (
-      // === GŁÓWNY KONTENER Z NOWĄ, DWUKOLUMNOWĄ SIATKĄ ===
-      <div className="book-details-layout-grid">
+
+      <div className={shouldShowCategorySidebar ? "book-details-layout-with-sidebar" : "book-details-layout-full"}>
 
         {/* === LEWA KOLUMNA: PANEL KATEGORII === */}
-        <aside className="details-sidebar-panel">
-          <BooksListFilterPanel
-              selectedKategoria={selectedCategory}
-              onSelectCategory={handleCategorySelect}
-              onCloseMenu={() => {}} // Pusta funkcja, bo tu nie ma mobilnego menu
-          />
-        </aside>
+        {shouldShowCategorySidebar && (
+            <aside className="details-sidebar-panel">
+              <BooksListFilterPanel
+                  selectedKategoria={selectedCategory}
+                  onSelectCategory={handleCategorySelect}
+                  onCloseMenu={() => {}}
+              />
+            </aside>
+        )}
 
         {/* === PRAWA KOLUMNA: CAŁA ZAWARTOŚĆ SZCZEGÓŁÓW TWOJEJ KSIĄŻKI === */}
         <main className="details-main-content">
-          {/* Poniżej znajduje się cały Twój kod, który mi wysłałeś, wklejony bez zmian */}
+
+          {privilegedRoles.includes(role) && (
+              <div className="back-to-panel-container">
+                <button
+                    onClick={() => dispatch(viewActions.changeView('home'))}
+                    className="back-to-panel-btn"
+                >
+                  <i className="fas fa-arrow-left"></i> Wróć do panelu
+                </button>
+              </div>
+          )}
           <div className="book-details-wrapper panel">
             {/* --- SEKCJA GÓRNA: ZDJĘCIE + INFORMACJE --- */}
             <div className="book-details-main-info">

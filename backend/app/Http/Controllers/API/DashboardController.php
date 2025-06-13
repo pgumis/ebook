@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use App\Models\Ebook;
 use App\Models\Zamowienie;
@@ -20,77 +21,75 @@ class DashboardController extends Controller
      */
     public function statystykaDostawcy(Request $request)
     {
-        $idUzytkownika = $request->user()->id; // ID zalogowanego użytkownika (dostawcy)
-        $poczatekMiesiaca = Carbon::now()->startOfMonth();
-        $koniecMiesiaca = Carbon::now()->endOfMonth();
-        $thirtyDaysAgo = Carbon::now()->subDays(29)->startOfDay(); // Obejmuje dzisiejszy dzień
+        // KROK 1: Walidacja i pobranie zakresu dat z requestu
+        $validated = $request->validate([
+            'start_date' => 'nullable|date_format:Y-m-d',
+            'end_date' => 'nullable|date_format:Y-m-d',
+        ]);
 
-        // 1. Liczba wystawionych książek (ebooków) przez TEGO dostawcę
-        $wystawioneKsiazki = Ebook::where('uzytkownik_id', $idUzytkownika)->count();
+        $dostawcaId = $request->user()->id;
 
-        // 2. Sprzedanych w tym miesiącu i Zysk w tym miesiącu
-        $daneSprzedazyMiesiac = DB::table('ebook_zamowienie')
+        // Jeśli daty nie są podane, domyślnie bierzemy ostatnie 30 dni
+        $startDate = isset($validated['start_date']) ? Carbon::parse($validated['start_date'])->startOfDay() : now()->subDays(29)->startOfDay();
+        $endDate = isset($validated['end_date']) ? Carbon::parse($validated['end_date'])->endOfDay() : now()->endOfDay();
+
+        // KROK 2: Pobranie ID książek dostawcy (bez zmian)
+        $ebookIds = Ebook::where('uzytkownik_id', $dostawcaId)->pluck('id');
+
+        // KROK 3: Główne zapytanie do transakcji, które będziemy reużywać
+        // Standaryzujemy na 'ebook_zamowienie.created_at' jako dacie transakcji
+        $transactionsQuery = DB::table('ebook_zamowienie')
+            ->whereIn('ebook_id', $ebookIds)
+            ->whereBetween('created_at', [$startDate, $endDate]);
+
+        // KROK 4: Obliczenie kluczowych wskaźników dla zadanego okresu
+        // Klonujemy zapytanie, aby nie modyfikować oryginału
+        $profitInRange = (clone $transactionsQuery)->sum(DB::raw('cena_jednostkowa * ilosc'));
+        $soldInRange = (clone $transactionsQuery)->sum('ilosc');
+
+        // KROK 5: TOP 5 E-booków w zadanym okresie
+        $topEbooksInRange = DB::table('ebook_zamowienie')
             ->join('ebooki', 'ebook_zamowienie.ebook_id', '=', 'ebooki.id')
-            ->join('zamowienia', 'ebook_zamowienie.zamowienie_id', '=', 'zamowienia.id')
-            ->where('ebooki.uzytkownik_id', $idUzytkownika)
-            ->whereBetween('zamowienia.data_zamowienia', [$poczatekMiesiaca, $koniecMiesiaca])
-            ->where('zamowienia.status', 'zrealizowane') // Zmieniono na 'zrealizowane' dla spójności
-            ->select('ebook_zamowienie.cena_jednostkowa', 'ebook_zamowienie.ilosc')
-            ->get();
-
-        $sprzedanychWtymMiesiacu = 0;
-        $zyskWtymMiesiacu = 0;
-        foreach ($daneSprzedazyMiesiac as $item) {
-            $ilosc = $item->ilosc ?? 1;
-            $sprzedanychWtymMiesiacu += $ilosc;
-            $zyskWtymMiesiacu += ($item->cena_jednostkowa * $ilosc);
-        }
-
-        // 3. DANE DO WYKRESU SPRZEDAŻY (OSTATNIE 30 DNI) DLA TEGO DOSTAWCY
-        $salesByDayForProvider = DB::table('ebook_zamowienie')
-            ->join('ebooki', 'ebook_zamowienie.ebook_id', '=', 'ebooki.id')
-            ->join('zamowienia', 'ebook_zamowienie.zamowienie_id', '=', 'zamowienia.id')
-            ->select(
-                DB::raw('DATE(zamowienia.data_zamowienia) as date'),
-                DB::raw('SUM(ebook_zamowienie.cena_jednostkowa * ebook_zamowienie.ilosc) as total')
-            )
-            ->where('ebooki.uzytkownik_id', $idUzytkownika) // Ogranicz do tego dostawcy
-            ->where('zamowienia.data_zamowienia', '>=', $thirtyDaysAgo)
-            ->where('zamowienia.status', 'zrealizowane')
-            ->groupBy('date')
-            ->orderBy('date', 'asc')
-            ->get()
-            ->keyBy('date');
-
-        $salesChartData = [];
-        $salesChartLabels = [];
-        for ($i = 0; $i < 30; $i++) {
-            $date = $thirtyDaysAgo->copy()->addDays($i);
-            $dateString = $date->toDateString();
-            $salesChartLabels[] = $date->format('d.m');
-            $salesChartData[] = $salesByDayForProvider->get($dateString)->total ?? 0;
-        }
-
-        // 4. TOP 5 E-booków TEGO DOSTAWCY (najlepiej sprzedające się w tym miesiącu)
-        $topEbooksForProvider = DB::table('ebook_zamowienie')
-            ->join('ebooki', 'ebook_zamowienie.ebook_id', '=', 'ebooki.id')
-            ->select('ebooki.tytul', DB::raw('COUNT(ebook_zamowienie.ebook_id) as total_sold'))
-            ->where('ebooki.uzytkownik_id', $idUzytkownika) // Ogranicz do tego dostawcy
-            ->where('ebook_zamowienie.created_at', '>=', $poczatekMiesiaca)
+            ->select('ebooki.tytul', DB::raw('SUM(ebook_zamowienie.ilosc) as total_sold'))
+            ->whereIn('ebook_zamowienie.ebook_id', $ebookIds)
+            ->whereBetween('ebook_zamowienie.created_at', [$startDate, $endDate])
             ->groupBy('ebooki.tytul')
-            ->orderBy('total_sold', 'desc')
+            ->orderByDesc('total_sold')
             ->limit(5)
             ->get();
 
+        // KROK 6: Dynamiczne dane do wykresu dla zadanego okresu
+        $salesByDay = (clone $transactionsQuery)
+            ->select(
+                DB::raw('DATE(created_at) as date'),
+                DB::raw('SUM(cena_jednostkowa * ilosc) as total')
+            )
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
+            ->get()
+            ->keyBy('date'); // Kluczujemy po dacie dla łatwego dostępu
+
+        // Tworzymy etykiety i dane dla każdej daty w zadanym okresie, aby wykres był kompletny
+        $period = CarbonPeriod::create($startDate, $endDate);
+        $salesChartLabels = [];
+        $salesChartData = [];
+
+        foreach ($period as $date) {
+            $dateString = $date->toDateString();
+            $salesChartLabels[] = $date->format('d.m'); // Etykieta w formacie DD.MM
+            $salesChartData[] = $salesByDay[$dateString]->total ?? 0; // Używamy danych lub wstawiamy 0
+        }
+
+        // KROK 7: Zwrócenie ujednoliconej odpowiedzi JSON
         return response()->json([
-            'publishedBooks' => $wystawioneKsiazki,
-            'soldThisMonth' => $sprzedanychWtymMiesiacu,
-            'profitThisMonth' => number_format($zyskWtymMiesiacu, 2, '.', '') . ' zł', // Formatuj tu
+            'publishedBooks' => $ebookIds->count(), // Liczba książek jest stała
+            'profitInRange' => number_format($profitInRange, 2, '.', ''), // Zwracamy czystą liczbę
+            'soldInRange' => $soldInRange,
+            'topEbooks' => $topEbooksInRange,
             'salesChart' => [
                 'labels' => $salesChartLabels,
                 'data' => $salesChartData,
             ],
-            'topEbooks' => $topEbooksForProvider,
         ], 200);
     }
 }

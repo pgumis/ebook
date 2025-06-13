@@ -177,3 +177,62 @@ tbody tr:last-child td {
 .vendors-book-list-add-new-book:hover {
   background-color: #3e6052;
 }
+
+.filters-bar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+.filter-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #fff;
+  padding: 0 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #ced4da;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filter-input-group:focus-within {
+  border-color: #4C7766;
+  box-shadow: 0 0 0 2px rgba(76, 119, 102, 0.2);
+}
+
+.filter-input-group label {
+  font-size: 0.9rem;
+  color: #555;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.filter-input-group input,
+.filter-input-group select {
+  border: none;
+  background: none;
+  outline: none;
+  padding: 0.6rem 0.2rem;
+  font-size: 0.9rem;
+}
+
+.filter-input-group input {
+  width: 100%;
+}
+
+/* Specjalny styl dla pola wyszukiwania, aby było szersze */
+.filter-input-group.search-filter {
+  flex-grow: 1; /* Pozwala polu wyszukiwania zająć dostępną przestrzeń */
+}
+.filter-input-group.search-filter input {
+  padding-left: 0.5rem; /* Odstęp od ikony */
+}
+
+.filter-input-group i {
+  color: #adb5bd;
+}

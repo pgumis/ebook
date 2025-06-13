@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Recenzja;
 use Illuminate\Http\Request;
 use App\Models\Ebook;
 use Illuminate\Support\Carbon;
@@ -421,5 +422,23 @@ class EbookController extends Controller
 
         // Krok 3: Przekieruj użytkownika pod wygenerowany adres
         return response()->json(['download_url' => $url]);
+    }
+
+    public function recenzjeDostawcy(Request $request)
+    {
+        $dostawca = $request->user();
+
+        $ebookIds = Ebook::where('uzytkownik_id', $dostawca->id)->pluck('id');
+
+        $recenzje = Recenzja::select(['id', 'ocena', 'tresc', 'created_at', 'uzytkownik_id', 'ebook_id'])
+            ->with([
+                'uzytkownik:id,imie',
+                'ebook:id,tytul'
+            ])
+            ->whereIn('ebook_id', $ebookIds)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json($recenzje);
     }
 }

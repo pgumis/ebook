@@ -36,8 +36,16 @@
 }
 
 .dashboard-single-info {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #EBE6E0;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    height: 100%; /* <-- DODAJ TĘ LINIĘ */
 }
 .dashboard-single-info h1 { font-size: 2.2rem; }
 

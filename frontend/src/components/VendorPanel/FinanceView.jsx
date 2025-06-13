@@ -3,83 +3,116 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
-import './Dashboard.css'; // Ponownie używamy tych samych stylów co dashboard
+import { format, subDays, startOfYear } from 'date-fns';
+import './Dashboard.css';
+import './FinanceView.css'; // Dedykowany plik stylów
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
 const FinanceView = () => {
-    const userData = useSelector(state => state.userData);
-    const [chartData, setChartData] = useState(null);
-    const [topEbooks, setTopEbooks] = useState([]);
+    const userToken = useSelector(state => state.userData.token);
+
+    // Stan dla danych, ładowania i błędów
+    const [financeData, setFinanceData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Stan dla zakresu dat
+    const [dateRange, setDateRange] = useState({
+        from: subDays(new Date(), 29), // Domyślnie ostatnie 30 dni
+        to: new Date()
+    });
+    const [activeFilter, setActiveFilter] = useState('30d');
+
     useEffect(() => {
         const fetchFinanceData = async () => {
-            if (!userData.loggedIn) return;
+            if (!userToken) return;
+            setLoading(true);
+
+            const from_date = format(dateRange.from, 'yyyy-MM-dd');
+            const to_date = format(dateRange.to, 'yyyy-MM-dd');
+
             try {
-                // Używamy tego samego endpointu, ale wykorzystamy inne dane
-                const response = await fetch('http://localhost:8000/api/dostawca/dashboard-stats', {
-                    headers: { 'Authorization': `Bearer ${userData.token}` }
+                const response = await fetch(`http://localhost:8000/api/dostawca/dashboard-stats?start_date=${from_date}&end_date=${to_date}`, {
+                    headers: { 'Authorization': `Bearer ${userToken}` }
                 });
-                if (!response.ok) throw new Error(`Błąd HTTP: ${response.status}`);
+                if (!response.ok) throw new Error('Błąd pobierania danych finansowych.');
+
                 const data = await response.json();
-                setChartData({
-                    labels: data.salesChart.labels,
-                    datasets: [{
-                        label: 'Zysk dzienny (zł)',
-                        data: data.salesChart.data,
-                        borderColor: '#4C7766',
-                        backgroundColor: 'rgba(76, 119, 102, 0.15)',
-                        tension: 0.3,
-                        fill: true,
-                    }],
-                });
-                setTopEbooks(data.topEbooks);
+                setFinanceData(data);
             } catch (err) {
-                setError("Nie udało się załadować danych finansowych.");
+                setError(err.message);
             } finally {
                 setLoading(false);
             }
         };
-        fetchFinanceData();
-    }, [userData.loggedIn, userData.token]);
 
-    const chartOptions = {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: { y: { ticks: { callback: (value) => value + ' zł' } } }
+        fetchFinanceData();
+    }, [userToken, dateRange]); // Efekt uruchamia się ponownie przy zmianie zakresu dat
+
+    const handleFilterChange = (period) => {
+        setActiveFilter(period);
+        const today = new Date();
+        if (period === '7d') {
+            setDateRange({ from: subDays(today, 6), to: today });
+        } else if (period === '30d') {
+            setDateRange({ from: subDays(today, 29), to: today });
+        } else if (period === 'year') {
+            setDateRange({ from: startOfYear(today), to: today });
+        }
     };
 
-    if (loading) return <div className="loading-spinner">Ładowanie...</div>;
-    if (error) return <div className="error-message">{error}</div>;
+    const chartOptions = { /* ... bez zmian ... */ };
+
+    const chartComponentData = {
+        labels: financeData?.salesChart?.labels || [],
+        datasets: [{
+            label: 'Zysk dzienny (zł)',
+            data: financeData?.salesChart?.data || [],
+            borderColor: '#4C7766',
+            backgroundColor: 'rgba(76, 119, 102, 0.15)',
+            tension: 0.3,
+            fill: true,
+        }],
+    };
 
     return (
-        // Używamy siatki, ale tylko dla dwóch głównych elementów
-        <div className="dashboard-grid-layout" style={{ gridTemplateColumns: '2fr 1fr' }}>
-            {/* WYKRES */}
-            {chartData && (
-                <div className="dashboard-card" style={{ gridColumn: '1 / 2' }}>
-                    <h4>Analiza sprzedaży w ostatnim miesiącu</h4>
-                    <div className="chart-wrapper">
-                        <Line options={chartOptions} data={chartData} />
-                    </div>
+        <div className="finance-view-container">
+            <div className="finance-header">
+                <h2>Analiza Finansowa</h2>
+                <div className="date-filter-controls">
+                    <button onClick={() => handleFilterChange('7d')} className={activeFilter === '7d' ? 'active' : ''}>7 Dni</button>
+                    <button onClick={() => handleFilterChange('30d')} className={activeFilter === '30d' ? 'active' : ''}>30 Dni</button>
+                    <button onClick={() => handleFilterChange('year')} className={activeFilter === 'year' ? 'active' : ''}>Ten Rok</button>
+                    {/* Tutaj w przyszłości można dodać Date Range Picker */}
                 </div>
-            )}
+            </div>
 
-            {/* TOP EBOOKS */}
-            {topEbooks.length > 0 && (
-                <div className="dashboard-card" style={{ gridColumn: '2 / 3' }}>
-                    <h4>Najpopularniejsze w tym miesiącu</h4>
-                    <ol className="top-ebooks-list">
-                        {topEbooks.map((ebook, index) => (
-                            <li key={index}>
-                                <span className="ebook-title">{ebook.tytul}</span>
-                                <span className="ebook-sales"><strong>{ebook.total_sold}</strong> szt.</span>
-                            </li>
-                        ))}
-                    </ol>
-                </div>
+            {loading ? (
+                <div className="loading-spinner">Aktualizowanie danych...</div>
+            ) : error ? (
+                <div className="error-message">{error}</div>
+            ) : (
+                <>
+                    <div className="finance-kpi-grid">
+                        <div className="dashboard-card kpi-card"><h4>Zysk w okresie</h4><p>{financeData?.profitInRange} zł</p></div>
+                        <div className="dashboard-card kpi-card"><h4>Sprzedane sztuki</h4><p>{financeData?.soldInRange}</p></div>
+                    </div>
+                    <div className="finance-main-grid">
+                        <div className="dashboard-card chart-card-finance">
+                            <h4>Wykres sprzedaży</h4>
+                            <div className="chart-wrapper"><Line options={chartOptions} data={chartComponentData} /></div>
+                        </div>
+                        <div className="dashboard-card top-ebooks-card-finance">
+                            <h4>Bestsellery w okresie</h4>
+                            {financeData?.topEbooks?.length > 0 ? (
+                                <ol className="top-ebooks-list">
+                                    {financeData.topEbooks.map((ebook, i) => <li key={i}><span>{ebook.tytul}</span><strong>{ebook.total_sold} szt.</strong></li>)}
+                                </ol>
+                            ) : <p>Brak sprzedaży w tym okresie.</p>}
+                        </div>
+                    </div>
+                </>
             )}
         </div>
     );

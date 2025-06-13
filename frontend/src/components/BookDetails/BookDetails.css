@@ -1,4 +1,36 @@
 /* --- Główny kontener --- */
+/* Plik: src/components/BookDetails/BookDetails.css */
+
+/* --- NOWE STYLE LAYOUTU --- */
+
+/* Layout Z PANELEM BOCZNYM (dla klienta) */
+.book-details-layout-with-sidebar {
+  display: grid;
+  grid-template-columns: 280px 1fr; /* Szerokość panelu bocznego + reszta */
+  gap: 30px;
+  align-items: flex-start;
+  padding: 2rem; /* Przykładowy padding, dostosuj wg potrzeb */
+}
+
+/* Layout PEŁNOEKRANOWY (dla dostawcy/admina) */
+.book-details-layout-full {
+  padding: 2rem; /* Przykładowy padding, dostosuj wg potrzeb */
+  max-width: 1200px; /* Opcjonalnie: Ustaw maksymalną szerokość dla lepszej czytelności */
+  margin: 0 auto; /* Wycentruj layout */
+}
+
+.details-sidebar-panel {
+  position: sticky;
+  top: 20px;
+}
+
+/* --- ISTNIEJĄCE STYLE (BEZ ZMIAN) --- */
+.book-details-wrapper {
+  /* ... twoje istniejące style dla .book-details-wrapper ... */
+}
+
+/* ... cała reszta twoich istniejących stylów ... */
+
 .book-details-wrapper {
   display: flex;
   flex-direction: column;
@@ -330,4 +362,29 @@
 .details-main-content{
 
   margin-top: 16px;
+}
+
+.back-to-panel-container {
+  margin-bottom: 1.5rem;
+}
+
+.back-to-panel-btn {
+  background-color: #4C7766; /* Główny, zielony kolor aplikacji */
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem; /* Większy padding dla lepszej widoczności */
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold; /* Pogrubiona czcionka */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem; /* Większy odstęp od ikony */
+  transition: background-color 0.2s, transform 0.2s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.back-to-panel-btn:hover {
+  background-color: #3e6052; /* Ciemniejszy odcień na hover */
+  transform: translateY(-2px); /* Efekt lekkiego uniesienia */
 }

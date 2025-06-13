@@ -1,0 +1,72 @@
+/* src/components/VendorPanel/ReviewsView.css */
+
+.reviews-view-container h2 {
+    margin-top: 0;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    color: #2d3748;
+}
+
+.reviews-list {
+    display: grid;
+    grid-template-columns: 1fr; /* Jedna kolumna na recenzje */
+    gap: 1.5rem;
+}
+
+.review-card {
+    background-color: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-direction: column;
+}
+
+.review-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    margin-bottom: 1rem;
+}
+
+.review-rating .star-filled {
+    color: #f59e0b; /* Kolor złotej gwiazdki */
+}
+
+.review-rating .star-empty {
+    color: #d1d5db; /* Kolor pustej gwiazdki */
+}
+
+.review-book-title {
+    font-size: 0.9rem;
+    color: #4a5568;
+}
+
+.review-card-body p {
+    margin: 0;
+    font-style: italic;
+    color: #374151;
+    line-height: 1.6;
+}
+
+.review-card-footer {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.no-reviews-card {
+    background-color: #fff;
+    border: 1px dashed #e2e8f0;
+    border-radius: 12px;
+    padding: 3rem;
+    text-align: center;
+    color: #6b7280;
+}

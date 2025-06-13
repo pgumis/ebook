@@ -1,6 +1,6 @@
 // frontend/src/components/VendorsBookList/VendorsBookList.jsx
 import "./VendorsBookList.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { viewActions } from "../../store/view";
 
@@ -9,6 +9,9 @@ const VendorsBookList = () => {
   const [loading, setLoading] = useState(true);
   // --- NOWY STAN DO FILTROWANIA ---
   const [statusFilter, setStatusFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [priceFrom, setPriceFrom] = useState('');
+  const [priceTo, setPriceTo] = useState('');
 
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.userData);
@@ -51,6 +54,23 @@ const VendorsBookList = () => {
     pobierzKsiazki();
   }, [userId, userToken]);
 
+  const filteredBooks = useMemo(() => {
+    return books
+        .filter(book => { // Filtr statusu
+          return statusFilter === 'all' || book.status === statusFilter;
+        })
+        .filter(book => { // Filtr wyszukiwania (tytuł lub autor)
+          const term = searchTerm.toLowerCase();
+          return book.tytul.toLowerCase().includes(term) || book.autor.toLowerCase().includes(term);
+        })
+        .filter(book => { // Filtr ceny "od"
+          return priceFrom === '' || book.price >= parseFloat(priceFrom);
+        })
+        .filter(book => { // Filtr ceny "do"
+          return priceTo === '' || book.price <= parseFloat(priceTo);
+        });
+  }, [books, statusFilter, searchTerm, priceFrom, priceTo]);
+
   // --- NOWA FUNKCJA DO WYCOFYWANIA KSIĄŻKI ---
   const handleWithdraw = async (e, bookId) => {
     e.stopPropagation(); // Zapobiega otwarciu szczegółów książki po kliknięciu przycisku
@@ -88,10 +108,7 @@ const VendorsBookList = () => {
   const handleEdit = (e, book) => {
     e.stopPropagation();
     console.log("Przekierowanie do edycji książki:", book);
-    // Tutaj w przyszłości będzie logika otwierająca formularz edycji z danymi książki
-    // dispatch(viewActions.changeView("editBook"));
-    // dispatch(viewActions.setBookDetailsObj(book));
-    alert('Funkcjonalność edycji jest w przygotowaniu!');
+    handleOpenBookDetails(book);
   };
 
   const handleOpenBookDetails = (bookObj) => {
@@ -130,34 +147,43 @@ const VendorsBookList = () => {
     );
   }
 
-  // --- FILTROWANIE KSIĄŻEK PRZED RENDEROWANIEM ---
-  const filteredBooks = books.filter(book => {
-    if (statusFilter === 'all') return true;
-    return book.status === statusFilter;
-  });
 
   return (
       <div className="vendors-book-list-wrapper">
         <div className="list-header">
-          <h4>Twoje książki</h4>
-          <div className="header-actions">
-            {/* --- NOWY FILTR STATUSU --- */}
-            <div className="filter-container">
-              <label htmlFor="status-filter">Filtruj:</label>
-              <select
-                  id="status-filter"
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-              >
-                <option value="all">Wszystkie</option>
-                <option value="aktywny">Aktywne</option>
-                <option value="oczekujący">Oczekujące</option>
-                <option value="wycofany">Wycofane</option>
-              </select>
-            </div>
-            <button className="vendors-book-list-add-new-book" onClick={() => { dispatch(viewActions.changeView("addBook")); }}>
-              + Dodaj nową książkę
-            </button>
+          <h4>Twoje książki ({filteredBooks.length})</h4>
+          <button className="vendors-book-list-add-new-book" onClick={() => dispatch(viewActions.changeView("addBook"))}>
+            + Dodaj nową książkę
+          </button>
+        </div>
+
+        {/* --- NOWY PANEL FILTRÓW --- */}
+        <div className="filters-bar">
+          <div className="filter-input-group search-filter">
+            <i className="fas fa-search"></i>
+            <input
+                type="text"
+                placeholder="Szukaj po tytule lub autorze..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <div className="filter-input-group">
+            <label htmlFor="status-filter">Status:</label>
+            <select id="status-filter" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+              <option value="all">Wszystkie</option>
+              <option value="aktywny">Aktywne</option>
+              <option value="oczekujący">Oczekujące</option>
+              <option value="wycofany">Wycofane</option>
+            </select>
+          </div>
+          <div className="filter-input-group">
+            <label htmlFor="price-from">Cena od:</label>
+            <input id="price-from" type="number" placeholder="np. 10" value={priceFrom} onChange={(e) => setPriceFrom(e.target.value)} />
+          </div>
+          <div className="filter-input-group">
+            <label htmlFor="price-to">Cena do:</label>
+            <input id="price-to" type="number" placeholder="np. 50" value={priceTo} onChange={(e) => setPriceTo(e.target.value)} />
           </div>
         </div>
 
