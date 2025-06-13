@@ -6,6 +6,7 @@
 }
 .admin-content {
   width: 100%;
+  overflow-x: auto;
 }
 
 .admin-sidebar ul {

@@ -9,7 +9,7 @@ import { cartActions } from "../../store/cart";
 const slogans = [
   "Twoja biblioteka w kieszeni",
   "Odkryj nową historię",
-  "Książki zawsze pod ręką"
+  "Książki zawsze pod ręką",
 ];
 
 const typingSpeed = 120; // Szybkość pisania (ms na literę)
@@ -65,7 +65,7 @@ const TopBar = () => {
   const cartItems = useSelector((state) => state.cart.items); // Pobieramy dane koszyka
   const currView = useSelector((state) => state.view.selectedView);
   const cartItemCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
-  const [displayedSlogan, setDisplayedSlogan] = useState('');
+  const [displayedSlogan, setDisplayedSlogan] = useState("");
   const [sloganIndex, setSloganIndex] = useState(0);
 
   useEffect(() => {
@@ -73,19 +73,21 @@ const TopBar = () => {
     const handleTyping = () => {
       const currentSlogan = slogans[sloganIndex];
       let charIndex = 0;
-      setDisplayedSlogan(''); // Resetuj na starcie
+      setDisplayedSlogan(""); // Resetuj na starcie
 
       // Używamy interwału, który będzie pisał litera po literze
       const typingInterval = setInterval(() => {
         if (charIndex < currentSlogan.length) {
-          setDisplayedSlogan(prev => currentSlogan.substring(0, charIndex + 1));
+          setDisplayedSlogan((prev) =>
+            currentSlogan.substring(0, charIndex + 1)
+          );
           charIndex++;
         } else {
           // Jeśli skończyliśmy pisać, zatrzymujemy ten interwał...
           clearInterval(typingInterval);
           // ...i po chwili pauzy, przechodzimy do następnego sloganu
           setTimeout(() => {
-            setSloganIndex(prev => (prev + 1) % slogans.length);
+            setSloganIndex((prev) => (prev + 1) % slogans.length);
           }, sloganPause);
         }
       }, typingSpeed);
@@ -97,7 +99,6 @@ const TopBar = () => {
     // Uruchamiamy cykl pisania
     const cleanup = handleTyping();
     return cleanup;
-
   }, [sloganIndex]);
 
   const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -109,6 +110,7 @@ const TopBar = () => {
       setWindowWidth(window.innerWidth);
     };
     window.addEventListener("resize", handleResize); // nasłuchuj zmiany rozmiaru
+    console.log(windowWidth);
     return () => window.removeEventListener("resize", handleResize); // usuń nasłuchiwacz przy unmount
   }, [windowWidth]);
 
@@ -126,12 +128,12 @@ const TopBar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-
   const handleSignOut = () => {
     dispatch(userDataActions.clearData());
     dispatch(cartActions.clearCart());
     localStorage.clear();
     dispatch(viewActions.changeView("home"));
+
   };
   const isSearchBarVisible = userData.role === "" || userData.role === "klient";
 
@@ -143,8 +145,10 @@ const TopBar = () => {
     setIsMobileMenuOpen(false);
     document.body.classList.remove("no-scroll");
   };
-  const isCustomerView = !userData.role || userData.role === 'klient';
-  const isPrivilegedUser = ['dostawca', 'admin', 'wlasciciel'].includes(userData.role);
+  const isCustomerView = !userData.role || userData.role === "klient";
+  const isPrivilegedUser = ["dostawca", "admin", "wlasciciel"].includes(
+    userData.role
+  );
 
   return (
     <>
@@ -154,119 +158,148 @@ const TopBar = () => {
             ✕
           </button>
           <div className="mobile-nav-menu-options">
-            {!userData.loggedIn && (
+            {userData.role !== "admin" && (
               <>
-                <a
+                <div
+                  className="search-bar-trigger"
                   onClick={() => {
                     handleMenuClose();
-                    dispatch(viewActions.changeView("signIn"));
+                    dispatch(viewActions.toggleSearchOverlay(true));
                   }}
                 >
-                  Zaloguj się
-                </a>
-                <a
-                  onClick={() => {
-                    handleMenuClose();
-                    dispatch(viewActions.changeView("signUp"));
-                  }}
-                >
-                  Zarejestruj się
-                </a>
+                  <i className="fas fa-search"></i>
+                  <span>Wyszukaj tytuł lub autora...</span>
+                </div>
+                {!userData.loggedIn && (
+                  <>
+                    <a
+                      onClick={() => {
+                        handleMenuClose();
+                        dispatch(viewActions.changeView("signIn"));
+                      }}
+                    >
+                      Zaloguj się
+                    </a>
+                    <a
+                      onClick={() => {
+                        handleMenuClose();
+                        dispatch(viewActions.changeView("signUp"));
+                      }}
+                    >
+                      Zarejestruj się
+                    </a>
+                  </>
+                )}
+                {userData.loggedIn && (
+                  <>
+                    <a
+                      onClick={() => {
+                        handleMenuClose();
+                        dispatch(viewActions.changeView("profileDetails"));
+                      }}
+                    >
+                      Zarządzaj profilem
+                    </a>
+                    <a
+                      onClick={() => {
+                        handleMenuClose();
+                        dispatch(viewActions.changeView("cart"));
+                      }}
+                    >
+                      Koszyk
+                    </a>
+
+                    <a
+                      onClick={() => {
+                        handleMenuClose();
+                        dispatch(viewActions.changeView("purchaseHistory"));
+                      }}
+                    >
+                      Historia zamówień
+                    </a>
+                    <a
+                      onClick={() => {
+                        handleMenuClose();
+                        dispatch(viewActions.changeView("contact"));
+                      }}
+                    >
+                      Kontakt
+                    </a>
+                  </>
+                )}
               </>
             )}
-            <a
-              onClick={() => {
-                handleMenuClose();
-                dispatch(viewActions.changeView("profileDetails"));
-              }}
-            >
-              Zarządzaj profilem
-            </a>
-            <a
-              onClick={() => {
-                handleMenuClose();
-                dispatch(viewActions.changeView("cart"));
-              }}
-            >
-              Koszyk
-            </a>
-
-            <a
-              onClick={() => {
-                handleMenuClose();
-                dispatch(viewActions.changeView("purchaseHistory"));
-              }}
-            >
-              Historia zamówień
-            </a>
-            <a
-              onClick={() => {
-                handleMenuClose();
-                dispatch(viewActions.changeView("contact"));
-              }}
-            >
-              Kontakt
-            </a>
-
-            <a
+            {userData.loggedIn === true && <a
               onClick={() => {
                 handleMenuClose();
                 handleSignOut();
               }}
             >
               Wyloguj się
-            </a>
+            </a>}
           </div>
         </div>
       )}
       <nav className="top-bar">
         <div className="top-bar-left-section">
-          <div className="logo-group" onClick={() => dispatch(viewActions.changeView('home'))}>
+          <div
+            className="logo-group"
+            onClick={() => dispatch(viewActions.changeView("home"))}
+          >
             <img src="/logo.png" alt="Logo - ikona" className="top-bar-logo" />
-            <img src="/logo napis.png" alt="E-book na wynos - napis" className="top-bar-logo-napis" />
+            <img
+              src="/logo napis.png"
+              alt="E-book na wynos - napis"
+              className="top-bar-logo-napis"
+            />
           </div>
-          <div className="slogan-container">
-            <span className="logo-slogan">{displayedSlogan}</span>
-            {/* Kursor jest teraz zawsze widoczny, gdy tekst nie jest w pełni wyświetlony */}
-            {displayedSlogan.length < slogans[sloganIndex].length && (
+          {windowWidth > 600 && (
+            <div className="slogan-container">
+              <span className="logo-slogan">{displayedSlogan}</span>
+              {/* Kursor jest teraz zawsze widoczny, gdy tekst nie jest w pełni wyświetlony */}
+              {displayedSlogan.length < slogans[sloganIndex].length && (
                 <span className="typing-cursor">|</span>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </div>
 
-        {isSearchBarVisible && (
-
-            <div
-                className="search-bar-trigger"
-                onClick={() => dispatch(viewActions.toggleSearchOverlay(true))}
-            >
-              <i className="fas fa-search"></i>
-              <span>Wyszukaj tytuł lub autora...</span>
-            </div>
+        {isSearchBarVisible && windowWidth > 900 && (
+          <div
+            className="search-bar-trigger"
+            onClick={() => dispatch(viewActions.toggleSearchOverlay(true))}
+          >
+            <i className="fas fa-search"></i>
+            <span>Wyszukaj tytuł lub autora...</span>
+          </div>
         )}
 
-        {windowWidth > 768 && (
+        {(isSearchBarVisible ? windowWidth > 1200 : windowWidth > 834) && (
           <div className="nav-right-side">
-            <button
-              className="nav-icon-btn"
-              onClick={() => dispatch(viewActions.changeView("contact"))}
-              title="Kontakt"
-            >
-              <i className="fas fa-envelope"></i>
-            </button>
+            {userData.role === "klient" && (
+              <button
+                className="nav-icon-btn"
+                onClick={() => dispatch(viewActions.changeView("contact"))}
+                title="Kontakt"
+              >
+                <i className="fas fa-envelope"></i>
+              </button>
+            )}
 
             {userData.loggedIn ? (
               <>
-                <button
-                  className="nav-icon-btn cart-btn"
-                  onClick={() => dispatch(viewActions.changeView("cart"))}
-                  title="Koszyk"
-                >
-                  <i className="fas fa-shopping-cart"></i>
-                  {cartItemCount > 0 && (
-                    <span className="cart-badge">{cartItemCount}</span>
-                  )}
-                </button>
+                {userData.role === "klient" && (
+                  <button
+                    className="nav-icon-btn cart-btn"
+                    onClick={() => dispatch(viewActions.changeView("cart"))}
+                    title="Koszyk"
+                  >
+                    <i className="fas fa-shopping-cart"></i>
+                    {cartItemCount > 0 && (
+                      <span className="cart-badge">{cartItemCount}</span>
+                    )}
+                  </button>
+                )}
 
                 <div className="profile-section" ref={profileMenuRef}>
                   <div
@@ -284,22 +317,28 @@ const TopBar = () => {
                   </div>
                   {showProfileMenu && (
                     <div className="profile-dropdown-menu">
-                      <TopBarListOption
-                        icon={<ProfileIcon />}
-                        onClick={() =>
-                          dispatch(viewActions.changeView("profileDetails"))
-                        }
-                      >
-                        Zarządzaj profilem
-                      </TopBarListOption>
-                      <TopBarListOption
-                        icon={<HistoryIcon />}
-                        onClick={() =>
-                          dispatch(viewActions.changeView("purchaseHistory"))
-                        }
-                      >
-                        Historia zamówień
-                      </TopBarListOption>
+                      {userData.role === "klient" && (
+                        <>
+                          <TopBarListOption
+                            icon={<ProfileIcon />}
+                            onClick={() =>
+                              dispatch(viewActions.changeView("profileDetails"))
+                            }
+                          >
+                            Zarządzaj profilem
+                          </TopBarListOption>
+                          <TopBarListOption
+                            icon={<HistoryIcon />}
+                            onClick={() =>
+                              dispatch(
+                                viewActions.changeView("purchaseHistory")
+                              )
+                            }
+                          >
+                            Historia zamówień
+                          </TopBarListOption>
+                        </>
+                      )}
                       <TopBarListOption
                         icon={<LogoutIcon />}
                         onClick={handleSignOut}
@@ -329,7 +368,7 @@ const TopBar = () => {
             )}
           </div>
         )}
-        {windowWidth < 768 && (
+        {(isSearchBarVisible ? windowWidth < 1200 : windowWidth < 834) && (
           <button
             className="top-bar-burger"
             aria-label="Otwórz menu kategorii"
