@@ -220,7 +220,7 @@ const BookDetails = () => {
                   {loadingReviews ? <p>Ładowanie recenzji...</p> : (
                       recenzje.length > 0 ? (
                           recenzje.map((recenzja, index) => {
-                            let authorName = "Anonim";
+                            let authorName = "Ty";
                             if (recenzja.uzytkownik && recenzja.uzytkownik.imie && recenzja.uzytkownik.nazwisko) {
                               const pierwszaLiteraNazwiska = recenzja.uzytkownik.nazwisko.charAt(0).toUpperCase();
                               authorName = `${recenzja.uzytkownik.imie} ${pierwszaLiteraNazwiska}.`;
