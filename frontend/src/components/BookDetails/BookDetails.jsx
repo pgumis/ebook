@@ -172,6 +172,7 @@ const BookDetails = () => {
                     }</span>
                   </div>
                   <p className="book-details-price">{selectedBook.cena} zł</p>
+                  {selectedBook.format && <p className="book-format">{selectedBook.format.toUpperCase()}</p>}
                 </div>
 
                 <div className="book-details-actions">

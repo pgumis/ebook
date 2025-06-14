@@ -431,3 +431,18 @@
   background-color: #545b61; /* Ciemniejszy odcień na hover */
   transform: translateY(-2px); /* Efekt lekkiego uniesienia */
 }
+
+.book-details-format {
+  font-size: 0.95em; /* Nieco mniejsza czcionka niż tytuł/autor */
+  color: #666; /* Ciemniejszy szary, aby odróżnić od ceny */
+  margin-top: 5px; /* Mały margines od góry, aby oddzielić od ceny */
+  font-weight: 500; /* Lekko pogrubiony, aby był czytelny */
+  text-transform: uppercase; /* Upewnij się, że tekst jest dużymi literami, jeśli tego chcesz */
+}
+
+/* Możesz też dodać media queries, jeśli potrzebujesz responsywności */
+@media (max-width: 768px) {
+  .book-details-format {
+    font-size: 0.9em;
+  }
+}

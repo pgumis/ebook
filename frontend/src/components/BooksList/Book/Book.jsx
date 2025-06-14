@@ -75,6 +75,7 @@ const Book = ({ bookObj }) => {
                             </span>
                         )}
                     </div>
+                    {bookObj.format && <p className="book-format">{bookObj.format.toUpperCase()}</p>}
                 </div>
                 <div className="book-footer">
                     <p className="book-price">{parseFloat(bookObj.price).toFixed(2)} zł</p>
