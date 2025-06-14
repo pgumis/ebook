@@ -149,7 +149,7 @@ const TopBar = () => {
   const isPrivilegedUser = ["dostawca", "admin", "wlasciciel"].includes(
     userData.role
   );
-  console.log(showProfileMenu);
+
   return (
     <>
       {isMobileMenuOpen && (
