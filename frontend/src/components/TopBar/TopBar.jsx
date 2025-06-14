@@ -132,6 +132,7 @@ const TopBar = () => {
     dispatch(userDataActions.clearData());
     dispatch(cartActions.clearCart());
     localStorage.clear();
+    setShowProfileMenu(false);
     dispatch(viewActions.changeView("home"));
   };
   const isSearchBarVisible = userData.role === "" || userData.role === "klient";
@@ -148,7 +149,7 @@ const TopBar = () => {
   const isPrivilegedUser = ["dostawca", "admin", "wlasciciel"].includes(
     userData.role
   );
-
+  console.log(showProfileMenu);
   return (
     <>
       {isMobileMenuOpen && (
