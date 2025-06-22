@@ -243,3 +243,78 @@
 .message-read {
     color: #6c757d; /* Na przykład lekko wyszarzony tekst */
 }
+
+.details-container {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    animation: fadeIn 0.4s ease-out;
+}
+
+.details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.details-header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.details-body {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.details-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #fcfcfc;
+    border: 1px solid #f0f0f0;
+    border-radius: 5px;
+}
+
+.details-item span {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.details-item strong {
+    color: #222;
+    font-weight: 600;
+    text-align: right;
+}
+
+/* Style dla statusów (wykorzystujemy istniejące klasy) */
+.details-item .status-aktywny {
+    color: #28a745;
+}
+
+.details-item .status-oczekuje {
+    color: #ffc107;
+}
+
+.details-item .status-zablokowany {
+    color: #dc3545;
+}
+
+/* Animacja (może już istnieć w pliku) */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

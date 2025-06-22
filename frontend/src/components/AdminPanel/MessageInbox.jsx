@@ -246,13 +246,13 @@ const MessageInbox = () => {
                   </td>
                   <td>
                     <button
-                      className="action-btn view-btn"
+                      className="action-btn btn-view"
                       onClick={() => openMessage(message)}
                     >
                       Zobacz
                     </button>
                     <button
-                      className="action-btn delete-btn"
+                      className="action-btn btn-delete"
                       onClick={() => handleDeleteMessage(message.id)}
                     >
                       Usuń

@@ -22,7 +22,7 @@ const Pagination = ({ currentPage, lastPage, onPageChange }) => {
   );
 };
 
-const UserManagement = () => {
+const UserManagement = ({ onShowDetails }) => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.userData.token);
 
@@ -36,7 +36,7 @@ const UserManagement = () => {
     key: "created_at",
     direction: "desc",
   });
-
+  const [roleChanges, setRoleChanges] = useState({});
   // --- NOWA, ROZBUDOWANA FUNKCJA POBIERANIA DANYCH ---
   const fetchUsers = useCallback(async () => {
     if (!token) return;
@@ -80,9 +80,46 @@ const UserManagement = () => {
   };
 
   const handleEditClick = (userId) => {
-    console.log(`Przejdź do edycji użytkownika o ID: ${userId}`);
-    // dispatch(viewActions.changeView('adminPanelEditUser'));
-    // dispatch(viewActions.setSelectedItem(userId));
+    // 1. Ustawiamy ID w Reduxie, żeby UserDetails wiedział kogo pobrać
+    dispatch(viewActions.setSelectedItem(userId));
+    // 2. Wywołujemy funkcję z AdminPanel, aby zmienić widok
+    onShowDetails();
+  };
+
+  const handleRoleChange = async (userId, newRole) => {
+    if (!token) return;
+
+    // Aktualizacja stanu lokalnego, aby wyświetlić nową wartość w <select>
+    setRoleChanges(prev => ({ ...prev, [userId]: newRole }));
+
+    try {
+      const response = await fetch(`http://localhost:8000/api/admin/uzytkownicy/${userId}/zmien-role`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({ rola: newRole }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.komunikat || "Wystąpił błąd");
+      }
+
+      // Odśwież listę użytkowników, aby zobaczyć potwierdzone zmiany
+      fetchUsers();
+
+    } catch (error) {
+      console.error("Błąd zmiany roli:", error);
+      // Opcjonalnie: cofnij zmianę w UI w razie błędu
+      setRoleChanges(prev => {
+        const { [userId]: _, ...rest } = prev;
+        return rest;
+      });
+    }
   };
 
   return (
@@ -126,7 +163,18 @@ const UserManagement = () => {
                   {user.imie} {user.nazwisko}
                 </td>
                 <td>{user.email}</td>
-                <td>{user.rola}</td>
+                <td>
+                  <select
+                      className="filter-select" // Używamy istniejącej klasy dla spójności wyglądu
+                      value={roleChanges[user.id] || user.rola}
+                      onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                  >
+                    <option value="klient">Klient</option>
+                    <option value="dostawca">Dostawca</option>
+                    <option value="admin">Admin</option>
+                    <option value="wlasciciel">Właściciel</option>
+                  </select>
+                </td>
                 <td>
                   <span className={`status-badge status-${user.status}`}>
                     {user.status}
