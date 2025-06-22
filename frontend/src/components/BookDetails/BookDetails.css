@@ -446,3 +446,26 @@
     font-size: 0.9em;
   }
 }
+
+.book-details-metadata {
+  margin: 1rem 0;
+  padding: 1rem 0;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem; /* Odstępy między wierszami */
+}
+
+.book-details-metadata p {
+  margin: 0;
+  font-size: 0.95rem; /* Rozmiar czcionki */
+  color: #555; /* Kolor tekstu */
+  display: flex;
+}
+
+.book-details-metadata p strong {
+  color: #111; /* Kolor etykiety */
+  min-width: 120px; /* Stała szerokość dla etykiet, aby ładnie się wyrównały */
+  flex-shrink: 0; /* Zapobiega kurczeniu się etykiet */
+}
