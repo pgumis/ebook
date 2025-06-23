@@ -9,6 +9,7 @@ use App\Models\Uzytkownik;
 use App\Models\Ebook;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class OwnerDashboardController extends Controller
 {
@@ -118,90 +119,129 @@ class OwnerDashboardController extends Controller
 
     public function getUsersAnalysis(Request $request)
     {
-        // 1. Podział użytkowników na role (to już mieliśmy, ale tu się przyda)
+
+        $validator = Validator::make($request->all(), [
+            'startDate' => 'required|date',
+            'endDate' => 'required|date|after_or_equal:startDate',
+            'sort_by' => 'sometimes|in:total_spent,order_count',
+            'direction' => 'sometimes|in:asc,desc',
+            'limit' => 'sometimes|integer|min:1|max:50'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $startDate = Carbon::parse($request->input('startDate'))->startOfDay();
+        $endDate = Carbon::parse($request->input('endDate'))->endOfDay();
+        $sortBy = $request->input('sort_by', 'total_spent');
+        $direction = $request->input('direction', 'desc');
+        $limit = $request->input('limit', 10);
+
+        // Podział użytkowników na role (to zapytanie nie zależy od daty, więc jest OK)
         $usersByRole = Uzytkownik::select('rola', DB::raw('count(*) as total'))
             ->groupBy('rola')
             ->pluck('total', 'rola');
 
-        // 2. Trend rejestracji w ostatnich 30 dniach
+        // Trend rejestracji (teraz używa zakresu dat)
         $registrationTrend = Uzytkownik::select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as count'))
-            ->where('created_at', '>=', Carbon::now()->subDays(30))
+            // --- ZMIANA ---
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->groupBy('date')
             ->orderBy('date', 'asc')
             ->get();
 
-        // 3. Top 10 klientów wg. sumy wydatków
         $topCustomersBySpending = Uzytkownik::join('zamowienia', 'uzytkownicy.id', '=', 'zamowienia.uzytkownik_id')
             ->where('zamowienia.status', 'zrealizowane')
+            ->whereBetween('zamowienia.created_at', [$startDate, $endDate])
             ->select(
-                'uzytkownicy.imie',
-                'uzytkownicy.nazwisko',
-                'uzytkownicy.email',
+                'uzytkownicy.imie', 'uzytkownicy.nazwisko', 'uzytkownicy.email',
                 DB::raw('SUM(zamowienia.suma) as total_spent'),
                 DB::raw('COUNT(zamowienia.id) as order_count')
             )
             ->groupBy('uzytkownicy.id', 'uzytkownicy.imie', 'uzytkownicy.nazwisko', 'uzytkownicy.email')
-            ->orderBy('total_spent', 'desc')
-            ->limit(10)
+            ->orderBy($sortBy, $direction) // Użycie dynamicznego sortowania
+            ->limit($limit) // Użycie dynamicznego limitu
             ->get();
+
+        $newUsersInPeriod = Uzytkownik::select('rola', DB::raw('count(*) as count'))
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->groupBy('rola')
+            ->pluck('count', 'rola');
 
         return response()->json([
             'usersByRole' => $usersByRole,
             'registrationTrend' => $registrationTrend,
             'topCustomersBySpending' => $topCustomersBySpending,
+            'newUsersInPeriod' => $newUsersInPeriod,
         ]);
     }
 
     public function getProductsAnalysis(Request $request)
     {
-        // 1. Najlepiej sprzedające się e-booki (TOP 10)
+        // Pełna walidacja dla wszystkich możliwych parametrów
+        $validator = Validator::make($request->all(), [
+            'startDate' => 'required|date',
+            'endDate' => 'required|date|after_or_equal:startDate',
+            'limit_bestsellers' => 'sometimes|integer|min:1|max:50',
+            'limit_worst_sellers' => 'sometimes|integer|min:1|max:50',
+            'limit_categories' => 'sometimes|integer|min:1|max:50',
+            'direction_categories' => 'sometimes|in:asc,desc',
+            'limit_vendors' => 'sometimes|integer|min:1|max:50',
+            'direction_vendors' => 'sometimes|in:asc,desc',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Pobieranie wszystkich parametrów z requestu
+        $startDate = Carbon::parse($request->input('startDate'))->startOfDay();
+        $endDate = Carbon::parse($request->input('endDate'))->endOfDay();
+        $limitBestsellers = $request->input('limit_bestsellers', 10);
+        $limitWorstSellers = $request->input('limit_worst_sellers', 10);
+        $limitCategories = $request->input('limit_categories', 10);
+        $directionCategories = $request->input('direction_categories', 'desc');
+        $limitVendors = $request->input('limit_vendors', 10);
+        $directionVendors = $request->input('direction_vendors', 'desc');
+
+        // Zapytania o Bestsellery i Najsłabiej sprzedające się (one mają stałe sortowanie)
         $bestSellingEbooks = DB::table('ebooki')
             ->leftJoin('ebook_zamowienie', 'ebooki.id', '=', 'ebook_zamowienie.ebook_id')
+            ->leftJoin('zamowienia', 'ebook_zamowienie.zamowienie_id', '=', 'zamowienia.id')
+            ->where('zamowienia.status', 'zrealizowane')->whereBetween('zamowienia.created_at', [$startDate, $endDate])
             ->select('ebooki.tytul', DB::raw('SUM(ebook_zamowienie.ilosc) as total_sold'))
-            ->groupBy('ebooki.id', 'ebooki.tytul')
-            ->orderBy('total_sold', 'desc')
-            ->limit(10)
-            ->get();
+            ->groupBy('ebooki.id', 'ebooki.tytul')->orderBy('total_sold', 'desc')->limit($limitBestsellers)->get();
 
-        // 2. Najsłabiej sprzedające się e-booki (TOP 10) - które były w sprzedaży
         $worstSellingEbooks = DB::table('ebooki')
-            ->leftJoin('ebook_zamowienie', 'ebooki.id', '=', 'ebook_zamowienie.ebook_id')
-            ->where('ebooki.status', 'aktywny') // Analizujemy tylko aktywne
-            ->select('ebooki.tytul', DB::raw('COALESCE(SUM(ebook_zamowienie.ilosc), 0) as total_sold'))
-            ->groupBy('ebooki.id', 'ebooki.tytul')
-            ->orderBy('total_sold', 'asc')
-            ->limit(10)
-            ->get();
+            ->leftJoin('ebook_zamowienie', function ($join) use ($startDate, $endDate) {
+                $join->on('ebooki.id', '=', 'ebook_zamowienie.ebook_id')
+                    ->leftJoin('zamowienia', 'ebook_zamowienie.zamowienie_id', '=', 'zamowienia.id')
+                    ->where('zamowienia.status', 'zrealizowane')->whereBetween('zamowienia.created_at', [$startDate, $endDate]);
+            })
+            ->where('ebooki.status', 'aktywny')->select('ebooki.tytul', DB::raw('COALESCE(SUM(ebook_zamowienie.ilosc), 0) as total_sold'))
+            ->groupBy('ebooki.id', 'ebooki.tytul')->orderBy('total_sold', 'asc')->limit($limitWorstSellers)->get();
 
-        // 3. Najbardziej dochodowe kategorie
+        // Zapytania o Kategorie i Dostawców (z dynamicznym sortowaniem i limitem)
         $topCategories = DB::table('ebooki')
             ->join('ebook_zamowienie', 'ebooki.id', '=', 'ebook_zamowienie.ebook_id')
             ->join('zamowienia', 'ebook_zamowienie.zamowienie_id', '=', 'zamowienia.id')
-            ->where('zamowienia.status', 'zrealizowane')
+            ->where('zamowienia.status', 'zrealizowane')->whereBetween('zamowienia.created_at', [$startDate, $endDate])
             ->select('ebooki.kategoria', DB::raw('SUM(ebook_zamowienie.cena_jednostkowa * ebook_zamowienie.ilosc) as total_revenue'))
-            ->groupBy('ebooki.kategoria') // Grupujemy po kolumnie kategoria z tabeli 'ebooki'
-            ->orderBy('total_revenue', 'desc')
-            ->limit(10)
-            ->get();
+            ->groupBy('ebooki.kategoria')->orderBy('total_revenue', $directionCategories)->limit($limitCategories)->get();
 
-        // 4. Najlepsi dostawcy (wg. przychodu)
         $topVendors = DB::table('uzytkownicy')
             ->join('ebooki', 'uzytkownicy.id', '=', 'ebooki.uzytkownik_id')
             ->join('ebook_zamowienie', 'ebooki.id', '=', 'ebook_zamowienie.ebook_id')
             ->join('zamowienia', 'ebook_zamowienie.zamowienie_id', '=', 'zamowienia.id')
-            ->where('zamowienia.status', 'zrealizowane')
-            ->where('uzytkownicy.rola', 'dostawca')
+            ->where('zamowienia.status', 'zrealizowane')->where('uzytkownicy.rola', 'dostawca')
+            ->whereBetween('zamowienia.created_at', [$startDate, $endDate])
             ->select('uzytkownicy.imie', 'uzytkownicy.nazwisko', DB::raw('SUM(ebook_zamowienie.cena_jednostkowa * ebook_zamowienie.ilosc) as total_revenue'))
-            ->groupBy('uzytkownicy.id', 'uzytkownicy.imie', 'uzytkownicy.nazwisko')
-            ->orderBy('total_revenue', 'desc')
-            ->limit(10)
-            ->get();
+            ->groupBy('uzytkownicy.id', 'uzytkownicy.imie', 'uzytkownicy.nazwisko')->orderBy('total_revenue', $directionVendors)->limit($limitVendors)->get();
 
         return response()->json([
-            'bestSellingEbooks' => $bestSellingEbooks,
-            'worstSellingEbooks' => $worstSellingEbooks,
-            'topCategories' => $topCategories,
-            'topVendors' => $topVendors,
+            'bestSellingEbooks' => $bestSellingEbooks, 'worstSellingEbooks' => $worstSellingEbooks,
+            'topCategories' => $topCategories, 'topVendors' => $topVendors,
         ]);
     }
 

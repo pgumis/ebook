@@ -1,12 +1,14 @@
 // Plik: src/components/OwnerPanel/views/SalesAnalysisView.jsx
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { Line, Bar } from 'react-chartjs-2';
 import '../OwnerPanel.css';
-import { format, subDays, startOfYear } from 'date-fns';
+import EnhancedDateRangePicker from '../shared/EnhancedDateRangePicker.jsx';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import LoadingSpinner from '../shared/LoadingSpinner';
+import EmptyState from '../shared/EmptyState';
+
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
 const AnalysisCard = ({ title, value, icon }) => (
@@ -17,18 +19,19 @@ const AnalysisCard = ({ title, value, icon }) => (
 );
 
 const SalesAnalysisView = () => {
-    const [startDate, setStartDate] = useState(new Date(new Date().setDate(new Date().getDate() - 29)));
-    const [endDate, setEndDate] = useState(new Date());
     const [analysisData, setAnalysisData] = useState(null);
     const [loading, setLoading] = useState(true);
     const userToken = useSelector(state => state.userData.token);
-
+    const [dateRange, setDateRange] = useState({
+        startDate: null,
+        endDate: null
+    });
     useEffect(() => {
-        if (!userToken) return;
+        if (!userToken || !dateRange.startDate || !dateRange.endDate) return;
         const fetchData = async () => {
             setLoading(true);
-            const formattedStartDate = startDate.toISOString().split('T')[0];
-            const formattedEndDate = endDate.toISOString().split('T')[0];
+            const formattedStartDate = dateRange.startDate.toISOString().split('T')[0];
+            const formattedEndDate = dateRange.endDate.toISOString().split('T')[0];
             try {
                 const response = await fetch(`http://localhost:8000/api/wlasciciel/sales-analysis?startDate=${formattedStartDate}&endDate=${formattedEndDate}`, {
                     headers: { 'Authorization': `Bearer ${userToken}` }
@@ -44,7 +47,11 @@ const SalesAnalysisView = () => {
             }
         };
         fetchData();
-    }, [startDate, endDate, userToken]);
+    }, [dateRange, userToken]);
+
+    const handleDateChange = (start, end) => {
+        setDateRange({ startDate: start, endDate: end });
+    };
 
     const chartOptions = { responsive: true, maintainAspectRatio: false };
     const daysOfWeekLabels = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
@@ -70,11 +77,8 @@ const SalesAnalysisView = () => {
     return (
         <div className="analysis-view">
             <h2>Analiza Sprzedaży</h2>
-            <div className="date-picker-controls">
-                <div><label>Od:</label><DatePicker selected={startDate} onChange={(date) => setStartDate(date)} dateFormat="dd.MM.yyyy" locale="pl"/></div>
-                <div><label>Do:</label><DatePicker selected={endDate} onChange={(date) => setEndDate(date)} dateFormat="dd.MM.yyyy" locale="pl"/></div>
-            </div>
-            {loading ? <p>Analizowanie danych...</p> : !analysisData ? <p>Brak danych do wyświetlenia dla wybranego okresu.</p> : (
+            <EnhancedDateRangePicker onDateChange={handleDateChange} />
+            {loading ? <LoadingSpinner /> : !analysisData ? <EmptyState message="Brak danych do wyświetlenia dla wybranego okresu." /> : (
                 <>
                     <div className="stats-grid">
                         <AnalysisCard title="Całkowity przychód" value={`${(analysisData.kpi.totalRevenue || 0).toFixed(2)} zł`} icon="fas fa-coins" />
