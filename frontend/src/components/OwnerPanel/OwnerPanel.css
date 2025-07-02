@@ -475,3 +475,29 @@ th { background-color: #f8f9fa; }
     font-weight: 500;
     margin: 0;
 }
+
+.year-stepper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+.year-stepper button {
+    background-color: #f8f9fa;
+    border: none;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    font-weight: 500;
+}
+.year-stepper button:hover {
+    background-color: #e2e8f0;
+}
+.year-stepper button:first-child, .year-stepper button:last-child {
+    font-size: 1.2rem;
+    color: #4C7766;
+}
+.year-stepper button.active {
+    background-color: #4C7766;
+    color: white;
+}

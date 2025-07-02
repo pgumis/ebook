@@ -9,8 +9,13 @@ const AboutUs = () => {
             <div className="about-us-card">
                 <h1>O Projekcie "E-BOOK NA WYNOS"</h1>
                 <p className="subtitle">
-                    Platforma e-commerce stworzona w ramach projektu akademickiego.
+                    Platforma e-commerce stworzona w ramach projektu uczelnianego.
                 </p>
+
+                <div className="info-section">
+                    <h2>Uczelnia</h2>
+                    <p>Wyższa Szkoła Przedsiębiorczości i Administracji w Lublinie</p>
+                </div>
 
                 <div className="info-section">
                     <h2>Przedmiot</h2>
@@ -19,8 +24,8 @@ const AboutUs = () => {
 
                 <div className="info-section">
                     <h2>Autorzy</h2>
-                    <p>Paweł Gumiela</p>
                     <p>Michał Boguszko</p>
+                    <p>Paweł Gumiela</p>
                 </div>
 
                 <div className="info-section">

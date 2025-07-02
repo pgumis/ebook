@@ -248,7 +248,7 @@ class OwnerDashboardController extends Controller
     public function generateReport(Request $request)
     {
         $request->validate([
-            'reportType' => 'required|in:sales,users',
+            'reportType' => 'required|in:sales, users, products',
             'startDate' => 'nullable|date',
             'endDate' => 'nullable|date|after_or_equal:startDate',
         ]);
@@ -276,6 +276,21 @@ class OwnerDashboardController extends Controller
             $columns = ['ID Użytkownika', 'Imię', 'Nazwisko', 'Email', 'Rola', 'Data Rejestracji'];
             $query = Uzytkownik::select('id', 'imie', 'nazwisko', 'email', 'rola', 'created_at');
         }
+        elseif ($reportType === 'products') {
+            $columns = ['ID Ebooka', 'Tytuł', 'Kategoria', 'Cena (PLN)', 'Status', 'Sprzedanych sztuk', 'Całkowity przychód'];
+            $query = Ebook::leftJoin('ebook_zamowienie', 'ebooki.id', '=', 'ebook_zamowienie.ebook_id')
+                ->leftJoin('zamowienia', 'ebook_zamowienie.zamowienie_id', '=', 'zamowienia.id')
+                ->where(function ($q) {
+                    $q->where('zamowienia.status', 'zrealizowane')->orWhereNull('zamowienia.id');
+                })
+                ->select(
+                    'ebooki.id', 'ebooki.tytul', 'ebooki.kategoria', 'ebooki.cena', 'ebooki.status',
+                    DB::raw('COALESCE(SUM(ebook_zamowienie.ilosc), 0) as total_sold'),
+                    DB::raw('COALESCE(SUM(ebook_zamowienie.ilosc * ebook_zamowienie.cena_jednostkowa), 0) as total_revenue')
+                )
+                ->groupBy('ebooki.id', 'ebooki.tytul', 'ebooki.kategoria', 'ebooki.cena', 'ebooki.status');
+        }
+
 
         // Filtrowanie po dacie, jeśli podano
         if ($request->filled('startDate') && $request->filled('endDate')) {
@@ -308,6 +323,17 @@ class OwnerDashboardController extends Controller
                         $row->email,
                         $row->rola,
                         $row->created_at,
+                    ]);
+                }
+                elseif ($reportType === 'products') {
+                    fputcsv($file, [
+                        $row->id,
+                        $row->tytul,
+                        $row->kategoria,
+                        number_format($row->cena, 2, '.', ''),
+                        $row->status,
+                        $row->total_sold,
+                        number_format($row->total_revenue, 2, '.', ''),
                     ]);
                 }
             }
