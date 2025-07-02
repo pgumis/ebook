@@ -66,6 +66,7 @@ const ReportsView = () => {
                     <select value={reportType} onChange={e => setReportType(e.target.value)}>
                         <option value="sales">Raport Sprzedaży</option>
                         <option value="users">Raport Użytkowników</option>
+                        <option value="products">Raport Produktów</option>
                     </select>
                 </div>
                 <div className="report-filter-group">

@@ -1,0 +1,54 @@
+/* src/components/AboutUs/AboutUs.css */
+
+.about-us-container {
+    width: 100%;
+    padding: 2rem 0;
+}
+
+.about-us-card {
+    background-color: #fff;
+    padding: 2.5rem 3rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+}
+
+.about-us-card h1 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: #2d3748;
+    font-size: 2rem;
+}
+
+.about-us-card .subtitle {
+    font-size: 1.1rem;
+    color: #718096;
+    margin-bottom: 2.5rem;
+}
+
+.info-section {
+    margin-bottom: 2rem;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 1.5rem;
+}
+
+.info-section:first-of-type {
+    border-top: none;
+    padding-top: 0;
+}
+
+.info-section h2 {
+    font-size: 1.2rem;
+    color: #4C7766; /* Kolor motywu */
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.info-section p {
+    font-size: 1.1rem;
+    color: #2d3748;
+    margin: 0.25rem 0;
+}

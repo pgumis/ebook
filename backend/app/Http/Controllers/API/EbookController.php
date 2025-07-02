@@ -266,7 +266,7 @@ class EbookController extends Controller
 
         $query->orderBy('tytul', 'asc'); // Domyślne sortowanie
 
-        $ebooki = $query->paginate(12); // Paginacja, np. 12 książek na stronę
+        $ebooki = $query->paginate(15); // Paginacja, np. 12 książek na stronę
 
         return response()->json($ebooki);
     }

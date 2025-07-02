@@ -23,6 +23,9 @@ const viewSlice = createSlice({
                 state.selectedItemId = action.payload.itemId;
             }
         },
+        setSelectedItem(state, action) {
+            state.selectedItemId = action.payload;
+        },
         setBookDetailsObj(state,action){
             state.bookDetailsObj = action.payload
         },

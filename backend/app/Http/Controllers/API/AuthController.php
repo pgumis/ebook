@@ -187,7 +187,7 @@ class AuthController extends Controller
             'imie' => 'required|string|min:2|max:30',
             'nazwisko' => 'required|string|min:2|max:40',
             'email' => 'required|email|max:60|unique:uzytkownicy,email,' . $uzytkownik->id,
-            'numer_telefonu' => 'required|string|min:7|max:13',
+            'numer_telefonu' => 'nullable|string|min:7|max:13',
             'profilePic' => 'nullable|string|max:255',
         ]);
 

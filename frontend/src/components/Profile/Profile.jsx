@@ -108,6 +108,7 @@ const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [cacheBuster, setCacheBuster] = useState(Date.now());
 
   useEffect(() => {
     setEditedFirstName(userData.imie || "");
@@ -115,6 +116,7 @@ const Profile = () => {
     setEditedEmail(userData.email || "");
     setEditedPhoneNumber(userData.phoneNumber || "");
     setProfileImage(userData.profilePic || "/avatars/avatar1.png");
+    setCacheBuster(Date.now());
   }, [userData]);
 
   // Wszystkie Twoje funkcje (handleAvatarSelect, toggleEditMode, handleSubmit) pozostają bez zmian.
@@ -159,6 +161,7 @@ const Profile = () => {
         setMessage({ type: "success", text: result.message });
         setIsEditing(false);
         dispatch(userDataActions.setData(result.user));
+        setCacheBuster(Date.now());
       } else {
         setMessage({ type: "error", text: result.message || "Wystąpił błąd." });
       }
@@ -175,7 +178,7 @@ const Profile = () => {
         {/* === NOWY, NOWOCZESNY NAGŁÓWEK PROFILU === */}
         <div className="profile-header">
           <div className="profile-header-avatar">
-            <img src={profileImage} alt="Zdjęcie profilowe" />
+            <img src={`${profileImage}?v=${cacheBuster}`} alt="Zdjęcie profilowe" />
             {isEditing && (
                 <button className="change-avatar-btn" onClick={() => setShowAvatarPicker(p => !p)}>
                   <i className="fas fa-camera"></i>
@@ -197,7 +200,7 @@ const Profile = () => {
             <div className="profile-section-card avatar-picker-container">
               <div className="avatar-picker">
                 {avatarNumbers.map((num) => (
-                    <img key={num} src={`/avatars/avatar${num}.png`} alt={`Awatar ${num}`}
+                    <img key={num} src={`/avatars/avatar${num}.png?v=${cacheBuster}`} alt={`Awatar ${num}`}
                          className={`avatar-thumbnail ${profileImage === `/avatars/avatar${num}.png` ? 'selected-avatar' : ''}`}
                          onClick={() => handleAvatarSelect(num)} />
                 ))}

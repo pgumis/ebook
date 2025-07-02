@@ -315,4 +315,58 @@ class AdminController extends Controller
 
         return response()->json(['komunikat' => 'Wiadomość została usunięta.'], 200);
     }
+
+    public function zmienRolaUzytkownika(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'rola' => 'required|string|in:klient,dostawca,admin,wlasciciel',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['bledy' => $validator->errors()], 422);
+        }
+
+        $uzytkownik = Uzytkownik::find($id);
+
+        if (!$uzytkownik) {
+            return response()->json(['komunikat' => 'Użytkownik nie został znaleziony.'], 404);
+        }
+
+        $uzytkownik->rola = $request->input('rola');
+        $uzytkownik->save();
+
+        return response()->json(['komunikat' => 'Rola użytkownika została zaktualizowana.', 'uzytkownik' => $uzytkownik]);
+    }
+
+    public function aktualizujUzytkownika(Request $request, $id)
+    {
+        $uzytkownik = Uzytkownik::find($id);
+        if (!$uzytkownik) {
+            return response()->json(['komunikat' => 'Użytkownik nie znaleziony.'], 404);
+        }
+
+        // Walidacja danych wejściowych
+        $validator = Validator::make($request->all(), [
+            'imie' => 'sometimes|required|string|max:255',
+            'nazwisko' => 'sometimes|required|string|max:255',
+            // Upewnij się, że email jest unikalny, ignorując obecnego użytkownika
+            'email' => 'sometimes|required|email|max:255|unique:uzytkownicy,email,' . $id,
+            'numer_telefonu' => 'nullable|string|max:20',
+            'rola' => 'sometimes|required|string|in:klient,dostawca,admin,wlasciciel',
+            'status' => 'sometimes|required|string|in:aktywny,nieaktywny,zablokowany',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Błąd walidacji', 'errors' => $validator->errors()], 422);
+        }
+
+        // Aktualizacja danych
+        $uzytkownik->fill($request->only(['imie', 'nazwisko', 'email', 'numer_telefonu', 'rola', 'status']));
+        $uzytkownik->save();
+
+        return response()->json([
+            'message' => 'Dane użytkownika zostały zaktualizowane.',
+            'user' => $uzytkownik
+        ], 200);
+    }
 }

@@ -116,3 +116,33 @@
     font-size: 1.2rem;
   }
 }
+.action-btn {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  font-weight: 500; /* Lżejsza czcionka niż w menu */
+  font-size: 0.85rem;
+  margin-right: 5px;
+  transition: background-color 0.2s, transform 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+/* Przycisk "Zobacz" - zielony, jak motyw przewodni panelu */
+.action-btn.btn-view {
+  background-color: #4c7766;
+}
+
+/* Przycisk "Usuń" - czerwony, intuicyjny dla operacji usuwania */
+.action-btn.btn-delete {
+  background-color: #dc3545;
+}

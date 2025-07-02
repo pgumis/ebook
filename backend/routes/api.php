@@ -137,6 +137,8 @@ Route::middleware('auth:sanctum')
 Route::middleware(['auth:sanctum', 'sprawdz.role:admin'])->prefix('admin')->group(function () {
     Route::get('/uzytkownicy', [AdminController::class, 'wszyscyUzytkownicy']);
     Route::get('/uzytkownicy/{id}', [AdminController::class, 'szczegolyUzytkownika']);
+    Route::put('/uzytkownicy/{id}', [AdminController::class, 'aktualizujUzytkownika']);
+    Route::put('/uzytkownicy/{id}/zmien-role', [AdminController::class, 'zmienRolaUzytkownika']);
     Route::get('/ebooki', [AdminController::class, 'wszystkieEbooki']);
     Route::put('/ebooki/{id}/status', [AdminController::class, 'zmienStatusEbooka']);
     Route::get('/recenzje', [AdminController::class, 'wszystkieRecenzje']);
@@ -146,6 +148,7 @@ Route::middleware(['auth:sanctum', 'sprawdz.role:admin'])->prefix('admin')->grou
     Route::get('/wiadomosci', [AdminController::class, 'wszystkieWiadomosci']);
     Route::put('/wiadomosci/{id}/przeczytaj', [AdminController::class, 'oznaczJakoPrzeczytana']);
     Route::delete('/wiadomosci/{id}', [AdminController::class, 'usunWiadomosc']);
+
 });
 
 Route::middleware(['auth:sanctum', 'sprawdz.role:wlasciciel'])->prefix('wlasciciel')->group(function () {

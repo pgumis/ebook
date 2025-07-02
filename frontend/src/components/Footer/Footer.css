@@ -1,14 +1,100 @@
-.footer {
+/* Główny kontener stopki */
+.site-footer {
+  background-color: #26272b; /* Ciemny, prawie czarny kolor tła */
+  color: #a7a7a7; /* Jasnoszary kolor tekstu */
+  padding: 45px 0 20px;
+  font-size: 15px;
+  line-height: 24px;
   width: 100%;
-  height: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #fff;
-  font-weight: bold;
+  margin-top: auto; /* Wypycha stopkę na dół w kontenerze flexbox */
+}
+
+/* Kontener z kolumnami */
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsywne kolumny */
+  gap: 30px;
+  max-width: 1170px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.footer-column h4 {
+  color: #fff;
+  font-size: 18px;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+/* Ozdobna linia pod nagłówkami */
+.footer-column h4::after {
+  content: '';
   position: absolute;
-  bottom: 0;
-  clear: both;
+  left: 0;
+  bottom: -10px;
+  background-color: #4C7766; /* Kolor motywu */
+  height: 2px;
+  width: 50px;
+}
+
+.footer-about {
+  margin-top: 30px;
+}
+
+/* Lista linków */
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 30px 0 0 0;
+}
+
+.footer-links a {
+  color: #a7a7a7;
+  text-decoration: none;
+  display: block;
+  padding-bottom: 10px;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #fff;
+}
+
+/* Media społecznościowe */
+.social-links {
+  margin-top: 30px;
+  display: flex;
+  gap: 15px;
+}
+
+.social-links a {
+  color: #fff;
+  background-color: #33383d;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+/* Animacja po najechaniu myszką */
+.social-links a:hover {
+  background-color: #4C7766; /* Zmiana koloru tła na kolor motywu */
+  transform: translateY(-5px); /* Uniesienie ikonki */
 }
 
 
+.footer-bottom {
+  border-top: 1px solid #33383d;
+  text-align: center;
+  padding: 20px 0;
+  margin-top: 30px;
+}
+
+.footer-bottom p {
+  margin: 0;
+  font-size: 14px;
+}

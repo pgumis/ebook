@@ -20,8 +20,9 @@ const AdminPanel = () => {
   const renderActiveView = () => {
     switch (activeView) {
       case "users":
-        return <UserManagement />;
-
+        return <UserManagement onShowDetails={() => setActiveView("userDetails")} />;
+      case "userDetails":
+        return <UserDetails onGoBack={() => setActiveView("users")} />;
       case "ebooks":
         return <EbookManagement />;
       case "reviews":
@@ -31,7 +32,7 @@ const AdminPanel = () => {
       case "messages":
         return <MessageInbox />;
       default:
-        return <UserManagement />;
+        return <UserManagement onShowDetails={() => setActiveView("userDetails")} />;
     }
   };
 

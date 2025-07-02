@@ -164,15 +164,35 @@ const BookDetails = () => {
                 <div className="book-details-main-text">
                   <p className="book-details-title">{selectedBook.tytul}</p>
                   <p className="book-details-author">{selectedBook.autor}</p>
+
+                  {/* --- POCZĄTEK ZMIANY: NOWA SEKCJA Z METADANYMI --- */}
+                  <div className="book-details-metadata">
+                    {selectedBook.wydawnictwo && (
+                        <p><strong>Wydawnictwo:</strong> {selectedBook.wydawnictwo}</p>
+                    )}
+                    {selectedBook.liczba_stron && (
+                        <p><strong>Liczba stron:</strong> {selectedBook.liczba_stron}</p>
+                    )}
+                    {selectedBook.jezyk && (
+                        <p><strong>Język:</strong> {selectedBook.jezyk}</p>
+                    )}
+                    {selectedBook.isbn && (
+                        <p><strong>ISBN:</strong> {selectedBook.isbn}</p>
+                    )}
+                    {selectedBook.format && (
+                        <p><strong>Format:</strong> {selectedBook.format.toUpperCase()}</p>
+                    )}
+                  </div>
+                  {/* --- KONIEC ZMIANY --- */}
+
                   <div className="book-details-rating">
-                    {generateStars(selectedBook.rating)}
-                    <span className="book-details-rating-value">{ !isNaN(parseFloat(selectedBook.rating))
-                        ? `(${parseFloat(selectedBook.rating).toFixed(1)})`
+                    {generateStars(selectedBook.recenzje_avg_ocena || 0)}
+                    <span className="book-details-rating-value">{!isNaN(parseFloat(selectedBook.recenzje_avg_ocena))
+                        ? `(${(parseFloat(selectedBook.recenzje_avg_ocena)).toFixed(1)})`
                         : '(Brak ocen)'
                     }</span>
                   </div>
-                  <p className="book-details-price">{selectedBook.cena} zł</p>
-                  {selectedBook.format && <p className="book-format">{selectedBook.format.toUpperCase()}</p>}
+                  <p className="book-details-price">{parseFloat(selectedBook.cena).toFixed(2)} zł</p>
                 </div>
 
                 <div className="book-details-actions">
@@ -220,7 +240,7 @@ const BookDetails = () => {
                   {loadingReviews ? <p>Ładowanie recenzji...</p> : (
                       recenzje.length > 0 ? (
                           recenzje.map((recenzja, index) => {
-                            let authorName = "Anonim";
+                            let authorName = "Ty";
                             if (recenzja.uzytkownik && recenzja.uzytkownik.imie && recenzja.uzytkownik.nazwisko) {
                               const pierwszaLiteraNazwiska = recenzja.uzytkownik.nazwisko.charAt(0).toUpperCase();
                               authorName = `${recenzja.uzytkownik.imie} ${pierwszaLiteraNazwiska}.`;
