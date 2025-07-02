@@ -1,8 +1,16 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { viewActions } from '../../store/view';
 import './Footer.css';
 
 const Footer = () => {
     const year = new Date().getFullYear();
+    const dispatch = useDispatch();
+
+    const handleLinkClick = (e, viewName) => {
+        e.preventDefault();
+        dispatch(viewActions.changeView(viewName));
+    };
 
     return (
         <footer className="site-footer">
@@ -19,7 +27,7 @@ const Footer = () => {
                 <div className="footer-column">
                     <h4>Szybkie Linki</h4>
                     <ul className="footer-links">
-                        <li><a href="#">O nas</a></li>
+                        <li><a href="#" onClick={(e) => handleLinkClick(e, 'about')}>O nas</a></li>
                         <li><a href="#">FAQ</a></li>
                         <li><a href="#">Regulamin</a></li>
                         <li><a href="#">Polityka Prywatności</a></li>

@@ -29,6 +29,7 @@ import OwnerPanel from "./components/OwnerPanel/OwnerPanel";
 import SearchOverlay from './components/SearchOverlay/SearchOverlay';
 import { registerLocale } from "react-datepicker";
 import pl from "date-fns/locale/pl";
+import AboutUs from "./components/AboutUs/AboutUs";
 
 registerLocale("pl", pl);
 function App() {
@@ -84,6 +85,7 @@ function App() {
           {currView.selectedView === "editBookDetails" && <VendorEditBookDetails />}
           {currView.selectedView === "addBook" && <VendorAddBook />}
           {currView.selectedView === "checkout" && <CheckoutPage />}
+          {currView.selectedView === "about" && <AboutUs />}
         </div>
         <Footer />
       </div>
