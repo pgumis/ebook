@@ -1,6 +1,6 @@
 .admin-panel-layout {
   display: grid;
-  grid-template-columns: 260px 1fr; /* Zwiększamy lekko szerokość menu */
+  grid-template-columns: 260px 1fr;
   gap: 30px;
   align-items: flex-start;
 }
@@ -23,10 +23,9 @@
   margin-bottom: 5px;
   transition: background-color 0.2s, color 0.2s, transform 0.2s ease;
 
-  /* -> NOWE STYLE: Ustawiamy elementy w rzędzie i wyrównujemy */
   display: flex;
   align-items: center;
-  gap: 15px; /* Odstęp między ikoną a tekstem */
+  gap: 15px;
 }
 
 .admin-sidebar li:hover {
@@ -41,11 +40,11 @@
   transform: translateX(0);
 }
 
-/* -> NOWE STYLE: Nadajemy stałą szerokość ikonom dla równego ułożenia */
+
 .admin-sidebar li i {
-  width: 20px; /* Stała szerokość kontenera ikony */
-  text-align: center; /* Wyśrodkowanie ikony w jej kontenerze */
-  font-size: 1.1rem; /* Rozmiar samej ikony */
+  width: 20px; 
+  text-align: center;
+  font-size: 1.1rem;
 }
 .mobile-button-grid {
   display: grid;
@@ -122,7 +121,7 @@
   border-radius: 6px;
   cursor: pointer;
   color: white;
-  font-weight: 500; /* Lżejsza czcionka niż w menu */
+  font-weight: 500;
   font-size: 0.85rem;
   margin-right: 5px;
   transition: background-color 0.2s, transform 0.2s;
@@ -137,12 +136,10 @@
   filter: brightness(1.1);
 }
 
-/* Przycisk "Zobacz" - zielony, jak motyw przewodni panelu */
 .action-btn.btn-view {
   background-color: #4c7766;
 }
 
-/* Przycisk "Usuń" - czerwony, intuicyjny dla operacji usuwania */
 .action-btn.btn-delete {
   background-color: #dc3545;
 }

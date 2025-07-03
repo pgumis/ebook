@@ -1,4 +1,3 @@
-/* src/components/SearchOverlay/SearchOverlay.css */
 .search-overlay-backdrop {
     position: fixed;
     top: 0;
@@ -129,7 +128,7 @@
 }
 
 .search-filters-bar {
-    flex-wrap: wrap; /* Pozwala filtrom przechodzić do nowej linii na mniejszych ekranach */
+    flex-wrap: wrap;
 }
 
 .filter-group.price-filter {
@@ -137,15 +136,15 @@
 }
 
 .filter-group.price-filter input {
-    width: 80px; /* Stała szerokość dla pól ceny */
+    width: 80px;
 }
 
 .filter-group.sort-filter {
-    margin-left: auto; /* Przesuwa sortowanie do prawej krawędzi */
+    margin-left: auto;
 }
 
 .price-inputs-row {
     display: flex;
-    align-items: center; /* Wyrównuje inputy i myślnik w pionie */
-    gap: 0.5rem; /* Odstęp między elementami */
+    align-items: center;
+    gap: 0.5rem;
 }

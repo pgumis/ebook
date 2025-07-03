@@ -1,10 +1,9 @@
-// src/components/SearchOverlay/SearchOverlay.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { viewActions } from '../../store/view';
 import './SearchOverlay.css';
 
-// Prosty hook do opóźniania wykonania funkcji (debounce)
+
 const useDebounce = (value, delay) => {
     const [debouncedValue, setDebouncedValue] = useState(value);
     useEffect(() => {
@@ -33,7 +32,7 @@ const SearchOverlay = () => {
     const [sortBy, setSortBy] = useState('relevance');
     const [kategorie, setKategorie] = useState([]);
 
-    const debouncedSearchTerm = useDebounce(searchTerm, 300); // Czekaj 300ms po zaprzestaniu pisania
+    const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
     useEffect(() => {
         const fetchKategorie = async () => {
@@ -131,7 +130,7 @@ const SearchOverlay = () => {
                     </div>
                     <div className="filter-group price-filter">
                         <label>Cena:</label>
-                        <div className="price-inputs-row"> {/* <-- NOWY DIV OPAKOWUJĄCY */}
+                        <div className="price-inputs-row">
                             <input type="number" name="cena_min" placeholder="Od" value={filters.cena_min} onChange={handleFilterChange} />
                             <span>-</span>
                             <input type="number" name="cena_max" placeholder="Do" value={filters.cena_max} onChange={handleFilterChange} />

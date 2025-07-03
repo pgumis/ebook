@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { viewActions } from "../../store/view";
-import "./VendorEditBookDetails.css"; // Style specyficzne dla formularza
-import "../BookDetails/BookDetails.css"; // Importujemy style layoutu ze szczegółów książki
+import "./VendorEditBookDetails.css";
+import "../BookDetails/BookDetails.css";
 
 const VendorEditBookDetails = () => {
   const dispatch = useDispatch();

@@ -1,104 +1,117 @@
-/* src/components/VendorPanel/DashboardContainer_Vendor.css */
-
-/* Główny layout dla treści pod kartami KPI */
 .dashboard-main-content-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr; /* Dwie kolumny: lewa szersza, prawa węższa */
-    gap: 1.5rem;
-    margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .right-column-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-/* Karta z recenzjami */
 .recent-reviews-card h4 {
-    margin: 0 0 1rem 0;
-    font-size: 1.1rem;
-    color: #333;
-    font-weight: 600;
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: 600;
 }
 
 .review-item-widget {
-    padding: 1rem 0;
-    border-bottom: 1px solid #919191;
-
+  padding: 1rem 0;
+  border-bottom: 1px solid #919191;
 }
 .review-item-widget:not(:last-child) {
-    border-bottom: 1px solid #919191;
+  border-bottom: 1px solid #919191;
 }
 
 .review-item-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    font-size: 0.95rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
 }
-.review-rating-widget .star-filled { color: #f59e0b; }
-.review-rating-widget .star-empty { color: #d1d5db; }
+.review-rating-widget .star-filled {
+  color: #f59e0b;
+}
+.review-rating-widget .star-empty {
+  color: #d1d5db;
+}
 
 .review-comment-widget {
-    font-style: italic;
-    color: #555;
-    margin: 0 0 0.5rem 0;
+  font-style: italic;
+  color: #555;
+  margin: 0 0 0.5rem 0;
 }
 
 .review-author-widget {
-    display: block;
-    text-align: right;
-    font-size: 0.85rem;
-    color: #777;
+  display: block;
+  text-align: right;
+  font-size: 0.85rem;
+  color: #777;
 }
 
-/* Karta Szybkich Akcji */
 .quick-actions-card {
-    text-align: center;
+  text-align: center;
 }
-.quick-actions-card h4 { margin: 0 0 1rem 0; }
+.quick-actions-card h4 {
+  margin: 0 0 1rem 0;
+}
 .add-book-button {
-    width: 100%;
-    padding: 1rem;
-    font-size: 1rem;
-    font-weight: bold;
-    color: #fff;
-    background-color: #4C7766;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #4c7766;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.add-book-button:hover { background-color: #3e6052; transform: translateY(-2px); }
-.add-book-button i { margin-right: 0.75rem; }
-
-/* Widget z bestsellerami */
-.top-ebooks-widget-card h4 { margin: 0 0 1rem 0; }
-.top-ebooks-widget-card ol { list-style-position: inside; padding-left: 0; margin: 0; }
+.add-book-button:hover {
+  background-color: #3e6052;
+  transform: translateY(-2px);
+}
+.add-book-button i {
+  margin-right: 0.75rem;
+}
+.top-ebooks-widget-card h4 {
+  margin: 0 0 1rem 0;
+}
+.top-ebooks-widget-card ol {
+  list-style-position: inside;
+  padding-left: 0;
+  margin: 0;
+}
 .top-ebooks-widget-card li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.6rem 0;
-    font-size: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  font-size: 0.9rem;
 }
-.top-ebooks-widget-card li:not(:last-child) { border-bottom: 1px solid #f0f0f0; }
-.top-ebooks-widget-card strong { color: #4C7766; }
+.top-ebooks-widget-card li:not(:last-child) {
+  border-bottom: 1px solid #f0f0f0;
+}
+.top-ebooks-widget-card strong {
+  color: #4c7766;
+}
 
 .review-rating-widget {
-    display: flex;
-    align-items: center;
-    gap: 0.2rem; /* Dodaje odstęp między gwiazdkami a liczbą */
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
 }
 
 .numeric-rating {
-    font-size: 0.85rem;
-    font-weight: bold;
-    color: #6c757d; /* Delikatnie szary kolor */
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #6c757d;
 }

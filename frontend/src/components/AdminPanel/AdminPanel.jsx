@@ -13,8 +13,8 @@ const AdminPanel = () => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
-    window.addEventListener("resize", handleResize); // nasłuchuj zmiany rozmiaru
-    return () => window.removeEventListener("resize", handleResize); // usuń nasłuchiwacz przy unmount
+    window.addEventListener("resize", handleResize); 
+    return () => window.removeEventListener("resize", handleResize);
   }, [windowWidth]);
 
   const renderActiveView = () => {
@@ -42,7 +42,6 @@ const AdminPanel = () => {
         <aside className="admin-sidebar">
           <nav>
             <ul>
-              {/* -> DODANE IKONY DO KAŻDEJ POZYCJI */}
               <li
                 className={activeView === "users" ? "active" : ""}
                 onClick={() => setActiveView("users")}

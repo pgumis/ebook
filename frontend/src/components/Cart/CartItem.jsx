@@ -1,9 +1,7 @@
 import React from 'react';
-import './Cart.css'; // Współdzielimy style z Cart.css
-
-// Komponent przyjmuje 'item' oraz funkcję 'onDelete' jako propsy
+import './Cart.css';
 const CartItem = ({ item, onDelete }) => {
-    // Zabezpieczenie na wypadek, gdyby cena była tekstem (chociaż naprawimy to w Redux)
+
     const priceAsNumber = parseFloat(item.price) || 0;
 
     return (

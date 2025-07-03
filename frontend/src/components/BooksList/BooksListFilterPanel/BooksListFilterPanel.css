@@ -1,5 +1,3 @@
-/* src/components/BooksList/BooksListFilterPanel/BooksListFilterPanel.css */
-
 .filter-panel {
     background-color: #f9f9f9;
     padding: 20px;
@@ -11,7 +9,7 @@
 .filter-panel h3 {
     font-size: 1.25rem;
     margin-top: 0;
-    margin-bottom: 0; /* Usunięte z nagłówka .filter-panel-header */
+    margin-bottom: 0;
 }
 
 .filter-panel-list {

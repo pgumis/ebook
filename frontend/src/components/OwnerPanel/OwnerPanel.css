@@ -1,6 +1,3 @@
-/* src/components/OwnerPanel/OwnerPanel.css */
-
-/* Główny layout siatki */
 .owner-panel-layout {
     display: grid;
     grid-template-columns: 260px 1fr;
@@ -8,7 +5,6 @@
     background-color: #f8f9fa;
 }
 
-/* --- Style dla menu bocznego (Sidebar) --- */
 .panel-sidebar {
     background-color: #ffffff;
     border-right: 1px solid #e2e8f0;
@@ -69,7 +65,6 @@
     font-size: 1.1rem;
 }
 
-/* --- Style dla głównej treści --- */
 .panel-main-content {
     padding: 2rem;
     overflow-y: auto;
@@ -82,7 +77,6 @@
     color: #2d3748;
 }
 
-/* Style dla kart ze statystykami (używane w MainDashboardView) */
 .stat-card {
     background-color: #fff;
     padding: 1.5rem;
@@ -97,7 +91,6 @@
 .stat-info p { margin: 0.25rem 0 0 0; font-size: 1.75rem; font-weight: bold; color: #2d3748;}
 
 
-/* Style dla widoków analitycznych (używane m.in. w SalesAnalysisView) */
 .analysis-view {
     display: flex;
     flex-direction: column;
@@ -169,31 +162,26 @@ th { background-color: #f8f9fa; }
     background-color: #ccc;
 }
 
-/* Plik: src/styles/CustomDatePicker.css */
-
-/* Zmiana wyglądu inputa, w którym jest data */
 .date-picker-controls input {
     padding: 0.5rem 0.75rem;
     border-radius: 6px;
     border: 1px solid #ced4da;
     background-color: #fff;
     font-size: 0.9rem;
-    width: 120px; /* Stała szerokość dla estetyki */
+    width: 120px;
     text-align: center;
     cursor: pointer;
 }
 
-/* Główny kontener kalendarza */
 .react-datepicker {
-    font-family: 'Lato', sans-serif; /* Używamy spójnej czcionki */
+    font-family: 'Lato', sans-serif;
     border: 1px solid #e0e0e0 !important;
     border-radius: 12px !important;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
 }
 
-/* Nagłówek kalendarza (z nazwą miesiąca) */
 .react-datepicker__header {
-    background-color: #4C7766 !important; /* Twój główny kolor */
+    background-color: #4C7766 !important;
     border-bottom: none !important;
     border-radius: 12px 12px 0 0 !important;
     padding-top: 15px !important;
@@ -201,17 +189,15 @@ th { background-color: #f8f9fa; }
 
 .react-datepicker__current-month,
 .react-datepicker__day-name {
-    color: white !important; /* Biały tekst na ciemnym tle */
+    color: white !important;
     font-weight: bold !important;
 }
 
-/* Strzałki do zmiany miesiąca */
 .react-datepicker__navigation-icon::before {
     border-color: white !important;
     border-width: 2px 2px 0 0 !important;
 }
 
-/* Pojedynczy dzień w kalendarzu */
 .react-datepicker__day {
     transition: all 0.2s ease !important;
     border-radius: 50% !important;
@@ -222,7 +208,6 @@ th { background-color: #f8f9fa; }
     border-radius: 50% !important;
 }
 
-/* Dzień, który jest aktualnie wybrany */
 .react-datepicker__day--selected,
 .react-datepicker__day--in-selecting-range,
 .react-datepicker__day--in-range {
@@ -236,7 +221,6 @@ th { background-color: #f8f9fa; }
     color: #333 !important;
 }
 
-/* Dzisiejszy dzień */
 .react-datepicker__day--today {
     font-weight: bold !important;
     border: 1px solid #4C7766;
@@ -250,8 +234,8 @@ th { background-color: #f8f9fa; }
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     display: flex;
     align-items: center;
-    gap: 2rem; /* Większy odstęp między grupami filtrów */
-    flex-wrap: wrap; /* Responsywność na mniejszych ekranach */
+    gap: 2rem;
+    flex-wrap: wrap;
 }
 
 .report-filter-group {
@@ -265,7 +249,6 @@ th { background-color: #f8f9fa; }
     color: #4a5568;
 }
 
-/* Spójne style dla selecta i inputa z DatePicker */
 .report-filter-group select,
 .report-generator-form .react-datepicker-wrapper input {
     padding: 0.6rem 1rem;
@@ -284,7 +267,6 @@ th { background-color: #f8f9fa; }
     outline: none;
 }
 
-/* Główny przycisk akcji */
 .report-generate-btn {
     background-color: #4C7766;
     color: white;
@@ -294,7 +276,7 @@ th { background-color: #f8f9fa; }
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.2s, transform 0.2s;
-    margin-left: auto; /* Przesuwa przycisk do prawej krawędzi */
+    margin-left: auto;
 }
 
 .report-generate-btn:hover:not(:disabled) {
@@ -345,18 +327,15 @@ th { background-color: #f8f9fa; }
     border-color: #4C7766;
 }
 
-    /* --- Ulepszone style dla niestandardowego filtra daty --- */
-
 .custom-range-picker {
     display: flex;
-    gap: 1.5rem; /* Zmniejszamy lekko odstęp dla zwartości */
+    gap: 1.5rem;
     align-items: center;
     padding-top: 1rem;
     border-top: 1px solid #e2e8f0;
-    margin-top: 1rem; /* Dodajemy margines dla separacji od przycisków */
+    margin-top: 1rem;
 }
 
-/* Styl dla grupy 'Etykieta + Pole input' */
 .custom-range-picker > div {
     display: flex;
     align-items: center;
@@ -368,7 +347,6 @@ th { background-color: #f8f9fa; }
     color: #4a5568;
 }
 
-/* Precyzyjne stylowanie samego pola input wewnątrz komponentu DatePicker */
 .custom-range-picker .react-datepicker-wrapper input {
     padding: 0.6rem 1rem;
     border-radius: 8px;
@@ -377,11 +355,10 @@ th { background-color: #f8f9fa; }
     font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.2s ease;
-    width: 130px; /* Lekko szersze pole dla daty */
+    width: 130px;
     text-align: center;
 }
 
-/* Efekt "focus" po kliknięciu na pole daty, spójny z innymi polami */
 .custom-range-picker .react-datepicker-wrapper input:focus {
     border-color: #4C7766;
     box-shadow: 0 0 0 3px rgba(76, 119, 102, 0.2);
@@ -393,7 +370,7 @@ th { background-color: #f8f9fa; }
     display: flex;
     gap: 1rem;
     margin-top: 1rem;
-    margin-bottom: 1.5rem; /* Odstęp od wykresu pod spodem */
+    margin-bottom: 1.5rem;
     border-top: 1px solid #e2e8f0;
     padding-top: 1rem;
 }
@@ -448,8 +425,8 @@ th { background-color: #f8f9fa; }
 
 .table-container table th:first-child,
 .table-container table td:first-child {
-    width: 60px; /* Stała, niewielka szerokość */
-    text-align: center; /* Wyśrodkowanie tekstu */
+    width: 60px;
+    text-align: center;
 }
 
 .empty-state-container {

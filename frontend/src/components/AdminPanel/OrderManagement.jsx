@@ -32,7 +32,7 @@ const OrderManagement = () => {
     key: "created_at",
     direction: "desc",
   });
-  const [statusFilter, setStatusFilter] = useState(""); // Stan dla filtra statusu
+  const [statusFilter, setStatusFilter] = useState("");
 
   const fetchOrders = useCallback(async () => {
     if (!token) return;
@@ -79,7 +79,7 @@ const OrderManagement = () => {
           body: JSON.stringify({ status: newStatus }),
         }
       );
-      fetchOrders(); // Odśwież listę, aby pokazać zmianę
+      fetchOrders();
     } catch (error) {
       console.error("Błąd aktualizacji statusu:", error);
     }

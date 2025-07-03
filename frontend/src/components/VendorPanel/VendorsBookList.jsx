@@ -1,4 +1,3 @@
-// frontend/src/components/VendorsBookList/VendorsBookList.jsx
 import "./VendorsBookList.css";
 import { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,7 +6,6 @@ import { viewActions } from "../../store/view";
 const VendorsBookList = () => {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
-  // --- NOWY STAN DO FILTROWANIA ---
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [priceFrom, setPriceFrom] = useState('');
@@ -26,7 +24,7 @@ const VendorsBookList = () => {
       }
       try {
         const response = await fetch(`http://localhost:8000/api/ebooki/dostawca/${userId}`, {
-          headers: { 'Authorization': `Bearer ${userToken}` } //
+          headers: { 'Authorization': `Bearer ${userToken}` }
         });
         if (!response.ok) throw new Error(`Błąd HTTP: ${response.status}`);
         const dane = await response.json();
@@ -56,31 +54,30 @@ const VendorsBookList = () => {
 
   const filteredBooks = useMemo(() => {
     return books
-        .filter(book => { // Filtr statusu
+        .filter(book => {
           return statusFilter === 'all' || book.status === statusFilter;
         })
-        .filter(book => { // Filtr wyszukiwania (tytuł lub autor)
+        .filter(book => {
           const term = searchTerm.toLowerCase();
           return book.tytul.toLowerCase().includes(term) || book.autor.toLowerCase().includes(term);
         })
-        .filter(book => { // Filtr ceny "od"
+        .filter(book => {
           return priceFrom === '' || book.price >= parseFloat(priceFrom);
         })
-        .filter(book => { // Filtr ceny "do"
+        .filter(book => {
           return priceTo === '' || book.price <= parseFloat(priceTo);
         });
   }, [books, statusFilter, searchTerm, priceFrom, priceTo]);
 
-  // --- NOWA FUNKCJA DO WYCOFYWANIA KSIĄŻKI ---
   const handleWithdraw = async (e, bookId) => {
-    e.stopPropagation(); // Zapobiega otwarciu szczegółów książki po kliknięciu przycisku
+    e.stopPropagation();
 
     if (window.confirm('Czy na pewno chcesz wycofać tę książkę? Zostanie ona ukryta w sklepie, ale zachowana w panelu.')) {
       try {
         const response = await fetch(`http://localhost:8000/api/ebooki/${bookId}/wycofaj`, {
-          method: 'PUT', //
+          method: 'PUT',
           headers: {
-            'Authorization': `Bearer ${userToken}`, //
+            'Authorization': `Bearer ${userToken}`,
             'Content-Type': 'application/json'
           }
         });
@@ -88,8 +85,6 @@ const VendorsBookList = () => {
         if (!response.ok) {
           throw new Error('Wycofanie książki nie powiodło się.');
         }
-
-        // Aktualizuj status książki w stanie lokalnym dla natychmiastowego efektu
         setBooks(prevBooks =>
             prevBooks.map(book =>
                 book.id === bookId ? { ...book, status: 'wycofany' } : book
@@ -104,7 +99,6 @@ const VendorsBookList = () => {
     }
   };
 
-  // --- NOWA FUNKCJA DO EDYCJI (PRZYGOTOWANIE POD PRZYSZŁY WIDOK) ---
   const handleEdit = (e, book) => {
     e.stopPropagation();
     console.log("Przekierowanie do edycji książki:", book);
@@ -156,8 +150,6 @@ const VendorsBookList = () => {
             + Dodaj nową książkę
           </button>
         </div>
-
-        {/* --- NOWY PANEL FILTRÓW --- */}
         <div className="filters-bar">
           <div className="filter-input-group search-filter">
             <i className="fas fa-search"></i>
@@ -210,7 +202,6 @@ const VendorsBookList = () => {
                   <td><span className={`status-badge ${getStatusClassName(book.status)}`}>{book.status}</span></td>
                   <td>{formatDate(book.created_at)}</td>
                   <td className="actions-cell">
-                    {/* --- NOWE PRZYCISKI AKCJI --- */}
                     <button className="btn-action btn-edit" onClick={(e) => handleEdit(e, book)}>Edytuj</button>
                     {book.status !== 'wycofany' && (
                         <button className="btn-action btn-withdraw" onClick={(e) => handleWithdraw(e, book.id)}>Wycofaj</button>

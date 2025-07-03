@@ -1,4 +1,3 @@
-// PurchaseDetails.jsx
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { viewActions } from '../../store/view';
@@ -9,7 +8,6 @@ const PurchaseDetails = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
 
-  // Pobieramy ID wybranego zamówienia ze stanu Reduxa
   const { selectedItemId: orderId, selectedView } = useSelector(state => state.view);
   const token = useSelector(state => state.userData.token);
 

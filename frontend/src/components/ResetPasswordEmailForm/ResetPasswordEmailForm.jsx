@@ -20,20 +20,6 @@ const ResetPasswordForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // const response = await fetch("http://localhost:8000/api/rejestracja", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(dane),
-    // });
-
-    // const wynik = await response.json();
-
-    // if (response.ok) {
-    //   setKomunikat(wynik.komunikat);
-    // } else {
-    //   setKomunikat("Błąd: " + JSON.stringify(wynik.bledy));
-    // }
   };
 
   return (

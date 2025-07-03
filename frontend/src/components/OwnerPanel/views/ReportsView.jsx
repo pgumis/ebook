@@ -1,4 +1,3 @@
-// src/components/OwnerPanel/views/ReportsView.jsx
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
@@ -28,7 +27,6 @@ const ReportsView = () => {
 
             if (!response.ok) throw new Error('Błąd generowania raportu');
 
-            // Pobranie nazwy pliku z nagłówka odpowiedzi
             const disposition = response.headers.get('content-disposition');
             let fileName = `raport-${reportType}.csv`;
             if (disposition && disposition.indexOf('attachment') !== -1) {
@@ -39,13 +37,12 @@ const ReportsView = () => {
                 }
             }
 
-            // Utworzenie obiektu Blob i linku do pobrania
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = fileName;
-            document.body.appendChild(a); // Wymagane w Firefox
+            document.body.appendChild(a);
             a.click();
             a.remove();
 

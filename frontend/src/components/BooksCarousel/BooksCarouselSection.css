@@ -46,7 +46,7 @@
 
 .carousel-section .slick-prev:before,
 .carousel-section .slick-next:before {
-    color: #4c7766 !important;  /* zamień na dowolny kolor */
+    color: #4c7766 !important;
     font-size: 32px !important;
     opacity: 1;
 }

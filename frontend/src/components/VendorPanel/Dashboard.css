@@ -1,30 +1,27 @@
-/* frontend/src/components/Dashboard.css */
-
-/* Układ siatki dla pulpitu */
 .dashboard-grid-layout {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Trzy kolumny na statystyki */
-    grid-template-rows: auto 1fr; /* Dwa wiersze: auto na staty, reszta dla treści */
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto 1fr;
     gap: 1.5rem;
 }
 
-/* Karta z główną statystyką */
+
 .stat-card-main { grid-column: 1 / 2; }
 .stat-card { grid-column: span 1; }
 
-/* Karta z wykresem */
+
 .chart-card {
-    grid-column: 1 / 3; /* Zajmuje dwie kolumny */
+    grid-column: 1 / 3;
     grid-row: 2 / 3;
 }
 
-/* Karta z listą top 5 */
+
 .top-ebooks-card {
-    grid-column: 3 / 4; /* Zajmuje jedną kolumnę */
+    grid-column: 3 / 4;
     grid-row: 2 / 3;
 }
 
-/* Ogólny styl kart pulpitu */
+
 .dashboard-card, .dashboard-single-info {
     background-color: #fff;
     border-radius: 12px;
@@ -45,14 +42,13 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%; /* <-- DODAJ TĘ LINIĘ */
+    height: 100%;
 }
 .dashboard-single-info h1 { font-size: 2.2rem; }
 
-/* Wrapper dla wykresu, aby zapewnić responsywność */
 .chart-wrapper {
     position: relative;
-    flex: 1; /* Kluczowe dla responsywności w kontenerze flex */
+    flex: 1;
     min-height: 300px;
 }
 
@@ -63,7 +59,6 @@
     font-weight: 600;
 }
 
-/* Style listy top 5 */
 .top-ebooks-list {
     list-style: none; padding: 0; margin: 0; flex: 1; display: flex; flex-direction: column; justify-content: space-around;
 }
@@ -78,7 +73,7 @@
 .top-ebooks-list .ebook-sales strong { color: #4C7766; }
 
 .placeholder-card {
-    grid-column: 1 / -1; /* Rozciąga się na całą szerokość siatki */
+    grid-column: 1 / -1; 
     border: 2px dashed #e2e8f0;
     background-color: #f8fafc;
     display: flex;

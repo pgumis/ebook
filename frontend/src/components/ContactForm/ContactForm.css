@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     padding: 2rem;
-    background-color: #f8f9fa; /* Jaśniejsze tło dla całej sekcji */
+    background-color: #f8f9fa;
 }
 
 .form-wrapper-contact {
@@ -44,7 +44,7 @@
 }
 
 .form-group.full-width {
-    grid-column: 1 / -1; /* Rozciąga element na obie kolumny */
+    grid-column: 1 / -1;
 }
 
 .form-group label {
@@ -99,7 +99,7 @@ textarea {
 
 .form-actions {
     display: flex;
-    justify-content: flex-end; /* Przyciski po prawej */
+    justify-content: flex-end;
     gap: 1rem;
     margin-top: 1rem;
 }
@@ -135,7 +135,6 @@ textarea {
     background-color: #e9ecef;
 }
 
-/* Style walidacji */
 .invalid {
     border-color: #dc3545 !important;
 }
@@ -146,7 +145,6 @@ textarea {
     margin-top: 0.25rem;
 }
 
-/* Style dla komunikatu */
 .form-komunikat {
     padding: 1rem;
     border-radius: 8px;
@@ -166,7 +164,7 @@ textarea {
 
 @media (max-width: 768px) {
     .contact-form-grid {
-        grid-template-columns: 1fr; /* Jedna kolumna na mniejszych ekranach */
+        grid-template-columns: 1fr;
     }
     .form-wrapper-contact {
         padding: 2rem;

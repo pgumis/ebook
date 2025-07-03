@@ -1,4 +1,3 @@
-// src/components/OwnerPanel/views/ProductsAnalysisView.jsx
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Bar } from 'react-chartjs-2';
@@ -37,7 +36,6 @@ const ProductsAnalysisView = () => {
     const userToken = useSelector(state => state.userData.token);
     const [dateRange, setDateRange] = useState({ startDate: null, endDate: null });
 
-    // Rozbudowany stan konfiguracji dla każdej sekcji
     const [sectionConfigs, setSectionConfigs] = useState({
         bestsellers: { limit: 10 },
         worstSellers: { limit: 10 },
@@ -53,7 +51,6 @@ const ProductsAnalysisView = () => {
             const formattedStartDate = dateRange.startDate.toISOString().split('T')[0];
             const formattedEndDate = dateRange.endDate.toISOString().split('T')[0];
             try {
-                // Budujemy URL z wszystkimi nowymi parametrami
                 const params = new URLSearchParams({
                     startDate: formattedStartDate,
                     endDate: formattedEndDate,
@@ -83,7 +80,6 @@ const ProductsAnalysisView = () => {
         setDateRange({ startDate: start, endDate: end });
     };
 
-    // Poprawiona, uniwersalna funkcja do obsługi wszystkich zmian (naprawia błąd!)
     const handleConfigChange = (section, key, value) => {
         setSectionConfigs(prev => ({
             ...prev,
@@ -109,7 +105,6 @@ const ProductsAnalysisView = () => {
         }]
     };
 
-    // --- KLUCZOWA POPRAWKA JEST TUTAJ ---
     return (
         <div className="analysis-view">
             <h2>Analiza Produktów</h2>
@@ -141,7 +136,7 @@ const ProductsAnalysisView = () => {
                             <TableControls
                                 config={sectionConfigs.bestsellers}
                                 onConfigChange={(key, value) => handleConfigChange('bestsellers', key, value)}
-                                showSort={false} // Ukrywamy sortowanie, bo jest stałe
+                                showSort={false}
                             />
                             <h3>TOP {sectionConfigs.bestsellers.limit} Bestsellerów</h3>
                             <table>
@@ -155,7 +150,7 @@ const ProductsAnalysisView = () => {
                             <TableControls
                                 config={sectionConfigs.worstSellers}
                                 onConfigChange={(key, value) => handleConfigChange('worstSellers', key, value)}
-                                showSort={false} // Ukrywamy sortowanie, bo jest stałe
+                                showSort={false}
                             />
                             <h3>TOP {sectionConfigs.worstSellers.limit} Najsłabiej sprzedających się</h3>
                             <table>

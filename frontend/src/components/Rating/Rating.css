@@ -1,5 +1,3 @@
-/* src/components/Rating/Rating.css */
-
 .review-card {
     background-color: #ffffff;
     border: 1px solid #f0f0f0;
@@ -39,7 +37,7 @@
 }
 
 .review-stars {
-    color: #ffc107; /* Kolor gwiazdek */
+    color: #ffc107;
     font-size: 1rem;
 }
 
@@ -54,7 +52,6 @@
     color: #343a40;
 }
 
-/* --- Style dla formularza dodawania recenzji --- */
 .add-review-form-wrapper {
     border: 1px solid #e9ecef;
     border-radius: 8px;

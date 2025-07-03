@@ -1,4 +1,3 @@
-// SinglePurchase.jsx
 import { useDispatch } from "react-redux";
 import { viewActions } from "../../store/view";
 
@@ -6,14 +5,12 @@ const SinglePurchase = ({ purchaseObj }) => {
     const dispatch = useDispatch();
 
     const handleClick = () => {
-        // Przekazujemy obiekt z nazwą widoku i ID zamówienia
         dispatch(viewActions.changeView({
             view: "purchaseDetails",
             itemId: purchaseObj.id
         }));
     };
 
-    // Formatowanie daty
     const formattedDate = new Date(purchaseObj.created_at).toLocaleDateString('pl-PL', {
         year: 'numeric', month: 'long', day: 'numeric'
     });

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { viewActions } from "../../store/view";
-import "./SignUp.css"; // Użyjemy nowego pliku CSS
+import "./SignUp.css";
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -14,11 +14,10 @@ const SignUp = () => {
     potwierdzHaslo: "",
   });
 
-  const [komunikat, setKomunikat] = useState({ text: "", type: "" }); // Zmieniamy komunikat na obiekt
+  const [komunikat, setKomunikat] = useState({ text: "", type: "" });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
-  // Funkcja `handleChange` pozostaje bez zmian
   const handleChange = (e) => {
     setDane({ ...dane, [e.target.name]: e.target.value });
     if (errors[e.target.name]) {
@@ -30,7 +29,6 @@ const SignUp = () => {
     }
   };
 
-  // Funkcja `validateForm` pozostaje bez zmian
   const validateForm = () => {
     const newErrors = {};
     let isValid = true;
@@ -62,7 +60,6 @@ const SignUp = () => {
     return isValid;
   };
 
-  // Funkcja `handleSubmit` z drobnymi modyfikacjami komunikatów
   const handleSubmit = async (e) => {
     e.preventDefault();
     setKomunikat({ text: "", type: "" });
@@ -107,7 +104,6 @@ const SignUp = () => {
   };
 
   return (
-      // Nowa struktura JSX, wzorowana na SignIn.jsx
       <div className="signup-page-container">
         <div className="signup-card">
           <img src="/e-book na wynos logo.png" alt="Logo" className="signup-logo" />
@@ -115,7 +111,6 @@ const SignUp = () => {
           <p className="signup-subtitle">Dołącz do nas i odkrywaj nowe książki!</p>
 
           <form onSubmit={handleSubmit} className="signup-form" noValidate>
-            {/* Rząd dla imienia i nazwiska */}
             <div className="signup-name-row">
               <div className="input-group">
                 <label htmlFor="imie">Imię</label>
@@ -153,7 +148,6 @@ const SignUp = () => {
               {errors.potwierdzHaslo && <p className="error-text">{errors.potwierdzHaslo}</p>}
             </div>
 
-            {/* Główny komunikat o błędzie/sukcesie */}
             {komunikat.text && <p className={`signup-main-message ${komunikat.type}`}>{komunikat.text}</p>}
 
             <button type="submit" className="signup-submit-btn" disabled={loading}>

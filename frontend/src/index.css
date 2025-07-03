@@ -1,5 +1,4 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');/*https://www.iconfinder.com/search?q=&iconset=liny*/
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
 html, body {
     height: 100%;
     width: 100%;
@@ -17,7 +16,7 @@ body {
 
 .wrapper {
   position: relative;
-  min-height: 100vh; /* ważne, żeby kontener miał pełną wysokość */
+  min-height: 100vh;
 }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",

@@ -115,7 +115,6 @@ const EbookManagement = () => {
         <table className="management-table">
           <thead>
             <tr>
-              {/* ZAKTUALIZOWANE NAGŁÓWKI TABELI */}
               <th className="sortable" onClick={() => handleSort("id")}>
                 ID
               </th>
@@ -166,7 +165,6 @@ const EbookManagement = () => {
             {!loading &&
               ebooks.map((ebook) => (
                 <tr key={ebook.id}>
-                  {/* ZAKTUALIZOWANE KOMÓRKI DANYCH */}
                   <td>{ebook.id}</td>
                   <td>{ebook.tytul}</td>
                   <td>

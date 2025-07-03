@@ -1,11 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { viewActions } from "../../../store/view";
-import { cartActions } from "../../../store/cart"; // Importujemy akcje koszyka
+import { cartActions } from "../../../store/cart";
 import generateStars from "../../../utils/generateStars";
 import "./Book.css";
 import { useRef } from "react";
 
-// Funkcja pomocnicza do skracania tytułu pozostaje bez zmian
 const titleSliced = (title) => {
     return title.slice(0, 25) + "...";
 };
@@ -18,7 +17,6 @@ const Book = ({ bookObj }) => {
 
     const title = bookObj.title.length >= 25 ? titleSliced(bookObj.title) : bookObj.title;
 
-    // --- Logika nawigacji i dodawania do koszyka ---
     const handleOpenBookDetails = () => {
         dispatch(viewActions.changeView("bookDetails"));
         dispatch(viewActions.setBookDetailsObj(bookObj));
@@ -27,11 +25,9 @@ const Book = ({ bookObj }) => {
     const handleAddToCart = (e) => {
         e.stopPropagation();
         if (!userData.token) return alert("Musisz być zalogowany.");
-        // -> UŻYWAMY POPRAWNEJ AKCJI ASYNCHRONICZNEJ
         dispatch(cartActions.addItemToCart({ token: userData.token, bookData: bookObj }));
     };
 
-    // Logika do rozróżniania kliknięcia od przeciągania w karuzeli
     const isDragging = useRef(false);
     const startX = useRef(0);
     const handleMouseDown = (e) => {
@@ -58,7 +54,7 @@ const Book = ({ bookObj }) => {
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onClick={handleClick}
-            title={bookObj.title} // Tooltip z pełnym tytułem
+            title={bookObj.title}
         >
             <div className="book-img-wrapper">
                 <img src={bookObj.okladka} alt={`Okładka ${title}`} />

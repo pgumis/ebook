@@ -26,7 +26,6 @@ const UserManagement = ({ onShowDetails }) => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.userData.token);
 
-  // --- NOWE STANY DO ZARZĄDZANIA WIDOKIEM ---
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -37,12 +36,10 @@ const UserManagement = ({ onShowDetails }) => {
     direction: "desc",
   });
   const [roleChanges, setRoleChanges] = useState({});
-  // --- NOWA, ROZBUDOWANA FUNKCJA POBIERANIA DANYCH ---
   const fetchUsers = useCallback(async () => {
     if (!token) return;
     setLoading(true);
 
-    // Budujemy URL z parametrami
     const params = new URLSearchParams({
       page: currentPage,
       szukaj: searchTerm,
@@ -68,9 +65,7 @@ const UserManagement = ({ onShowDetails }) => {
 
   useEffect(() => {
     fetchUsers();
-  }, [fetchUsers]); // useEffect reaguje teraz na wszystkie zmiany parametrów
-
-  // --- FUNKCJE OBSŁUGI ---
+  }, [fetchUsers]);
   const handleSort = (key) => {
     let direction = "asc";
     if (sortConfig.key === key && sortConfig.direction === "asc") {
@@ -80,16 +75,12 @@ const UserManagement = ({ onShowDetails }) => {
   };
 
   const handleEditClick = (userId) => {
-    // 1. Ustawiamy ID w Reduxie, żeby UserDetails wiedział kogo pobrać
     dispatch(viewActions.setSelectedItem(userId));
-    // 2. Wywołujemy funkcję z AdminPanel, aby zmienić widok
     onShowDetails();
   };
 
   const handleRoleChange = async (userId, newRole) => {
     if (!token) return;
-
-    // Aktualizacja stanu lokalnego, aby wyświetlić nową wartość w <select>
     setRoleChanges(prev => ({ ...prev, [userId]: newRole }));
 
     try {
@@ -108,13 +99,10 @@ const UserManagement = ({ onShowDetails }) => {
       if (!response.ok) {
         throw new Error(data.komunikat || "Wystąpił błąd");
       }
-
-      // Odśwież listę użytkowników, aby zobaczyć potwierdzone zmiany
       fetchUsers();
 
     } catch (error) {
       console.error("Błąd zmiany roli:", error);
-      // Opcjonalnie: cofnij zmianę w UI w razie błędu
       setRoleChanges(prev => {
         const { [userId]: _, ...rest } = prev;
         return rest;
@@ -136,7 +124,6 @@ const UserManagement = ({ onShowDetails }) => {
         <table className="management-table">
           <thead>
             <tr>
-              {/* Nagłówki są teraz przyciskami do sortowania */}
               <th className="sortable" onClick={() => handleSort("id")}>
                 ID
               </th>
@@ -165,7 +152,7 @@ const UserManagement = ({ onShowDetails }) => {
                 <td>{user.email}</td>
                 <td>
                   <select
-                      className="filter-select" // Używamy istniejącej klasy dla spójności wyglądu
+                      className="filter-select"
                       value={roleChanges[user.id] || user.rola}
                       onChange={(e) => handleRoleChange(user.id, e.target.value)}
                   >

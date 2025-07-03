@@ -1,4 +1,3 @@
-// src/components/OwnerPanel/shared/EnhancedDateRangePicker.jsx
 import React, { useState, useEffect } from 'react';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
@@ -13,13 +12,11 @@ const EnhancedDateRangePicker = ({ onDateChange }) => {
     const [endDate, setEndDate] = useState(new Date());
     const [displayYear, setDisplayYear] = useState(new Date().getFullYear());
 
-    // --- NOWA ZMIANA: Dodajemy stan, który "pamięta" ostatnio wybrany kwartał ---
     const [selectedQuarter, setSelectedQuarter] = useState(1);
 
     const handlePresetClick = (preset, quarter = null) => {
         setActivePreset(preset);
 
-        // --- NOWA ZMIANA: Jeśli kliknięto kwartał, zapisujemy jego numer ---
         if (preset === 'quarter' && quarter) {
             setSelectedQuarter(quarter);
         }
@@ -35,7 +32,6 @@ const EnhancedDateRangePicker = ({ onDateChange }) => {
             case 'today':
             case 'week':
             case 'month':
-                // Logika dla tych presetów jest prosta i nie zależy od displayYear
                 newStart = preset === 'today' ? startOfDay(new Date()) :
                     preset === 'week' ? startOfDay(subDays(new Date(), 6)) :
                         startOfMonth(new Date());
@@ -59,13 +55,10 @@ const EnhancedDateRangePicker = ({ onDateChange }) => {
         onDateChange(newStart, newEnd);
     };
 
-    // --- POPRAWIONY EFEKT ---
     useEffect(() => {
-        // Gdy zmienia się rok, ponownie wywołujemy logikę dla aktywnego presetu
         if (activePreset === 'yearStepper') {
             handlePresetClick('yearStepper');
         } else if (activePreset === 'quarter') {
-            // Używamy zapamiętanego numeru kwartału
             handlePresetClick('quarter', selectedQuarter);
         }
     }, [displayYear]);
@@ -75,13 +68,12 @@ const EnhancedDateRangePicker = ({ onDateChange }) => {
         handlePresetClick('month');
     }, []);
 
-    const handleCustomStartDateChange = (date) => { /* ... bez zmian ... */ };
-    const handleCustomEndDateChange = (date) => { /* ... bez zmian ... */ };
+    const handleCustomStartDateChange = (date) => { };
+    const handleCustomEndDateChange = (date) => { };
 
     return (
         <div className="enhanced-date-picker-container">
             <div className="presets-toolbar">
-                {/* Przyciski kwartałów teraz przekazują swój numer */}
                 <button onClick={() => handlePresetClick('today')} className={activePreset === 'today' ? 'active' : ''}>Dziś</button>
                 <button onClick={() => handlePresetClick('week')} className={activePreset === 'week' ? 'active' : ''}>Ostatnie 7 dni</button>
                 <button onClick={() => handlePresetClick('month')} className={activePreset === 'month' ? 'active' : ''}>Bieżący miesiąc</button>

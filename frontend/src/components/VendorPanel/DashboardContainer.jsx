@@ -1,13 +1,10 @@
-// src/components/VendorPanel/DashboardContainer.jsx
-
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { viewActions } from '../../store/view'; // Importujemy akcje Reduxa
-import './Dashboard.css'; // Główne style kart, które już mamy
-import './DashboardContainer_Vendor.css'; // Dedykowane, nowe style dla tego widoku
+import { viewActions } from '../../store/view';
+import './Dashboard.css';
+import './DashboardContainer_Vendor.css';
 import DashboardSingleInfo from "./DashboardSingleInfo";
 
-// Funkcja pomocnicza do generowania gwiazdek, przyda się w widgecie z recenzjami
 const generateStars = (rating) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
@@ -20,7 +17,6 @@ const DashboardContainer = () => {
     const dispatch = useDispatch();
     const userData = useSelector(state => state.userData);
 
-    // Stany dla wszystkich potrzebnych danych
     const [stats, setStats] = useState(null);
     const [recentReviews, setRecentReviews] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -34,12 +30,11 @@ const DashboardContainer = () => {
             }
             setLoading(true);
             try {
-                // Używamy Promise.all, aby pobierać dane statystyk i recenzji równolegle
                 const [statsRes, reviewsRes] = await Promise.all([
                     fetch('http://localhost:8000/api/dostawca/dashboard-stats', {
                         headers: { 'Authorization': `Bearer ${userData.token}` }
                     }),
-                    fetch('http://localhost:8000/api/dostawca/recenzje?limit=3', { // Pobieramy tylko 3 ostatnie recenzje
+                    fetch('http://localhost:8000/api/dostawca/recenzje?limit=3', {
                         headers: { 'Authorization': `Bearer ${userData.token}` }
                     })
                 ]);
@@ -69,16 +64,13 @@ const DashboardContainer = () => {
 
     return (
         <>
-            {/* Górny rząd ze statystykami - bez zmian */}
             <div className="dashboard-grid-layout">
                 <div className="stat-card-main"><DashboardSingleInfo name="Zysk (30 dni)" value={`${stats?.profitInRange} zł`} /></div>
                 <div className="stat-card"><DashboardSingleInfo name="Sprzedane (30 dni)" value={stats?.soldInRange} /></div>
                 <div className="stat-card"><DashboardSingleInfo name="Liczba publikacji" value={stats?.publishedBooks} /></div>
             </div>
 
-            {/* NOWA, DOLNA CZĘŚĆ PULPITU */}
             <div className="dashboard-main-content-grid">
-                {/* Lewa kolumna: Ostatnie recenzje */}
                 <div className="dashboard-card recent-reviews-card">
                     <h4>Ostatnia aktywność</h4>
                     {recentReviews.length > 0 ? (
@@ -89,7 +81,6 @@ const DashboardContainer = () => {
                                         <span>{review.ebook.tytul}</span>
                                         <span className="review-rating-widget">
                                         {generateStars(review.ocena)}
-                                            {/* Dodajemy ocenę liczbową w nawiasie */}
                                             <span className="numeric-rating">({parseFloat(review.ocena).toFixed(1)})</span>
                                             </span>
                                     </div>
@@ -103,7 +94,6 @@ const DashboardContainer = () => {
                     )}
                 </div>
 
-                {/* Prawa kolumna: Szybkie akcje i bestsellery */}
                 <div className="right-column-grid">
                     <div className="dashboard-card quick-actions-card">
                         <h4>Szybkie akcje</h4>
@@ -116,7 +106,7 @@ const DashboardContainer = () => {
                         <div className="dashboard-card top-ebooks-widget-card">
                             <h4>Twoje bestsellery (30 dni)</h4>
                             <ol>
-                                {stats.topEbooks.slice(0, 3).map(ebook => ( // Bierzemy tylko top 3
+                                {stats.topEbooks.slice(0, 3).map(ebook => (
                                     <li key={ebook.tytul}>
                                         <span>{ebook.tytul}</span>
                                         <strong>{ebook.total_sold} szt.</strong>

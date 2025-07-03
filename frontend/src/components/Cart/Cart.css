@@ -1,5 +1,3 @@
-/* Cart.css - Dodaj lub zaktualizuj te style */
-
 .cart-page {
   padding: 2rem;
 }
@@ -13,7 +11,7 @@
 
 .cart-content {
   display: grid;
-  grid-template-columns: 2fr 1fr; /* 2/3 miejsca na listę, 1/3 na podsumowanie */
+  grid-template-columns: 2fr 1fr;
   gap: 2rem;
 }
 
@@ -23,7 +21,6 @@
   gap: 1.5rem;
 }
 
-/* --- Style dla CartItem.jsx --- */
 .cart-item-container {
   display: flex;
   justify-content: space-between;
@@ -65,7 +62,7 @@
 .cart-item-price {
   font-size: 1.2rem;
   font-weight: 600;
-  min-width: 100px; /* Aby ceny się nie przesuwały */
+  min-width: 100px;
   text-align: right;
 }
 
@@ -83,13 +80,13 @@
   transform: scale(1.1);
 }
 
-/* --- Styl dla podsumowania --- */
+
 .cart-summary {
   background-color: #f9f9f9;
   padding: 1.5rem;
   border-radius: 8px;
   border: 1px solid #e0e0e0;
-  align-self: flex-start; /* Aby podsumowanie nie rozciągało się na całą wysokość */
+  align-self: flex-start;
 }
 
 .cart-summary h3 {
@@ -137,10 +134,9 @@
   padding: 3rem 0;
 }
 
-/* Style dla responsywności */
 @media (max-width: 992px) {
   .cart-content {
-    grid-template-columns: 1fr; /* Jedna kolumna na mniejszych ekranach */
+    grid-template-columns: 1fr;
   }
   .cart-item-left,
   .cart-item-right {

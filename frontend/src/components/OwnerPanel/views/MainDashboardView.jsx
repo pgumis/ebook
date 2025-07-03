@@ -1,8 +1,6 @@
-// src/components/OwnerPanel/views/MainDashboardView.jsx
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-// Możesz stworzyć reużywalny komponent StatCard
 const StatCard = ({ title, value, icon }) => (
     <div className="stat-card">
         <div className="stat-icon">
@@ -56,7 +54,6 @@ const MainDashboardView = () => {
                 <StatCard title="Zamówienia dzisiaj" value={kpi.ordersToday} icon="fas fa-receipt" />
                 <StatCard title="Wszystkie e-booki" value={kpi.totalEbooks} icon="fas fa-book" />
             </div>
-            {/* Tutaj można dodać wykresy, np. podział użytkowników na role */}
         </div>
     );
 };

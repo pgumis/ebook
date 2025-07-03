@@ -1,5 +1,3 @@
-/* src/components/AboutUs/AboutUs.css */
-
 .about-us-container {
     width: 100%;
     padding: 2rem 0;
@@ -41,7 +39,7 @@
 
 .info-section h2 {
     font-size: 1.2rem;
-    color: #4C7766; /* Kolor motywu */
+    color: #4C7766;
     margin-bottom: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 1px;

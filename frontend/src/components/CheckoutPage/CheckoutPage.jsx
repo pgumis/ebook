@@ -1,12 +1,10 @@
-// CheckoutPage.jsx
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { viewActions } from '../../store/view';
-import { cartActions } from '../../store/cart'; // Importujemy akcje koszyka
+import { cartActions } from '../../store/cart'; 
 import './CheckoutPage.css';
 
 const CheckoutPage = () => {
-    // === KROK 1: Pobieramy dane bezpośrednio z Reduxa ===
     const { items: koszykItems, totalAmount: sumaKoszyka } = useSelector((state) => state.cart);
     const token = useSelector(state => state.userData.token);
 
@@ -34,11 +32,7 @@ const CheckoutPage = () => {
             }
 
             alert('Dziękujemy za zakup! Twoje e-booki są już dostępne na Twojej półce.');
-
-            // Po udanym zakupie czyścimy koszyk w Reduxie
             dispatch(cartActions.clearCart());
-
-            // I przechodzimy do profilu, aby zobaczyć "Moją półkę"
             dispatch(viewActions.changeView('profileDetails'));
 
         } catch (err) {
@@ -48,7 +42,6 @@ const CheckoutPage = () => {
         }
     };
 
-    // Zabezpieczenie na wypadek, gdyby ktoś dotarł tu z pustym koszykiem
     if (koszykItems.length === 0 && !loading) {
         return (
             <div className="checkout-container">

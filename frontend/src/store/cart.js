@@ -1,7 +1,5 @@
-// src/store/cart.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// Thunk do pobierania koszyka
 export const fetchCartData = createAsyncThunk('cart/fetchData', async (token, { rejectWithValue }) => {
   try {
     const response = await fetch("http://localhost:8000/api/koszyk", {
@@ -9,7 +7,6 @@ export const fetchCartData = createAsyncThunk('cart/fetchData', async (token, { 
     });
     if (!response.ok) throw new Error('Błąd serwera.');
     const data = await response.json();
-    // Przetwarzamy dane do właściwego formatu
     const items = data.pozycje.map(p => ({
       id: p.ebook.id,
       title: p.ebook.tytul,
@@ -25,7 +22,6 @@ export const fetchCartData = createAsyncThunk('cart/fetchData', async (token, { 
   }
 });
 
-// Thunk do dodawania do koszyka
 export const addItemToCart = createAsyncThunk('cart/addItem', async ({ token, bookData }, { rejectWithValue }) => {
   try {
     const response = await fetch("http://localhost:8000/api/koszyk", {
@@ -37,14 +33,12 @@ export const addItemToCart = createAsyncThunk('cart/addItem', async ({ token, bo
       const errorData = await response.json();
       throw new Error(errorData.komunikat || 'Nie udało się dodać produktu.');
     }
-    // Zwracamy dane książki, aby zaktualizować stan
     return bookData;
   } catch (error) {
     return rejectWithValue(error.message);
   }
 });
 
-// Thunk do usuwania z koszyka
 export const removeItemFromCart = createAsyncThunk('cart/removeItem', async ({ token, itemId }, { rejectWithValue }) => {
   try {
     const response = await fetch(`http://localhost:8000/api/koszyk/${itemId}`, {
@@ -76,14 +70,12 @@ const cartSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-        // Fetch
         .addCase(fetchCartData.pending, (state) => { state.status = 'loading'; })
         .addCase(fetchCartData.fulfilled, (state, action) => {
           state.status = 'succeeded';
           state.items = action.payload.items;
           state.totalAmount = action.payload.totalAmount;
         })
-        // Add
         .addCase(addItemToCart.fulfilled, (state, action) => {
           const newItem = action.payload;
           const existingItem = state.items.find((item) => item.id === newItem.id);
@@ -94,10 +86,8 @@ const cartSlice = createSlice({
           }
         })
         .addCase(addItemToCart.rejected, (state, action) => {
-          // Możesz tu obsłużyć błąd, np. wyświetlić powiadomienie
           console.error("Błąd dodawania do koszyka:", action.payload);
         })
-        // Remove
         .addCase(removeItemFromCart.fulfilled, (state, action) => {
           const removedItemId = action.payload;
           const removedItem = state.items.find(item => item.id === removedItemId);
@@ -109,7 +99,7 @@ const cartSlice = createSlice({
   },
 });
 
-export const { clearCart } = cartSlice.actions; // Poprawiony export
+export const { clearCart } = cartSlice.actions;
 export const cartActions = {
   clearCart,
   fetchCartData,

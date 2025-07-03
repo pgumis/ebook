@@ -1,13 +1,10 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { viewActions } from "../../store/view";
-import "./ResetPasswordForm.css"; // Importujemy nowe style
-
-// Zmieniamy nazwę komponentu dla spójności z nazwą pliku
+import "./ResetPasswordForm.css"; 
 const ResetPasswordForm = () => {
   const dispatch = useDispatch();
 
-  // Stan kontrolujący, który krok formularza jest widoczny
   const [emailSent, setEmailSent] = useState(false);
 
   const [dane, setDane] = useState({
@@ -23,8 +20,6 @@ const ResetPasswordForm = () => {
   const handleChange = (e) => {
     setDane({ ...dane, [e.target.name]: e.target.value });
   };
-
-  // Krok 1: Wysyłanie prośby o link do resetu
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -40,9 +35,8 @@ const ResetPasswordForm = () => {
 
       if (response.ok) {
         setKomunikat({ text: wynik.komunikat, type: "success" });
-        // Poprawiony i jedyny poprawny sposób aktualizacji stanu
         setDane(prev => ({ ...prev, token: wynik.token }));
-        setEmailSent(true); // Pokaż drugi krok formularza
+        setEmailSent(true);
       } else {
         setKomunikat({ text: `Błąd: ${wynik.message || "Sprawdź poprawność adresu e-mail."}`, type: "error" });
       }
@@ -53,7 +47,6 @@ const ResetPasswordForm = () => {
     }
   };
 
-  // Krok 2: Wysyłanie nowego hasła z tokenem
   const handlePasswordResetSubmit = async (e) => {
     e.preventDefault();
     if (dane.haslo.length < 6 || dane.haslo !== dane.powtorzHaslo) {
@@ -78,7 +71,6 @@ const ResetPasswordForm = () => {
 
       if (response.ok) {
         setKomunikat({ text: "Hasło zostało zmienione! Możesz się teraz zalogować.", type: "success" });
-        // Po sukcesie możemy zablokować formularz i pokazać tylko link do logowania
         setTimeout(() => dispatch(viewActions.changeView("signIn")), 2000);
       } else {
         setKomunikat({ text: `Błąd: ${wynik.message || "Wystąpił błąd."}`, type: "error" });
@@ -103,7 +95,6 @@ const ResetPasswordForm = () => {
 
           <form onSubmit={emailSent ? handlePasswordResetSubmit : handleEmailSubmit} className="reset-password-form" noValidate>
 
-            {/* ----- KROK 1: Pytanie o email ----- */}
             {!emailSent && (
                 <div className="input-group">
                   <label htmlFor="email">Adres e-mail</label>
@@ -111,7 +102,6 @@ const ResetPasswordForm = () => {
                 </div>
             )}
 
-            {/* ----- KROK 2: Wprowadzanie nowego hasła ----- */}
             {emailSent && (
                 <>
                   <div className="input-group">

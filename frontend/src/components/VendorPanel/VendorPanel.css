@@ -4,8 +4,6 @@
     min-height: 100vh;
     background-color: #f8f9fa;
 }
-
-/* --- Style dla menu bocznego (Sidebar) --- */
 .panel-sidebar {
     background-color: #ffffff;
     border-right: 1px solid #e2e8f0;
@@ -66,7 +64,6 @@
     font-size: 1.1rem;
 }
 
-/* --- Style dla głównej treści --- */
 .panel-main-content {
     padding: 2rem;
     overflow-y: auto;

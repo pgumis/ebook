@@ -1,7 +1,7 @@
 .panel{
     background-color: #fff;
     min-width: 100px;
-    min-height: calc(100vh - 12.5rem); /* 100vh - szerokosc navbar - marg top - marg bot*/
+    min-height: calc(100vh - 12.5rem);
     margin-top: 1rem;
     margin-bottom: 3rem;
     border-radius: 10px;
@@ -18,8 +18,6 @@ li{
     margin-bottom: 0.5rem;
 }
 .books-grid{
-    /*overflow-y: scroll;
-    height: 400px;*/
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 3rem;
@@ -34,12 +32,10 @@ li{
     width: 100%;
     height: 100%;
     display: grid;
-    /* Domyślny układ: panel boczny 280px, reszta to treść */
     grid-template-columns: 280px 1fr;
-    gap: 30px; /* Odstęp między panelem bocznym a głównym */
+    gap: 30px;
 }
 
-/* Na mniejszych ekranach przełączamy na układ jednokolumnowy */
 @media (max-width: 992px) {
     .book-list-grid {
         grid-template-columns: 1fr;

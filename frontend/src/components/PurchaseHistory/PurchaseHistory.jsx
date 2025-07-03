@@ -1,4 +1,3 @@
-// PurchaseHistory.jsx
 import React, { useState, useEffect } from 'react';
 import { useSelector } from "react-redux";
 import SinglePurchase from "./SinglePurchase";

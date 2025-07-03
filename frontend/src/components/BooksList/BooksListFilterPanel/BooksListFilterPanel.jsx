@@ -1,9 +1,6 @@
-// src/components/BooksList/BooksListFilterPanel/BooksListFilterPanel.jsx
-
 import React, { useState, useEffect } from 'react';
 import './BooksListFilterPanel.css';
 
-// Komponent otrzymuje nową funkcję 'onCloseMenu' jako prop
 const BooksListFilterPanel = ({ onSelectCategory, selectedKategoria, onCloseMenu }) => {
     const [kategorie, setKategorie] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -28,10 +25,9 @@ const BooksListFilterPanel = ({ onSelectCategory, selectedKategoria, onCloseMenu
         pobierzKategorie();
     }, []);
 
-    // Nowa funkcja, która wywołuje dwie akcje
     const handleCategoryClick = (kategoria) => {
         onSelectCategory(kategoria);
-        onCloseMenu(); // Zawsze zamykaj menu po kliknięciu
+        onCloseMenu();
     };
 
     if (loading) return <div className="filter-panel">Ładowanie...</div>;
@@ -41,7 +37,6 @@ const BooksListFilterPanel = ({ onSelectCategory, selectedKategoria, onCloseMenu
         <div className="panel filter-panel">
             <div className="filter-panel-header">
                 <h3>Kategorie</h3>
-                {/* Przycisk zamykania - widoczny tylko na mobilce (dzięki CSS) */}
                 <button className="close-menu-btn" onClick={onCloseMenu} aria-label="Zamknij menu">
                     <i className="fas fa-times"></i>
                 </button>

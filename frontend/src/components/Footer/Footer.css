@@ -1,18 +1,16 @@
-/* Główny kontener stopki */
 .site-footer {
-  background-color: #26272b; /* Ciemny, prawie czarny kolor tła */
-  color: #a7a7a7; /* Jasnoszary kolor tekstu */
+  background-color: #26272b;
+  color: #a7a7a7;
   padding: 45px 0 20px;
   font-size: 15px;
   line-height: 24px;
   width: 100%;
-  margin-top: auto; /* Wypycha stopkę na dół w kontenerze flexbox */
+  margin-top: auto;
 }
 
-/* Kontener z kolumnami */
 .footer-content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsywne kolumny */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 30px;
   max-width: 1170px;
   margin: 0 auto;
@@ -26,13 +24,12 @@
   position: relative;
 }
 
-/* Ozdobna linia pod nagłówkami */
 .footer-column h4::after {
   content: '';
   position: absolute;
   left: 0;
   bottom: -10px;
-  background-color: #4C7766; /* Kolor motywu */
+  background-color: #4C7766;
   height: 2px;
   width: 50px;
 }
@@ -41,7 +38,6 @@
   margin-top: 30px;
 }
 
-/* Lista linków */
 .footer-links {
   list-style: none;
   padding: 0;
@@ -60,7 +56,7 @@
   color: #fff;
 }
 
-/* Media społecznościowe */
+
 .social-links {
   margin-top: 30px;
   display: flex;
@@ -80,10 +76,9 @@
   transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-/* Animacja po najechaniu myszką */
 .social-links a:hover {
-  background-color: #4C7766; /* Zmiana koloru tła na kolor motywu */
-  transform: translateY(-5px); /* Uniesienie ikonki */
+  background-color: #4C7766;
+  transform: translateY(-5px);
 }
 
 

@@ -1,4 +1,3 @@
-// src/components/OwnerPanel/views/UsersAnalysisView.jsx
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Bar, Line } from 'react-chartjs-2';
@@ -13,8 +12,6 @@ const UsersAnalysisView = () => {
     const [loading, setLoading] = useState(true);
     const userToken = useSelector(state => state.userData.token);
     const [dateRange, setDateRange] = useState({ startDate: null, endDate: null });
-
-    // Połączony stan dla wszystkich opcji tabeli
     const [tableConfig, setTableConfig] = useState({
         sortBy: 'total_spent',
         direction: 'desc',
@@ -29,7 +26,6 @@ const UsersAnalysisView = () => {
             const formattedStartDate = dateRange.startDate.toISOString().split('T')[0];
             const formattedEndDate = dateRange.endDate.toISOString().split('T')[0];
             try {
-                // Budowanie URL z wszystkimi parametrami
                 const params = new URLSearchParams({
                     startDate: formattedStartDate,
                     endDate: formattedEndDate,
@@ -50,13 +46,12 @@ const UsersAnalysisView = () => {
             }
         };
         fetchData();
-    }, [userToken, dateRange, tableConfig]); // Efekt reaguje na wszystkie zmiany filtrów
+    }, [userToken, dateRange, tableConfig]);
 
     const handleDateChange = (start, end) => {
         setDateRange({ startDate: start, endDate: end });
     };
 
-    // Jedna funkcja do obsługi wszystkich zmian w konfiguracji tabeli
     const handleTableConfigChange = (e) => {
         const { name, value } = e.target;
         setTableConfig(prev => ({ ...prev, [name]: value }));
@@ -81,7 +76,6 @@ const UsersAnalysisView = () => {
         }]
     };
 
-    // --- KLUCZOWA POPRAWKA JEST TUTAJ ---
     return (
         <div className="analysis-view">
             <h2>Analiza Użytkowników</h2>
@@ -114,10 +108,8 @@ const UsersAnalysisView = () => {
                         </div>
                     </div>
                     <div className="table-container">
-                        {/* Dynamiczny tytuł tabeli */}
                         <h3>TOP {tableConfig.limit} Klientów</h3>
 
-                        {/* Połączone kontrolki do tabeli */}
                         <div className="table-controls">
                             <div className="filter-group">
                                 <label htmlFor="limit">Pokaż TOP:</label>

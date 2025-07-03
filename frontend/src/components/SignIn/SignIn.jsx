@@ -7,7 +7,7 @@ import "./SignIn.css";
 const SignIn = () => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
-  const [haslo, setHaslo] = useState(""); // Zostajemy przy 'haslo' zgodnie z poprzednią poprawką
+  const [haslo, setHaslo] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -24,27 +24,23 @@ const SignIn = () => {
         body: JSON.stringify({ email, haslo }),
       });
 
-      const data = await response.json(); // 'data' to obiekt z API, który mi wkleiłeś
+      const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data.message || data.error || "Nie udało się zalogować.");
       }
 
-      // --- KLUCZOWA ZMIANA JEST TUTAJ ---
-      // Zamiast wysyłać 'data' bezpośrednio, tworzymy nowy, czysty obiekt.
       const userDataToStore = {
-        loggedIn: true, // <-- NAJWAŻNIEJSZE: Ustawiamy stan zalogowania na TRUE!
-        id: data.user.id, // Bierzemy dane z zagnieżdżonego obiektu 'user'
+        loggedIn: true,
+        id: data.user.id,
         imie: data.user.imie,
         nazwisko: data.user.nazwisko,
         email: data.user.email,
         role: data.user.rola,
         numer_telefonu: data.user.numer_telefonu,
         zdjecie_profilowe: data.user.zdjecie_profilowe,
-        token: data.token // Bierzemy token z głównego obiektu
+        token: data.token
       };
-
-      // Zapisujemy i wysyłamy do Redux nasz nowy, poprawny obiekt
       localStorage.setItem("userData", JSON.stringify(userDataToStore));
       dispatch(userDataActions.setData(userDataToStore));
       dispatch(viewActions.changeView("home"));
@@ -60,7 +56,6 @@ const SignIn = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
-  // ... reszta kodu (część JSX) pozostaje bez zmian ...
   return (
       <div className="login-page-container">
         <div className="login-card">

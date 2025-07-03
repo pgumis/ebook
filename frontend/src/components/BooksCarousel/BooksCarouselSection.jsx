@@ -1,5 +1,3 @@
-// BooksCarouselSection.jsx (wersja uproszczona)
-
 import Slider from "react-slick";
 import Book from "../BooksList/Book/Book";
 import "./BooksCarouselSection.css";
@@ -10,7 +8,7 @@ const BooksCarouselSection = ({ title, books, loading }) => {
 
     const settings = {
         dots: false,
-        infinite: books.length > 6, // Karuzela zapętla się tylko, gdy jest więcej slajdów niż widać
+        infinite: books.length > 6,
         speed: 500,
         slidesToShow: 6,
         slidesToScroll: 1,

@@ -12,8 +12,8 @@ const slogans = [
   "Książki zawsze pod ręką",
 ];
 
-const typingSpeed = 120; // Szybkość pisania (ms na literę)
-const sloganPause = 6000; // Czas pauzy po napisaniu sloganu (ms)
+const typingSpeed = 120;
+const sloganPause = 6000;
 const ProfileIcon = () => (
   <svg fill="none" height="24" viewBox="0 0 24 24" width="24">
     <path
@@ -62,20 +62,18 @@ const LogoutIcon = () => (
 const TopBar = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.userData);
-  const cartItems = useSelector((state) => state.cart.items); // Pobieramy dane koszyka
+  const cartItems = useSelector((state) => state.cart.items);
   const currView = useSelector((state) => state.view.selectedView);
   const cartItemCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
   const [displayedSlogan, setDisplayedSlogan] = useState("");
   const [sloganIndex, setSloganIndex] = useState(0);
 
   useEffect(() => {
-    // Ta funkcja będzie zarządzać całym cyklem animacji dla jednego sloganu
     const handleTyping = () => {
       const currentSlogan = slogans[sloganIndex];
       let charIndex = 0;
-      setDisplayedSlogan(""); // Resetuj na starcie
+      setDisplayedSlogan("");
 
-      // Używamy interwału, który będzie pisał litera po literze
       const typingInterval = setInterval(() => {
         if (charIndex < currentSlogan.length) {
           setDisplayedSlogan((prev) =>
@@ -83,20 +81,16 @@ const TopBar = () => {
           );
           charIndex++;
         } else {
-          // Jeśli skończyliśmy pisać, zatrzymujemy ten interwał...
           clearInterval(typingInterval);
-          // ...i po chwili pauzy, przechodzimy do następnego sloganu
           setTimeout(() => {
             setSloganIndex((prev) => (prev + 1) % slogans.length);
           }, sloganPause);
         }
       }, typingSpeed);
 
-      // Zwracamy funkcję czyszczącą, która zatrzyma interwał, jeśli komponent się zmieni
       return () => clearInterval(typingInterval);
     };
 
-    // Uruchamiamy cykl pisania
     const cleanup = handleTyping();
     return cleanup;
   }, [sloganIndex]);
@@ -109,12 +103,11 @@ const TopBar = () => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
-    window.addEventListener("resize", handleResize); // nasłuchuj zmiany rozmiaru
+    window.addEventListener("resize", handleResize);
     console.log(windowWidth);
-    return () => window.removeEventListener("resize", handleResize); // usuń nasłuchiwacz przy unmount
+    return () => window.removeEventListener("resize", handleResize);
   }, [windowWidth]);
 
-  // Zamykanie menu profilu po kliknięciu na zewnątrz
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -262,7 +255,6 @@ const TopBar = () => {
           {windowWidth > 600 && (
             <div className="slogan-container">
               <span className="logo-slogan">{displayedSlogan}</span>
-              {/* Kursor jest teraz zawsze widoczny, gdy tekst nie jest w pełni wyświetlony */}
               {displayedSlogan.length < slogans[sloganIndex].length && (
                 <span className="typing-cursor">|</span>
               )}

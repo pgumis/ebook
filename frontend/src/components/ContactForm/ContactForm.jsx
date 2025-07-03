@@ -111,7 +111,6 @@ const ContactForm = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="contact-form-grid" noValidate>
-            {/* Pola w dwóch kolumnach */}
             <div className="form-group">
               <label htmlFor="imie">Imię</label>
               <input id="imie" type="text" name="imie" value={dane.imie} onChange={handleChange} className={!isInputValid.imie ? "invalid" : ""} disabled={userData.loggedIn} />
@@ -134,7 +133,6 @@ const ContactForm = () => {
               </select>
             </div>
 
-            {/* Pole na całą szerokość */}
             <div className="form-group full-width">
               <label htmlFor="wiadomosc">Treść wiadomości</label>
               <div className="text-area-wrapper">
@@ -144,14 +142,12 @@ const ContactForm = () => {
               {!isInputValid.wiadomosc && <span className="error-text">Wiadomość musi mieć co najmniej 20 znaków.</span>}
             </div>
 
-            {/* Komunikat o sukcesie lub błędzie */}
             {komunikat.tresc && (
                 <div className={`form-komunikat full-width ${komunikat.typ === 'sukces' ? 'sukces' : 'blad'}`}>
                   {komunikat.tresc}
                 </div>
             )}
 
-            {/* Przyciski na całą szerokość */}
             <div className="form-actions full-width">
               <button type="button" className="btn btn-secondary">Anuluj</button>
               <button type="submit" className="btn btn-primary">

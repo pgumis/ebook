@@ -1,4 +1,3 @@
-// src/components/OwnerPanel/OwnerPanel.jsx
 import React, { useState } from 'react';
 import './OwnerPanel.css';
 import Sidebar from './Sidebar';

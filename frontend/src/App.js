@@ -48,13 +48,8 @@ function App() {
     }
   }, [dispatch]);
 
-  // Drugi useEffect, który reaguje na zmianę tokena (np. po nowym logowaniu)
   useEffect(() => {
-    // Jeśli token się pojawił (czyli ktoś się właśnie zalogował), a nie było go wcześniej,
-    // również pobierz koszyk. To obsłuży świeże logowania.
     if (userData.token) {
-      // Można by tu dodać warunek, żeby nie pobierać, jeśli już jest załadowany,
-      // ale dla prostoty i pewności, pobranie przy każdej zmianie tokena jest OK.
       dispatch(cartActions.fetchCartData(userData.token));
     }
   }, [userData.token, dispatch]);

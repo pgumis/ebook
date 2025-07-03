@@ -1,9 +1,7 @@
-// src/components/VendorPanel/ReviewsView.jsx
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import './ReviewsView.css'; // Stworzymy ten plik w następnym kroku
+import './ReviewsView.css';
 
-// Mała funkcja pomocnicza do generowania gwiazdek
 const generateStars = (rating) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {

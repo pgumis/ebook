@@ -1,4 +1,3 @@
-// Plik: src/components/OwnerPanel/views/SalesAnalysisView.jsx
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import "react-datepicker/dist/react-datepicker.css";

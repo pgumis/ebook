@@ -1,4 +1,3 @@
-// Plik: src/components/VendorPanel/Sidebar.jsx
 import React from 'react';
 
 const Sidebar = ({ activeView, setActiveView }) => {
@@ -8,8 +7,6 @@ const Sidebar = ({ activeView, setActiveView }) => {
         { id: 'finance', label: 'Finanse', icon: 'fas fa-wallet' },
         { id: 'reviews', label: 'Recenzje', icon: 'fas fa-star' }
     ];
-
-    // Nowa, poprawna struktura zwracająca bezpośrednio <aside>
     return (
         <aside className="panel-sidebar">
             <div className="sidebar-brand">

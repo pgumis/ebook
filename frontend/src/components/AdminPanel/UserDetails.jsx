@@ -1,9 +1,7 @@
-// components/AdminPanel/UserDetails.jsx (NOWA WERSJA)
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { viewActions } from '../../store/view';
-import '../Profile/Profile.css'; // Załóżmy, że style są w Profile.css
+import '../Profile/Profile.css';
 import './ManagementTable.css';
 
 const UserDetails = ({ onGoBack }) => {
@@ -15,20 +13,17 @@ const UserDetails = ({ onGoBack }) => {
     const [loading, setLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
 
-    // Stany do formularza edycji
     const [formData, setFormData] = useState({});
     const [formLoading, setFormLoading] = useState(false);
     const [message, setMessage] = useState(null);
 
-    // --- POPRAWIONA FUNKCJA POWROTU ---
-    // Działa poprawnie, jeśli AdminPanel słucha stanu Redux
     const handleGoBack = () => {
         if (onGoBack) {
-            onGoBack(); // Wywołujemy funkcję przekazaną z AdminPanel
+            onGoBack();
         }
     };
 
-    // Funkcja do pobierania danych użytkownika
+
     const fetchUserDetails = useCallback(async () => {
         if (!userId || !token) return;
         setLoading(true);
@@ -38,7 +33,7 @@ const UserDetails = ({ onGoBack }) => {
             });
             const data = await response.json();
             setUser(data);
-            setFormData({ // Ustawiamy początkowe dane formularza
+            setFormData({
                 imie: data.imie || '',
                 nazwisko: data.nazwisko || '',
                 email: data.email || '',
@@ -65,9 +60,8 @@ const UserDetails = ({ onGoBack }) => {
 
     const toggleEditMode = () => {
         setIsEditing(prev => !prev);
-        setMessage(null); // Czyścimy komunikaty przy przełączaniu
+        setMessage(null);
         if (!isEditing) {
-            // Jeśli wchodzimy w tryb edycji, resetujemy formularz do danych z serwera
             setFormData({
                 imie: user.imie, nazwisko: user.nazwisko, email: user.email,
                 numer_telefonu: user.numer_telefonu || '', rola: user.rola, status: user.status
@@ -88,7 +82,7 @@ const UserDetails = ({ onGoBack }) => {
             const result = await response.json();
             if (response.ok) {
                 setMessage({ type: 'success', text: result.message });
-                setUser(result.user); // Aktualizujemy widok nowymi danymi
+                setUser(result.user);
                 setIsEditing(false);
             } else {
                 const errorText = result.message + (result.errors ? `: ${Object.values(result.errors).join(', ')}` : '');

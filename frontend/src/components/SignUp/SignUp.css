@@ -1,5 +1,3 @@
-/* Style dla strony rejestracji, wzorowane na stronie logowania */
-
 .signup-page-container {
     display: flex;
     justify-content: center;
@@ -15,7 +13,7 @@
     border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     width: 100%;
-    max-width: 550px; /* Nieco szersza karta, żeby zmieścić więcej pól */
+    max-width: 550px;
     text-align: center;
 }
 
@@ -39,7 +37,7 @@
 }
 
 .signup-form .input-group {
-    margin-bottom: 15px; /* Mniejszy margines, bo jest więcej pól */
+    margin-bottom: 15px;
     text-align: left;
 }
 
@@ -67,7 +65,6 @@
     box-shadow: 0 0 0 3px rgba(76, 119, 102, 0.2);
 }
 
-/* Styl dla wiersza z imieniem i nazwiskiem */
 .signup-name-row {
     display: flex;
     gap: 15px;
@@ -76,15 +73,13 @@
     flex: 1;
 }
 
-/* Styl dla komunikatów o błędach pod polami */
 .error-text {
     color: #d9534f;
     font-size: 0.8rem;
     margin-top: 4px;
-    height: 1em; /* Zapewnia stałą wysokość, aby formularz nie "skakał" */
+    height: 1em;
 }
 
-/* Główny komunikat (o sukcesie lub błędzie) */
 .signup-main-message {
     padding: 10px;
     border-radius: 8px;

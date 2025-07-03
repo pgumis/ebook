@@ -33,7 +33,7 @@ const ReviewManagement = () => {
     key: "created_at",
     direction: "desc",
   });
-  const [ratingFilter, setRatingFilter] = useState(""); // Nowy stan dla filtra ocen
+  const [ratingFilter, setRatingFilter] = useState("");
 
   const fetchReviews = useCallback(async () => {
     if (!token) return;
@@ -44,7 +44,7 @@ const ReviewManagement = () => {
       szukaj: searchTerm,
       sortuj_wg: sortConfig.key,
       kierunek: sortConfig.direction,
-      filtruj_ocena: ratingFilter, // Dodajemy filtr do zapytania
+      filtruj_ocena: ratingFilter,
     });
     const url = `http://localhost:8000/api/admin/recenzje?${params.toString()}`;
 
@@ -74,7 +74,7 @@ const ReviewManagement = () => {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
-      fetchReviews(); // Odśwież listę po usunięciu
+      fetchReviews();
     } catch (error) {
       console.error("Błąd usuwania recenzji:", error);
     }

@@ -1,10 +1,8 @@
-// src/components/Rating/Rating.jsx
 import React from 'react';
 import "./Rating.css";
 import generateStars from '../../utils/generateStars';
 
 const Rating = ({ ratingObj }) => {
-    // Zabezpieczenie na wypadek, gdyby obiekt był pusty
     if (!ratingObj) return null;
 
     return (

@@ -43,10 +43,10 @@
     background-color: #dc3545;
 }
 
-/* ManagementTable.css */
+
 
 .activate-btn {
-    background-color: #28a745; /* Zielony */
+    background-color: #28a745; 
 }
 
 .withdraw-btn {
@@ -54,22 +54,16 @@
     color: #f0f0f0;
 }
 
-/* ManagementTable.css */
 
-/* --- NOWE STYLE DLA ETYKIET STATUSU --- */
-
-
-/* Kolor zielony dla statusu 'aktywny' */
 .status-aktywny {
     color: #28a745;
 }
 
-/* Kolor czerwony dla statusu 'wycofany' */
 .status-wycofany {
     color: #dc3545;
 }
 
-/* ManagementTable.css */
+
 
 .action-cell {
     display: flex;
@@ -84,7 +78,7 @@
 }
 
 .save-btn {
-    background-color: #007bff; /* Niebieski */
+    background-color: #007bff;
 }
 
 .save-btn:disabled {
@@ -92,16 +86,13 @@
     cursor: not-allowed;
 }
 
-/* Poprawka dla statusu zrealizowane i anulowane */
 .status-zrealizowane {
-    background-color: #28a745; /* Zielony */
+    background-color: #28a745; 
 }
 .status-anulowane {
-    background-color: #6c757d; /* Szary */
+    background-color: #6c757d;
 }
-/* ManagementTable.css */
 
-/* --- NOWE STYLE --- */
 
 .search-input {
     width: 100%;
@@ -135,14 +126,12 @@
 
 .management-table th.sortable {
     cursor: pointer;
-    user-select: none; /* Zapobiega zaznaczaniu tekstu przy klikaniu */
+    user-select: none;
 }
 
 .management-table th.sortable:hover {
     background-color: #e9e9e9;
 }
-
-/* MessageInbox.css */
 
 .filters-container {
     display: flex;
@@ -163,7 +152,6 @@
     color: white;
 }
 
-/* --- Style dla Modala --- */
 .modal-backdrop {
     position: fixed;
     top: 0;
@@ -203,7 +191,7 @@
     margin: 1rem 0;
     max-height: 60vh;
     overflow-y: auto;
-    white-space: pre-wrap; /* Zachowuje entery i spacje z treści wiadomości */
+    white-space: pre-wrap;
     line-height: 1.6;
 }
 
@@ -239,9 +227,8 @@
     background-color: #f8f9fa;
 }
 
-/* Możesz też opcjonalnie dodać styl dla przeczytanych, jeśli chcesz */
 .message-read {
-    color: #6c757d; /* Na przykład lekko wyszarzony tekst */
+    color: #6c757d;
 }
 
 .details-container {
@@ -294,7 +281,6 @@
     text-align: right;
 }
 
-/* Style dla statusów (wykorzystujemy istniejące klasy) */
 .details-item .status-aktywny {
     color: #28a745;
 }
@@ -307,7 +293,7 @@
     color: #dc3545;
 }
 
-/* Animacja (może już istnieć w pliku) */
+
 @keyframes fadeIn {
     from {
         opacity: 0;

@@ -87,14 +87,12 @@ const MessageInbox = () => {
     fetchMessages();
   }, [fetchMessages]);
 
-  // --- POCZĄTEK POPRAWIONEJ LOGIKI ---
+ 
   const openMessage = async (message) => {
-    setSelectedMessage(message); // Otwórz modal
+    setSelectedMessage(message);
 
-    // Jeśli wiadomość jest nieprzeczytana, wykonaj zapytanie i zaktualizuj stan
     if (message.przeczytana === 0) {
       try {
-        // Wyślij żądanie do API, aby zaktualizować status w bazie danych
         await fetch(
           `http://localhost:8000/api/admin/wiadomosci/${message.id}/przeczytaj`,
           {
@@ -103,8 +101,6 @@ const MessageInbox = () => {
           }
         );
 
-        // Zaktualizuj stan lokalnie - to jest kluczowa poprawka.
-        // Zamiast polegać na odpowiedzi z serwera, od razu zmieniamy stan wiadomości w tablicy.
         setMessages((prevMessages) =>
           prevMessages.map((m) =>
             m.id === message.id ? { ...m, przeczytana: 1 } : m
@@ -115,7 +111,6 @@ const MessageInbox = () => {
       }
     }
   };
-  // --- KONIEC POPRAWIONEJ LOGIKI ---
 
   const handleDeleteMessage = async (messageId) => {
     if (!window.confirm("Czy na pewno chcesz usunąć tę wiadomość?")) return;
@@ -150,8 +145,7 @@ const MessageInbox = () => {
 
   if (loading && messages.length === 0) return <p>Ładowanie wiadomości...</p>;
 
-  // Liczba porządkowa musi uwzględniać paginację
-  const itemsPerPage = 15; // Tyle ile ustawiliśmy w paginacji w Laravelu
+  const itemsPerPage = 15;
   const startIndex = (currentPage - 1) * itemsPerPage;
 
   return (
@@ -179,7 +173,6 @@ const MessageInbox = () => {
         <table className="management-table">
           <thead>
             <tr>
-              {/* --- DODANA KOLUMNA LP. --- */}
               <th>Lp.</th>
               <th className="sortable" onClick={() => handleSort("imie")}>
                 Nadawca
@@ -223,7 +216,6 @@ const MessageInbox = () => {
                       : "message-read"
                   }
                 >
-                  {/* --- DODANA KOMÓRKA Z NUMEREM --- */}
                   <td>{startIndex + index + 1}</td>
                   <td>{message.imie}</td>
                   <td>{message.email}</td>

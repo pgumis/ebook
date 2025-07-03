@@ -1,10 +1,8 @@
-// frontend/src/components/Profile/Profile.jsx
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { userDataActions } from "../../store/userData";
-import "./Profile.css"; // Używamy jednego, ale przeprojektowanego pliku CSS
+import "./Profile.css";
 
-// --- Komponent "Moja Półka", pozostaje bez zmian w logice ---
 const MojaPolkaSection = () => {
   const [ebooki, setEbooki] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,7 +28,7 @@ const MojaPolkaSection = () => {
   }, [token]);
 
   const handleDownload = async (ebookId) => {
-    setDownloading(ebookId); // Pokaż stan ładowania na przycisku
+    setDownloading(ebookId);
     try {
       const response = await fetch(`http://localhost:8000/api/ebooks/${ebookId}/pobierz`, {
         headers: {
@@ -45,14 +43,13 @@ const MojaPolkaSection = () => {
 
       const result = await response.json();
 
-      // Kiedy otrzymamy link z backendu, przekierowujemy przeglądarkę, aby rozpoczęła pobieranie
       window.location.href = result.download_url;
 
     } catch (error) {
       console.error("Błąd podczas próby pobrania:", error);
       alert("Nie udało się pobrać pliku. Spróbuj ponownie.");
     } finally {
-      setDownloading(null); // Zakończ stan ładowania
+      setDownloading(null);
     }
   };
 
@@ -92,12 +89,10 @@ const MojaPolkaSection = () => {
 };
 
 
-// --- Główny komponent Profilu ---
 const Profile = () => {
   const userData = useSelector((state) => state.userData);
   const dispatch = useDispatch();
 
-  // Stany formularza i edycji (logika bez zmian)
   const [editedFirstName, setEditedFirstName] = useState(userData.imie || "");
   const [editedLastName, setEditedLastName] = useState(userData.nazwisko || "");
   const [editedEmail, setEditedEmail] = useState(userData.email || "");
@@ -119,18 +114,18 @@ const Profile = () => {
     setCacheBuster(Date.now());
   }, [userData]);
 
-  // Wszystkie Twoje funkcje (handleAvatarSelect, toggleEditMode, handleSubmit) pozostają bez zmian.
+
 
   const handleAvatarSelect = (avatarNumber) => {
     const newAvatarPath = `/avatars/avatar${avatarNumber}.png`;
     setProfileImage(newAvatarPath);
-    // Możesz dispatchować od razu lub poczekać na zapis całego profilu
+    
   };
 
   const toggleEditMode = () => {
     setIsEditing((prev) => !prev);
     setMessage(null);
-    if (isEditing) { // Przywracamy wartości, jeśli anulujemy edycję
+    if (isEditing) {
       setEditedFirstName(userData.imie || "");
       setEditedLastName(userData.nazwisko || "");
       setEditedEmail(userData.email || "");
@@ -175,7 +170,6 @@ const Profile = () => {
 
   return (
       <div className="profile-page-container">
-        {/* === NOWY, NOWOCZESNY NAGŁÓWEK PROFILU === */}
         <div className="profile-header">
           <div className="profile-header-avatar">
             <img src={`${profileImage}?v=${cacheBuster}`} alt="Zdjęcie profilowe" />
@@ -208,8 +202,6 @@ const Profile = () => {
             </div>
         )}
 
-
-        {/* === SEKCJA "MOJA PÓŁKA" - WIDOCZNA OD RAZU === */}
         <div className="profile-section-card">
           <div className="section-title">
             <i className="fas fa-book-open"></i>
@@ -218,7 +210,6 @@ const Profile = () => {
           <MojaPolkaSection />
         </div>
 
-        {/* === SEKCJA "DANE PROFILOWE" === */}
         <div className="profile-section-card">
           <div className="section-title">
             <i className="fas fa-user-edit"></i>

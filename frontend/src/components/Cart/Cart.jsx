@@ -2,14 +2,13 @@ import "./Cart.css";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { cartActions } from "../../store/cart";
-import CartItem from "./CartItem"; // Importujemy nowy komponent
+import CartItem from "./CartItem";
 import { viewActions } from '../../store/view';
 const Cart = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.userData);
   const { items, totalAmount, status } = useSelector((state) => state.cart);
 
-  // Funkcja usuwania, która teraz będzie też wysyłać żądanie do API
   const handleDelete = (id) => {
     dispatch(cartActions.removeItemFromCart({ token: userData.token, itemId: id }));
   };

@@ -1,25 +1,21 @@
-// src/components/VendorPanel/FinanceView.jsx
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import { format, subDays, startOfYear } from 'date-fns';
 import './Dashboard.css';
-import './FinanceView.css'; // Dedykowany plik stylów
+import './FinanceView.css';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
 const FinanceView = () => {
     const userToken = useSelector(state => state.userData.token);
-
-    // Stan dla danych, ładowania i błędów
     const [financeData, setFinanceData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Stan dla zakresu dat
     const [dateRange, setDateRange] = useState({
-        from: subDays(new Date(), 29), // Domyślnie ostatnie 30 dni
+        from: subDays(new Date(), 29),
         to: new Date()
     });
     const [activeFilter, setActiveFilter] = useState('30d');
@@ -48,7 +44,7 @@ const FinanceView = () => {
         };
 
         fetchFinanceData();
-    }, [userToken, dateRange]); // Efekt uruchamia się ponownie przy zmianie zakresu dat
+    }, [userToken, dateRange]);
 
     const handleFilterChange = (period) => {
         setActiveFilter(period);
@@ -62,7 +58,7 @@ const FinanceView = () => {
         }
     };
 
-    const chartOptions = { /* ... bez zmian ... */ };
+    const chartOptions = {};
 
     const chartComponentData = {
         labels: financeData?.salesChart?.labels || [],
@@ -84,7 +80,6 @@ const FinanceView = () => {
                     <button onClick={() => handleFilterChange('7d')} className={activeFilter === '7d' ? 'active' : ''}>7 Dni</button>
                     <button onClick={() => handleFilterChange('30d')} className={activeFilter === '30d' ? 'active' : ''}>30 Dni</button>
                     <button onClick={() => handleFilterChange('year')} className={activeFilter === 'year' ? 'active' : ''}>Ten Rok</button>
-                    {/* Tutaj w przyszłości można dodać Date Range Picker */}
                 </div>
             </div>
 

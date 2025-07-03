@@ -1,6 +1,5 @@
-/* Profile.css - NOWA, PRZEPROJEKTOWANA WERSJA */
 :root {
-  --profile-primary-color: #4C7766;
+  --profile-primary-color: #4c7766;
   --profile-bg-color: #f8f9fa;
   --card-bg-color: #ffffff;
   --text-primary: #212529;
@@ -18,7 +17,6 @@
   gap: 2rem;
 }
 
-/* === NOWY NAGŁÓWEK PROFILU === */
 .profile-header {
   display: flex;
   align-items: center;
@@ -94,7 +92,6 @@
   background: #e9ecef;
 }
 
-/* === KARTY SEKCJI (Moja Półka, Dane) === */
 .profile-section-card {
   background: var(--card-bg-color);
   padding: 2rem;
@@ -120,29 +117,74 @@
   color: var(--text-primary);
 }
 
-/* === Style dla Półki (z poprzedniej odpowiedzi, lekko dopasowane) === */
-.ebook-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; }
-.ebook-card { border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; }
-.ebook-card:hover { transform: translateY(-5px); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
-.ebook-card img { width: 100%; height: 200px; object-fit: cover; }
-.ebook-info { padding: 1rem; flex-grow: 1; display: flex; flex-direction: column; }
-.ebook-info h3 { font-size: 1rem; margin: 0 0 0.25rem 0; font-weight: 600; }
-.ebook-info p { font-size: 0.85rem; color: #666; margin: 0 0 1rem 0; flex-grow: 1; }
-.download-btn { display: block; text-align: center; padding: 0.7rem; background-color: var(--profile-primary-color); color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.2s; }
-.download-btn:hover { background-color: #3e6052; }
+.ebook-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+.ebook-card {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.ebook-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+.ebook-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+.ebook-info {
+  padding: 1rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+.ebook-info h3 {
+  font-size: 1rem;
+  margin: 0 0 0.25rem 0;
+  font-weight: 600;
+}
+.ebook-info p {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0 0 1rem 0;
+  flex-grow: 1;
+}
+.download-btn {
+  display: block;
+  text-align: center;
+  padding: 0.7rem;
+  background-color: var(--profile-primary-color);
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+.download-btn:hover {
+  background-color: #3e6052;
+}
 
-/* === Style dla Danych Profilowych === */
-.profile-data-view .data-row, .profile-form .form-row {
+.profile-data-view .data-row,
+.profile-form .form-row {
   display: grid;
   grid-template-columns: 200px 1fr;
   align-items: center;
   padding: 1rem 0;
   border-bottom: 1px solid #f1f3f5;
 }
-.profile-data-view .data-row:last-child, .profile-form .form-row:last-child {
+.profile-data-view .data-row:last-child,
+.profile-form .form-row:last-child {
   border-bottom: none;
 }
-.profile-data-view .data-row span:first-child, .profile-form .form-row label {
+.profile-data-view .data-row span:first-child,
+.profile-form .form-row label {
   font-weight: 600;
   color: var(--text-secondary);
 }
@@ -169,12 +211,47 @@
   gap: 1rem;
   margin-top: 2rem;
 }
-.btn-save { padding: 0.7rem 1.5rem; border:none; border-radius: 8px; font-weight: 700; cursor: pointer; background-color: var(--profile-primary-color); color: white; }
-.btn-cancel { padding: 0.7rem 1.5rem; border:1px solid var(--border-color); border-radius: 8px; font-weight: 700; cursor: pointer; background-color: #f1f3f5; color: var(--text-primary); }
+.btn-save {
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  background-color: var(--profile-primary-color);
+  color: white;
+}
+.btn-cancel {
+  padding: 0.7rem 1.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  background-color: #f1f3f5;
+  color: var(--text-primary);
+}
 
-/* === Style dla wyboru awatara === */
-.avatar-picker-container { margin-top: -1rem; /* Ustawia się pod headerem */ }
-.avatar-picker { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 10px; }
-.avatar-thumbnail { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 3px solid transparent; transition: all 0.2s; }
-.avatar-thumbnail:hover { transform: scale(1.05); }
-.avatar-thumbnail.selected-avatar { border-color: var(--profile-primary-color); }
+.avatar-picker-container {
+  margin-top: -1rem;
+}
+.avatar-picker {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+}
+.avatar-thumbnail {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: all 0.2s;
+}
+.avatar-thumbnail:hover {
+  transform: scale(1.05);
+}
+.avatar-thumbnail.selected-avatar {
+  border-color: var(--profile-primary-color);
+}

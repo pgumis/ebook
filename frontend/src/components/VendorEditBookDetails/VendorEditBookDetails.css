@@ -1,5 +1,3 @@
-/* Plik: src/components/VendorPanel/VendorEditBookDetails.css */
-
 .btn-primary-custom {
     background-color: #4C7766;
     color: white;
@@ -35,7 +33,6 @@
 .form-control, .form-select {
     border-radius: 6px;
     border: 1px solid #ced4da;
-    /* Domyślne style bootstrapa są OK, ale możemy je tu nadpisać w razie potrzeby */
 }
 
 .form-control:focus, .form-select:focus {

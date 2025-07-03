@@ -1,7 +1,6 @@
-// src/components/Rating/ReviewForm.jsx
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import './Rating.css'; // Użyjemy stylów z Rating.css i dodamy nowe
+import './Rating.css';
 
 const ReviewForm = ({ ebookId, onReviewAdded }) => {
     const [ocena, setOcena] = useState(0);
@@ -39,16 +38,13 @@ const ReviewForm = ({ ebookId, onReviewAdded }) => {
             const result = await response.json();
 
             if (!response.ok) {
-                // Używamy klucza 'error' z Twojego RecenzjaController.php
                 const errorMessage = result.error || 'Wystąpił nieznany błąd.';
                 throw new Error(errorMessage);
             }
 
-            // W Twoim kontrolerze, po sukcesie, zwracasz bezpośrednio obiekt recenzji.
-            // Musimy go uzupełnić o dane użytkownika, aby od razu dobrze się wyświetlił.
             const newReviewData = {
                 ...result,
-                uzytkownik: { nazwa: "Ty" } // Prosty placeholder
+                uzytkownik: { nazwa: "Ty" }
             };
 
             onReviewAdded(newReviewData);
@@ -57,7 +53,6 @@ const ReviewForm = ({ ebookId, onReviewAdded }) => {
         } catch (err) {
             setError(err.message);
         } finally {
-            // To jest kluczowe - ZAWSZE resetujemy stan ładowania
             setIsSubmitting(false);
         }
     };

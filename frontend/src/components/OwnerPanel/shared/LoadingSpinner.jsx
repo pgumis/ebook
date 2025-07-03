@@ -1,6 +1,5 @@
-// src/components/OwnerPanel/shared/LoadingSpinner.jsx
 import React from 'react';
-import './LoadingSpinner.css'; // Dedykowany plik CSS dla animacji
+import './LoadingSpinner.css';
 
 const LoadingSpinner = () => {
     return (

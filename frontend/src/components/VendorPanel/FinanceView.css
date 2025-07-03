@@ -1,5 +1,3 @@
-/* src/components/VendorPanel/FinanceView.css */
-
 .finance-view-container {
     display: flex;
     flex-direction: column;
@@ -75,7 +73,6 @@
 }
 
 .chart-card-finance, .top-ebooks-card-finance {
-    /* Dziedziczą style .dashboard-card, więc nie trzeba wiele dodawać */
 }
 
 .chart-card-finance h4, .top-ebooks-card-finance h4 { margin: 0 0 1rem 0; }

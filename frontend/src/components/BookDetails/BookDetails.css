@@ -1,22 +1,15 @@
-/* --- Główny kontener --- */
-/* Plik: src/components/BookDetails/BookDetails.css */
-
-/* --- NOWE STYLE LAYOUTU --- */
-
-/* Layout Z PANELEM BOCZNYM (dla klienta) */
 .book-details-layout-with-sidebar {
   display: grid;
-  grid-template-columns: 280px 1fr; /* Szerokość panelu bocznego + reszta */
+  grid-template-columns: 280px 1fr;
   gap: 30px;
   align-items: flex-start;
-  padding: 2rem; /* Przykładowy padding, dostosuj wg potrzeb */
+  padding: 2rem;
 }
 
-/* Layout PEŁNOEKRANOWY (dla dostawcy/admina) */
 .book-details-layout-full {
-  padding: 2rem; /* Przykładowy padding, dostosuj wg potrzeb */
-  max-width: 1200px; /* Opcjonalnie: Ustaw maksymalną szerokość dla lepszej czytelności */
-  margin: 0 auto; /* Wycentruj layout */
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .details-sidebar-panel {
@@ -24,26 +17,18 @@
   top: 20px;
 }
 
-/* --- ISTNIEJĄCE STYLE (BEZ ZMIAN) --- */
-.book-details-wrapper {
-  /* ... twoje istniejące style dla .book-details-wrapper ... */
-}
-
-/* ... cała reszta twoich istniejących stylów ... */
-
 .book-details-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 2rem; /* Odstęp między sekcją główną a dolną */
+  gap: 2rem;
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem;
 }
 
-/* --- Sekcja górna (zdjęcie + info) --- */
 .book-details-main-info {
   display: grid;
-  grid-template-columns: 1fr 1.5fr; /* Daje więcej miejsca na tekst */
+  grid-template-columns: 1fr 1.5fr;
   gap: 2rem;
   padding: 2rem;
   background-color: #ffffff;
@@ -58,25 +43,21 @@
 }
 
 .book-details-img {
-  max-height: 450px; /* -> Zmniejszono z 500px */
+  max-height: 450px;
   width: auto;
   max-width: 100%;
   object-fit: contain;
   border-radius: 8px;
-  /* -> Dodany cień i przejście dla płynnego efektu */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-
 }
-
 
 .book-details-right-panel {
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Rozsuwa tekst od przycisków */
+  justify-content: space-between;
   padding: 1rem 0;
 }
 
-/* --- Tekst po prawej stronie --- */
 .book-details-main-text {
   display: flex;
   flex-direction: column;
@@ -114,7 +95,6 @@
   margin-top: 1rem;
 }
 
-/* --- Przyciski i komunikaty --- */
 .book-details-actions {
   display: flex;
   flex-direction: column;
@@ -155,7 +135,6 @@
   cursor: not-allowed;
 }
 
-/* --- Sekcja dolna (opis + recenzje) --- */
 .book-details-bottom-content {
   display: flex;
   flex-direction: column;
@@ -181,7 +160,6 @@
   color: #333;
 }
 
-/* --- Sekcja recenzji --- */
 .book-details-rating-top-section {
   display: flex;
   justify-content: space-between;
@@ -232,7 +210,7 @@
 
 .rating-btns-container {
   display: flex;
-  justify-content: flex-end; /* Przyciski po prawej */
+  justify-content: flex-end;
   gap: 1rem;
 }
 
@@ -243,23 +221,18 @@
   gap: 1.5rem;
 }
 
-/* Usunięcie zbędnych starych stylów */
 .book-details-raiting {
   display: none;
 }
 
-/* Style dla wysuwanego formularza recenzji */
-
 .review-form-container {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.5s ease-in-out;
-  /* Dodajemy trochę marginesu, gdy formularz jest widoczny */
   margin-bottom: 0;
 }
 
 .review-form-container.form-visible {
-  /* Ustaw wystarczająco dużą wysokość, aby pomieścić formularz */
   max-height: 500px;
   margin-bottom: 2rem;
 }
@@ -276,7 +249,6 @@
   text-decoration: underline;
 }
 
-/* Możesz też poprawić wygląd nagłówka sekcji opinii */
 .book-details-rating-top-section {
   display: flex;
   justify-content: space-between;
@@ -286,18 +258,14 @@
   margin-bottom: 1rem;
 }
 
-/* Style dla wysuwanego formularza recenzji */
-
 .review-form-container {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.5s ease-in-out;
-  /* Dodajemy trochę marginesu, gdy formularz jest widoczny */
   margin-bottom: 0;
 }
 
 .review-form-container.form-visible {
-  /* Ustaw wystarczająco dużą wysokość, aby pomieścić formularz */
   max-height: 500px;
   margin-bottom: 2rem;
 }
@@ -314,7 +282,6 @@
   text-decoration: underline;
 }
 
-/* Możesz też poprawić wygląd nagłówka sekcji opinii */
 .book-details-rating-top-section {
   display: flex;
   justify-content: space-between;
@@ -323,12 +290,10 @@
   padding-bottom: 1rem;
   margin-bottom: 1rem;
 }
-
-/* BookDetails.css - dodaj na końcu */
 
 .book-details-layout-grid {
   display: grid;
-  grid-template-columns: 280px 1fr; /* Szerokość panelu bocznego i reszta */
+  grid-template-columns: 280px 1fr;
   gap: 30px;
 }
 
@@ -348,19 +313,17 @@
   padding: 10px;
 }
 
-/* Na mobilce chcemy, żeby panel kategorii był na górze, a szczegóły pod nim */
 @media (max-width: 992px) {
   .book-details-layout-grid {
-    grid-template-columns: 1fr; /* Jedna kolumna */
+    grid-template-columns: 1fr;
   }
 
   .details-sidebar-panel {
-    margin-bottom: 2rem; /* Odstęp między panelem a szczegółami książki */
+    margin-bottom: 2rem;
   }
 }
 
 .details-main-content{
-
   margin-top: 16px;
 }
 
@@ -369,78 +332,77 @@
 }
 
 .back-to-panel-btn {
-  background-color: #4C7766; /* Główny, zielony kolor aplikacji */
+  background-color: #4C7766;
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem; /* Większy padding dla lepszej widoczności */
+  padding: 0.75rem 1.5rem;
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.9rem;
-  font-weight: bold; /* Pogrubiona czcionka */
+  font-weight: bold;
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem; /* Większy odstęp od ikony */
+  gap: 0.75rem;
   transition: background-color 0.2s, transform 0.2s;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .back-to-panel-btn:hover {
-  background-color: #3e6052; /* Ciemniejszy odcień na hover */
-  transform: translateY(-2px); /* Efekt lekkiego uniesienia */
+  background-color: #3e6052;
+  transform: translateY(-2px);
 }
 
 .save-to-panel-btn {
-  background-color: #4C7766; /* Główny, zielony kolor aplikacji */
+  background-color: #4C7766;
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem; /* Większy padding dla lepszej widoczności */
+  padding: 0.75rem 1.5rem;
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.9rem;
-  font-weight: bold; /* Pogrubiona czcionka */
+  font-weight: bold;
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem; /* Większy odstęp od ikony */
+  gap: 0.75rem;
   transition: background-color 0.2s, transform 0.2s;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .save-to-panel-btn:hover {
-  background-color: #3e6052; /* Ciemniejszy odcień na hover */
-  transform: translateY(-2px); /* Efekt lekkiego uniesienia */
+  background-color: #3e6052;
+  transform: translateY(-2px);
 }
 
 .cancel-to-panel-btn {
-  background-color: #6c757d; /* Główny, zielony kolor aplikacji */
+  background-color: #6c757d;
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem; /* Większy padding dla lepszej widoczności */
+  padding: 0.75rem 1.5rem;
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.9rem;
-  font-weight: bold; /* Pogrubiona czcionka */
+  font-weight: bold;
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem; /* Większy odstęp od ikony */
+  gap: 0.75rem;
   transition: background-color 0.2s, transform 0.2s;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   margin-right: 10px;
 }
 
 .cancel-to-panel-btn:hover {
-  background-color: #545b61; /* Ciemniejszy odcień na hover */
-  transform: translateY(-2px); /* Efekt lekkiego uniesienia */
+  background-color: #545b61;
+  transform: translateY(-2px);
 }
 
 .book-details-format {
-  font-size: 0.95em; /* Nieco mniejsza czcionka niż tytuł/autor */
-  color: #666; /* Ciemniejszy szary, aby odróżnić od ceny */
-  margin-top: 5px; /* Mały margines od góry, aby oddzielić od ceny */
-  font-weight: 500; /* Lekko pogrubiony, aby był czytelny */
-  text-transform: uppercase; /* Upewnij się, że tekst jest dużymi literami, jeśli tego chcesz */
+  font-size: 0.95em;
+  color: #666;
+  margin-top: 5px;
+  font-weight: 500;
+  text-transform: uppercase;
 }
 
-/* Możesz też dodać media queries, jeśli potrzebujesz responsywności */
 @media (max-width: 768px) {
   .book-details-format {
     font-size: 0.9em;
@@ -448,14 +410,13 @@
 }
 
 .book-details-format {
-  font-size: 0.95em; /* Nieco mniejsza czcionka niż tytuł/autor */
-  color: #666; /* Ciemniejszy szary, aby odróżnić od ceny */
-  margin-top: 5px; /* Mały margines od góry, aby oddzielić od ceny */
-  font-weight: 500; /* Lekko pogrubiony, aby był czytelny */
-  text-transform: uppercase; /* Upewnij się, że tekst jest dużymi literami, jeśli tego chcesz */
+  font-size: 0.95em;
+  color: #666;
+  margin-top: 5px;
+  font-weight: 500;
+  text-transform: uppercase;
 }
 
-/* Możesz też dodać media queries, jeśli potrzebujesz responsywności */
 @media (max-width: 768px) {
   .book-details-format {
     font-size: 0.9em;
@@ -469,18 +430,18 @@
   border-bottom: 1px solid #f0f0f0;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem; /* Odstępy między wierszami */
+  gap: 0.75rem;
 }
 
 .book-details-metadata p {
   margin: 0;
-  font-size: 0.95rem; /* Rozmiar czcionki */
-  color: #555; /* Kolor tekstu */
+  font-size: 0.95rem;
+  color: #555;
   display: flex;
 }
 
 .book-details-metadata p strong {
-  color: #111; /* Kolor etykiety */
-  min-width: 120px; /* Stała szerokość dla etykiet, aby ładnie się wyrównały */
-  flex-shrink: 0; /* Zapobiega kurczeniu się etykiet */
+  color: #111;
+  min-width: 120px;
+  flex-shrink: 0;
 }

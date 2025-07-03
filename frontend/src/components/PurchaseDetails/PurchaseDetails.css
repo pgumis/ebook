@@ -103,16 +103,16 @@
 
 .btn-primary-action {
     background-color: #4C7766;
-    border-radius: 8px; /* Lekko większe zaokrąglenie dla nowoczesnego wyglądu */
+    border-radius: 8px;
     border-style: none;
     color: #fff;
     cursor: pointer;
-    display: inline-flex; /* Używamy flex, aby łatwo wyśrodkować ikonę i tekst */
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem; /* Odstęp między ikoną a tekstem */
-    font-family: inherit; /* Używa domyślnej czcionki strony */
+    gap: 0.5rem;
+    font-family: inherit;
     font-size: 14px;
-    font-weight: 600; /* Pogrubiona czcionka */
+    font-weight: 600;
     line-height: 1.5;
     padding: 0.6rem 1.2rem;
     text-align: center;
@@ -122,8 +122,8 @@
 }
 
 .btn-primary-action:hover {
-    background-color: #3e6052; /* Ciemniejszy odcień po najechaniu */
-    transform: translateY(-2px); /* Lekkie uniesienie */
+    background-color: #3e6052;
+    transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 

@@ -1,4 +1,3 @@
-// src/components/OwnerPanel/Sidebar.jsx
 import React from 'react';
 
 const Sidebar = ({ activeView, setActiveView }) => {
@@ -9,8 +8,6 @@ const Sidebar = ({ activeView, setActiveView }) => {
         { id: 'products', label: 'Analiza Produktów', icon: 'fas fa-tags' },
         { id: 'reports', label: 'Raporty', icon: 'fas fa-file-download' },
     ];
-
-    // Użyjemy tych samych stylów co w VendorPanel, więc CSS powinien być podobny
     return (
         <aside className="panel-sidebar">
             <div className="sidebar-brand">

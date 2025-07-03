@@ -1,12 +1,11 @@
-// src/components/VendorPanel/VendorPanel.jsx
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import "./VendorPanel.css";
 import Sidebar from "./Sidebar";
 import DashboardView from "./DashboardView";
 import VendorsBookList from "./VendorsBookList";
-import FinanceView from "./FinanceView"; // <-- NOWY IMPORT
-import ReviewsView from "./ReviewsView"; // <-- NOWY IMPORT
+import FinanceView from "./FinanceView";
+import ReviewsView from "./ReviewsView";
 
 const VendorPanel = () => {
     const userData = useSelector((state) => state.userData);

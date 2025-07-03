@@ -15,7 +15,6 @@ const Footer = () => {
     return (
         <footer className="site-footer">
             <div className="footer-content">
-                {/* --- Kolumna 1: O firmie --- */}
                 <div className="footer-column">
                     <h4>EBOOK NA WYNOS</h4>
                     <p className="footer-about">
@@ -23,7 +22,6 @@ const Footer = () => {
                     </p>
                 </div>
 
-                {/* --- Kolumna 2: Szybkie Linki --- */}
                 <div className="footer-column">
                     <h4>Szybkie Linki</h4>
                     <ul className="footer-links">
@@ -35,7 +33,6 @@ const Footer = () => {
                     </ul>
                 </div>
 
-                {/* --- Kolumna 3: Media Społecznościowe --- */}
                 <div className="footer-column">
                     <h4>Znajdź nas w sieci</h4>
                     <div className="social-links">
@@ -46,8 +43,6 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
-
-            {/* --- Dolny pasek z prawami autorskimi --- */}
             <div className="footer-bottom">
                 <p>EBOOK NA WYNOS &copy; {year}. Wszelkie prawa zastrzeżone.</p>
             </div>

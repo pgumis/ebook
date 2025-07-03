@@ -1,5 +1,3 @@
-/* src/components/BooksList/BooksListMainPanel/BooksListMainPanel.css */
-
 .books-carousel-section {
     margin-bottom: 40px;
 }
@@ -20,8 +18,6 @@
 
 .books-grid {
     display: grid;
-    /* Tworzy responsywną siatkę z kolumnami o szerokości min. 220px */
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    /* Równy odstęp 30px w pionie i poziomie */
     gap: 30px;
 }

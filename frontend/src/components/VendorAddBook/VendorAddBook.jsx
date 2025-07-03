@@ -29,7 +29,6 @@ const VendorAddBook = () => {
 
   const handleCoverChange = (e) => {
     const file = e.target.files[0];
-    // Akceptowane typy MIME dla obrazów
     const acceptedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/webp'];
 
     if (file && acceptedImageTypes.includes(file.type)) {
@@ -42,16 +41,11 @@ const VendorAddBook = () => {
   const handleBookChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    // Akceptowane typy MIME dla ebooków
     const fileExtension = file.name.split('.').pop().toLowerCase();
     const acceptedExtensions = ['pdf', 'epub', 'mobi'];
 
     if (acceptedExtensions.includes(fileExtension)) {
-      // Plik jest poprawny, więc robimy dwie rzeczy:
-      // 1. Zapisujemy obiekt pliku w stanie 'plik'
       setPlik(file);
-
-      // 2. Zapisujemy rozszerzenie (jako wielkie litery) w stanie 'dane' pod kluczem 'format'
       setDane(prevState => ({
         ...prevState,
         format: fileExtension.toUpperCase()
@@ -59,7 +53,6 @@ const VendorAddBook = () => {
 
     } else {
       alert("Proszę przesłać plik ebooka w formacie .epub, .pdf lub .mobi");
-      // Opcjonalnie: wyczyść input, jeśli plik był niepoprawny
       e.target.value = null;
     }
   };
@@ -126,7 +119,6 @@ const VendorAddBook = () => {
           <form onSubmit={handleSubmit}>
             <div className="card-body">
               <div className="row">
-                {/* LEWA KOLUMNA – formularz */}
                 <div className="col-md-7 border-end pe-4">
                     <div className="mb-2">
                       <label className="form-label">Tytuł *</label>
@@ -206,8 +198,6 @@ const VendorAddBook = () => {
                   </div>
 
                 </div>
-
-                {/* PRAWA KOLUMNA – okładka i podgląd */}
                 <div className="col-md-5">
 
                   <div className="mb-3">
@@ -236,10 +226,10 @@ const VendorAddBook = () => {
                             src={URL.createObjectURL(okladka)}
                             alt="Podgląd okładki"
                             style={{
-                              width: "100%",          // szerokość kolumny
-                              maxWidth: "180px",      // typowa szerokość okładki
-                              aspectRatio: "2 / 3",   // proporcje pionowe (np. 600x900)
-                              objectFit: "cover",     // dopasowanie przycięte
+                              width: "100%",
+                              maxWidth: "180px", 
+                              aspectRatio: "2 / 3",
+                              objectFit: "cover",
                               borderRadius: "4px",
                               border: "1px solid #ccc",
                               boxShadow: "0 0 6px rgba(0,0,0,0.1)",

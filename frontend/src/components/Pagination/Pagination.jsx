@@ -1,6 +1,5 @@
-// frontend/src/components/Pagination/Pagination.jsx
 import React from 'react';
-import './Pagination.css'; // Stwórz plik CSS dla paginacji
+import './Pagination.css';
 
 const Pagination = ({ currentPage, lastPage, onPageChange }) => {
     const pageNumbers = [];
@@ -20,8 +19,6 @@ const Pagination = ({ currentPage, lastPage, onPageChange }) => {
                         Poprzednia
                     </button>
                 </li>
-
-                {/* Możesz dodać logikę do wyświetlania tylko kilku stron wokół bieżącej */}
                 {pageNumbers.map(number => (
                     <li key={number} className={`pagination-item ${number === currentPage ? 'active' : ''}`}>
                         <button
