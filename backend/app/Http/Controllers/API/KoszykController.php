@@ -15,10 +15,7 @@ class KoszykController extends Controller
             ->where('uzytkownik_id', $request->user()->id)
             ->get();
 
-        // -> POPRAWIONA LOGIKA SUMOWANIA
-        // Sumujemy ceny z dołączonego modelu Ebook, a nie z tabeli koszyk
         $suma = $pozycje->sum(function ($pozycja) {
-            // Sprawdź, czy ebook istnieje, aby uniknąć błędu
             if ($pozycja->ebook) {
                 $cena = $pozycja->ebook->cena_promocyjna ?? $pozycja->ebook->cena;
                 return $cena * $pozycja->ilosc;
@@ -54,43 +51,34 @@ class KoszykController extends Controller
             return response()->json(['komunikat' => 'Ten e-book już znajduje się w koszyku.'], 409);
         }
 
-        // -> POPRAWIONY ZAPIS DO BAZY
-        // Zapisujemy tylko te pola, które istnieją w tabeli 'koszyk'
         $pozycja = Koszyk::create([
             'uzytkownik_id' => $user_id,
             'ebook_id' => $ebook->id,
-            'ilosc' => 1, // Zawsze dodajemy 1 sztukę
+            'ilosc' => 1,
         ]);
 
-        // Aby odpowiedź była kompletna dla frontendu, dołączamy dane ebooka
         $pozycja->load('ebook');
 
         return response()->json([
             'komunikat' => 'E-book został dodany do koszyka',
-            'pozycja' => $pozycja // Teraz odpowiedź zawiera też info o książce
+            'pozycja' => $pozycja
         ], 201);
     }
 
 
     public function usun(Request $request, $ebook_id)
     {
-        // Pobierz ID zalogowanego użytkownika
         $uzytkownik_id = $request->user()->id;
 
-        // Znajdź pozycję w koszyku, która należy do TEGO użytkownika
-        // i dotyczy TEJ książki. Używamy Twojego modelu 'Koszyk'.
         $pozycjaWKoszyku = Koszyk::where('uzytkownik_id', $uzytkownik_id)
             ->where('ebook_id', $ebook_id)
             ->first();
 
-        // Jeśli znaleziono taką pozycję, usuń ją
         if ($pozycjaWKoszyku) {
             $pozycjaWKoszyku->delete();
-            // Zwróć potwierdzenie usunięcia
             return response()->json(['komunikat' => 'Produkt został usunięty z koszyka.'], 200);
         }
 
-        // Jeśli z jakiegoś powodu nie znaleziono, zwróć błąd 404
         return response()->json(['komunikat' => 'Pozycja nie istnieje w koszyku.'], 404);
     }
 

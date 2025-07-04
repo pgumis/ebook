@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('uzytkownik_id');
             $table->unsignedBigInteger('ebook_id');
-            $table->tinyInteger('ocena'); // np. 1–5
+            $table->tinyInteger('ocena');
             $table->text('tresc')->nullable();
             $table->timestamps();
 

@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('platnosci', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('zamowienie_id');
-            $table->string('metoda'); // np. karta, blik, przelew
+            $table->string('metoda');
             $table->decimal('kwota', 8, 2);
-            $table->string('status')->default('oczekuje'); // np. oczekuje, zapłacona, anulowana
+            $table->string('status')->default('oczekuje');
             $table->timestamp('data_platnosci')->nullable();
             $table->timestamps();
 

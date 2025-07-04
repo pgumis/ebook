@@ -9,6 +9,7 @@ const viewSlice = createSlice({
         selectedItemId: null,
         selectedCategory: null,
         isSearchOverlayVisible: false,
+        emailForPasswordReset: null,
     },
     reducers: {
         toggleSearchOverlay(state, action) {
@@ -34,6 +35,9 @@ const viewSlice = createSlice({
         },
         setSelectedCategory(state, action) {
             state.selectedCategory = action.payload;
+        },
+        setEmailForPasswordReset(state, action) {
+            state.emailForPasswordReset = action.payload;
         },
     }
 })

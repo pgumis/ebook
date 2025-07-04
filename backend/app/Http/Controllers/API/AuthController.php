@@ -62,23 +62,20 @@ class AuthController extends Controller
 
         $token = $uzytkownik->createToken('token')->plainTextToken;
 
-        // *** KLUCZOWA ZMIANA: Dodajemy obiekt 'user' do odpowiedzi ***
         return response()->json([
             'komunikat' => 'Zalogowano pomyślnie',
             'token' => $token,
-            'user' => [ // Dodaj dane użytkownika, które chcesz wysłać do frontendu
+            'user' => [
                 'id' => $uzytkownik->id,
-                'imie' => $uzytkownik->imie, // Zakładam, że w modelu Uzytkownik masz kolumnę 'imie'
-                'nazwisko' => $uzytkownik->nazwisko, // Zakładam, że w modelu Uzytkownik masz kolumnę 'nazwisko'
+                'imie' => $uzytkownik->imie,
+                'nazwisko' => $uzytkownik->nazwisko,
                 'email' => $uzytkownik->email,
-                'numer_telefonu' => $uzytkownik->numer_telefonu, // Zakładam, że masz kolumnę 'numer_telefonu'
-                'rola' => $uzytkownik->rola, // Zakładam, że masz kolumnę 'rola'
-                'zdjecie_profilowe' => $uzytkownik->zdjecie_profilowe, // Zakładam, że masz kolumnę 'zdjecie_profilowe'
-                // Dodaj inne pola, które chcesz mieć dostępne w Reduxie i profilu (np. nazwa firmy dla dostawcy)
+                'numer_telefonu' => $uzytkownik->numer_telefonu,
+                'rola' => $uzytkownik->rola,
+                'zdjecie_profilowe' => $uzytkownik->zdjecie_profilowe,
             ]
         ], 200);
     }
-
 
     public function zapomnianeHaslo(Request $request)
     {
@@ -105,29 +102,36 @@ class AuthController extends Controller
         ]);
     }
 
-
     public function wyslijKodResetujacy(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:uzytkownicy,email',
         ]);
 
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Nie znaleziono użytkownika z podanym adresem e-mail.'], 422);
+        }
+
+        $email = $request->email;
         $kod = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
-        KodResetowaniaHasla::where('email', $request->email)->delete();
-
-        KodResetowaniaHasla::create([
-            'email' => $request->email,
+        \App\Models\KodResetowaniaHasla::where('email', $email)->delete();
+        \App\Models\KodResetowaniaHasla::create([
+            'email' => $email,
             'kod' => $kod,
-            'waznosc' => Carbon::now()->addMinutes(10),
+            'waznosc' => \Carbon\Carbon::now()->addMinutes(10),
         ]);
 
-        Mail::raw('Twój kod resetowania hasła to: ' . $kod, function ($message) use ($request) {
-            $message->to($request->email)
-                ->subject('Resetowanie hasła - E-book na wynos');
-        });
+        try {
+            \Illuminate\Support\Facades\Mail::raw('Twój kod do zresetowania hasła to: ' . $kod, function ($message) use ($email) {
+                $message->to($email)->subject('Resetowanie hasła - E-book na wynos');
+            });
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Błąd wysyłki e-maila resetującego: ' . $e->getMessage());
+            return response()->json(['message' => 'Nie udało się wysłać e-maila. Prosimy spróbować później.'], 500);
+        }
 
-        return response()->json(['message' => 'Kod został wysłany na e-mail.']);
+        return response()->json(['message' => 'Kod został wysłany na podany adres e-mail.']);
     }
 
     public function weryfikujKodResetujacy(Request $request)

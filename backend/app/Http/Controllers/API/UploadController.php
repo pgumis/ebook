@@ -30,7 +30,7 @@ class UploadController extends Controller
         ]);
     }
 
-        public function dodajEbooka(Request $request)
+    public function dodajEbooka(Request $request)
     {
         $request->validate([
             'file' => 'required|file|mimes:pdf,epub,mobi|max:51200',

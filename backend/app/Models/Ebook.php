@@ -48,7 +48,6 @@ class Ebook extends Model
 
     public function uzytkownik()
     {
-        // Laravel połączy ten model z modelem Uzytkownik za pomocą klucza obcego 'uzytkownik_id'
         return $this->belongsTo(Uzytkownik::class, 'uzytkownik_id');
     }
 

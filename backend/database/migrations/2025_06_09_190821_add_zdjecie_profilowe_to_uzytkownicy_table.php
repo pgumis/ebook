@@ -13,9 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('uzytkownicy', function (Blueprint $table) {
-            // Dodajemy nową kolumnę 'zdjecie_profilowe'
-            // Typ string, może być nullable (czyli może być pusta), domyślnie pusty string
-            $table->string('zdjecie_profilowe')->nullable()->default('')->after('rola'); // Po kolumnie 'rola' (lub innej, którą uznasz za sensowną)
+            $table->string('zdjecie_profilowe')->nullable()->default('')->after('rola');
         });
     }
 
@@ -25,7 +23,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('uzytkownicy', function (Blueprint $table) {
-            // Usuwamy kolumnę 'zdjecie_profilowe' w przypadku wycofania migracji
             $table->dropColumn('zdjecie_profilowe');
         });
     }

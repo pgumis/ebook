@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('wiadomosci', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('uzytkownik_id')->nullable();
-            $table->string('imie')->nullable(); // dla niezalogowanych
-            $table->string('email')->nullable(); // dla niezalogowanych
+            $table->string('imie')->nullable();
+            $table->string('email')->nullable();
             $table->string('temat');
             $table->text('tresc');
             $table->boolean('przeczytana')->default(false);

@@ -13,37 +13,28 @@ use Illuminate\Support\Facades\Validator;
 
 class OwnerDashboardController extends Controller
 {
-    /**
-     * Zwraca kluczowe wskaźniki wydajności (KPI) dla głównego pulpitu właściciela.
-     */
+
     public function getMainDashboardStats(Request $request)
     {
-        // Okresy czasowe
         $today = Carbon::today();
         $startOfMonth = Carbon::now()->startOfMonth();
         $startOfYear = Carbon::now()->startOfYear();
 
-        // 1. Całkowity przychód
         $totalRevenue = Zamowienie::where('status', 'zrealizowane')->sum('suma');
 
-        // 2. Przychód w tym miesiącu
         $monthlyRevenue = Zamowienie::where('status', 'zrealizowane')
             ->whereBetween('created_at', [$startOfMonth, Carbon::now()])
             ->sum('suma');
 
-        // 3. Liczba wszystkich użytkowników i podział na role
         $usersCount = Uzytkownik::count();
         $usersByRole = Uzytkownik::select('rola', DB::raw('count(*) as total'))
             ->groupBy('rola')
             ->pluck('total', 'rola');
 
-        // 4. Nowi użytkownicy w tym miesiącu
         $newUsersThisMonth = Uzytkownik::where('created_at', '>=', $startOfMonth)->count();
 
-        // 5. Całkowita liczba e-booków w bazie
         $totalEbooks = Ebook::count();
 
-        // 6. Liczba zrealizowanych zamówień dzisiaj
         $ordersToday = Zamowienie::where('status', 'zrealizowane')
             ->whereBetween('created_at', [Carbon::today()->startOfDay(), Carbon::today()->endOfDay()])
             ->count();
@@ -74,16 +65,13 @@ class OwnerDashboardController extends Controller
         $ordersQuery = Zamowienie::where('status', 'zrealizowane')
             ->whereBetween('created_at', [$startDate, $endDate]);
 
-        // Obliczenia KPI
         $totalRevenue = (clone $ordersQuery)->sum('suma');
         $totalOrders = (clone $ordersQuery)->count();
         $averageOrderValue = ($totalOrders > 0) ? $totalRevenue / $totalOrders : 0;
 
-        // Obliczenie sprzedanych e-booków
         $orderIds = (clone $ordersQuery)->pluck('id');
         $totalEbooksSold = DB::table('ebook_zamowienie')->whereIn('zamowienie_id', $orderIds)->sum('ilosc');
 
-        // Dane do wykresu "Sprzedaż w czasie"
         $salesData = (clone $ordersQuery)
             ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(suma) as total'))
             ->groupBy('date')->orderBy('date', 'asc')->get()->keyBy('date');
@@ -98,7 +86,6 @@ class OwnerDashboardController extends Controller
             $salesOverTimeData[] = $saleOnDay ? $saleOnDay->total : 0;
         }
 
-        // Pozostałe dane analityczne
         $salesByDayOfWeek = (clone $ordersQuery)->select(DB::raw('DAYOFWEEK(created_at) as day_of_week'), DB::raw('SUM(suma) as total'))->groupBy('day_of_week')->get()->pluck('total', 'day_of_week');
         $salesByHour = (clone $ordersQuery)->select(DB::raw('HOUR(created_at) as hour'), DB::raw('SUM(suma) as total'))->groupBy('hour')->get()->pluck('total', 'hour');
         $topSellingEbooks = DB::table('ebook_zamowienie')->join('zamowienia', 'ebook_zamowienie.zamowienie_id', '=', 'zamowienia.id')->join('ebooki', 'ebook_zamowienie.ebook_id', '=', 'ebooki.id')->where('zamowienia.status', 'zrealizowane')->whereBetween('zamowienia.created_at', [$startDate, $endDate])->select('ebooki.tytul', DB::raw('SUM(ebook_zamowienie.ilosc) as total_sold'))->groupBy('ebooki.tytul')->orderBy('total_sold', 'desc')->limit(10)->get();
@@ -138,14 +125,11 @@ class OwnerDashboardController extends Controller
         $direction = $request->input('direction', 'desc');
         $limit = $request->input('limit', 10);
 
-        // Podział użytkowników na role (to zapytanie nie zależy od daty, więc jest OK)
         $usersByRole = Uzytkownik::select('rola', DB::raw('count(*) as total'))
             ->groupBy('rola')
             ->pluck('total', 'rola');
 
-        // Trend rejestracji (teraz używa zakresu dat)
         $registrationTrend = Uzytkownik::select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as count'))
-            // --- ZMIANA ---
             ->whereBetween('created_at', [$startDate, $endDate])
             ->groupBy('date')
             ->orderBy('date', 'asc')
@@ -160,8 +144,8 @@ class OwnerDashboardController extends Controller
                 DB::raw('COUNT(zamowienia.id) as order_count')
             )
             ->groupBy('uzytkownicy.id', 'uzytkownicy.imie', 'uzytkownicy.nazwisko', 'uzytkownicy.email')
-            ->orderBy($sortBy, $direction) // Użycie dynamicznego sortowania
-            ->limit($limit) // Użycie dynamicznego limitu
+            ->orderBy($sortBy, $direction)
+            ->limit($limit)
             ->get();
 
         $newUsersInPeriod = Uzytkownik::select('rola', DB::raw('count(*) as count'))
@@ -179,7 +163,6 @@ class OwnerDashboardController extends Controller
 
     public function getProductsAnalysis(Request $request)
     {
-        // Pełna walidacja dla wszystkich możliwych parametrów
         $validator = Validator::make($request->all(), [
             'startDate' => 'required|date',
             'endDate' => 'required|date|after_or_equal:startDate',
@@ -195,7 +178,6 @@ class OwnerDashboardController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        // Pobieranie wszystkich parametrów z requestu
         $startDate = Carbon::parse($request->input('startDate'))->startOfDay();
         $endDate = Carbon::parse($request->input('endDate'))->endOfDay();
         $limitBestsellers = $request->input('limit_bestsellers', 10);
@@ -205,7 +187,6 @@ class OwnerDashboardController extends Controller
         $limitVendors = $request->input('limit_vendors', 10);
         $directionVendors = $request->input('direction_vendors', 'desc');
 
-        // Zapytania o Bestsellery i Najsłabiej sprzedające się (one mają stałe sortowanie)
         $bestSellingEbooks = DB::table('ebooki')
             ->leftJoin('ebook_zamowienie', 'ebooki.id', '=', 'ebook_zamowienie.ebook_id')
             ->leftJoin('zamowienia', 'ebook_zamowienie.zamowienie_id', '=', 'zamowienia.id')
@@ -222,7 +203,6 @@ class OwnerDashboardController extends Controller
             ->where('ebooki.status', 'aktywny')->select('ebooki.tytul', DB::raw('COALESCE(SUM(ebook_zamowienie.ilosc), 0) as total_sold'))
             ->groupBy('ebooki.id', 'ebooki.tytul')->orderBy('total_sold', 'asc')->limit($limitWorstSellers)->get();
 
-        // Zapytania o Kategorie i Dostawców (z dynamicznym sortowaniem i limitem)
         $topCategories = DB::table('ebooki')
             ->join('ebook_zamowienie', 'ebooki.id', '=', 'ebook_zamowienie.ebook_id')
             ->join('zamowienia', 'ebook_zamowienie.zamowienie_id', '=', 'zamowienia.id')
@@ -266,7 +246,6 @@ class OwnerDashboardController extends Controller
         $columns = [];
         $query = null;
 
-        // Budowanie zapytania i kolumn w zależności od typu raportu
         if ($reportType === 'sales') {
             $columns = ['ID Zamówienia', 'Data', 'Klient', 'Email Klienta', 'Status', 'Kwota (PLN)'];
             $query = Zamowienie::with('uzytkownik')
@@ -292,7 +271,6 @@ class OwnerDashboardController extends Controller
         }
 
 
-        // Filtrowanie po dacie, jeśli podano
         if ($request->filled('startDate') && $request->filled('endDate')) {
             $dateColumn = ($reportType === 'sales') ? 'created_at' : 'created_at';
             $query->whereBetween($dateColumn, [$request->input('startDate'), $request->input('endDate')]);
@@ -300,7 +278,6 @@ class OwnerDashboardController extends Controller
 
         $data = $query->get();
 
-        // Callback do streamowania odpowiedzi, aby nie zużywać dużo pamięci
         $callback = function() use($data, $columns, $reportType) {
             $file = fopen('php://output', 'w');
             fputcsv($file, $columns);

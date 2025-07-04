@@ -74,6 +74,4 @@ class WiadomoscController extends Controller
     }
 
 
-
-
 }

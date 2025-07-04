@@ -1,53 +1,87 @@
-import { useState } from "react";
+
+
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { viewActions } from "../../store/view";
-import Logo from "../Logo/Logo";
 
-const ResetPasswordForm = () => {
+const ResetPasswordEmailForm = () => {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-  const [dane, setDane] = useState({
-    imie: "",
-    nazwisko: "",
-    email: "",
-    haslo: "",
-  });
-
-  const [komunikat, setKomunikat] = useState("");
-
-  const handleChange = (e) => {
-    setDane({ ...dane, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setMessage(null);
+
+    try {
+      const response = await fetch(
+          "http://localhost:8000/api/haslo/wyslij-kod",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+          }
+      );
+
+      const result = await response.json();
+
+      if (response.ok) {
+
+        dispatch(viewActions.setEmailForPasswordReset(email));
+
+        dispatch(viewActions.changeView("reset-password-code"));
+      } else {
+
+        setMessage({ type: "error", text: result.message });
+      }
+    } catch (error) {
+      setMessage({
+        type: "error",
+        text: "Wystąpił błąd sieci. Spróbuj ponownie.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="screen-center">
-      <div className="form-wrapper">
-        <Logo />
-        <form onSubmit={handleSubmit} style={{ marginTop: 0 }}>
-          <div className="form-whole-line">
-            <label for="email">Email</label>
+      <div className="auth-form-container screen-center">
+        <form onSubmit={handleSubmit} className="auth-form">
+          <h2>Resetowanie hasła</h2>
+          <p className="auth-subtitle">
+            Podaj adres e-mail powiązany z Twoim kontem, a wyślemy na niego kod
+            do zresetowania hasła.
+          </p>
+
+          {message && (
+              <div
+                  className={`alert ${
+                      message.type === "success" ? "alert-success" : "alert-danger"
+                  }`}
+              >
+                {message.text}
+              </div>
+          )}
+
+          <div className="form-group">
+            <label htmlFor="email">E-mail</label>
             <input
-              type="email"
-              name="email"
-              value={dane.email}
-              onChange={handleChange}
-              required
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
             />
           </div>
-          
-          <p className="form-info">
-            ⓘ Na podany przez Ciebie adres email wyślemy link do <br />zresetowania hasła
-          </p>
-          <button type="submit" className="form-submit"  onClick={()=>{dispatch(viewActions.changeView('resetPassword'))}}>
-            Zresetuj hasło
+
+          <button type="submit" className="auth-button" disabled={isLoading}>
+            {isLoading ? "Wysyłanie..." : "Wyślij instrukcje"}
           </button>
         </form>
-        {komunikat && <p>{komunikat}</p>}
       </div>
-    </div>
   );
 };
-export default ResetPasswordForm;
+
+export default ResetPasswordEmailForm;
